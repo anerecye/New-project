@@ -1,0 +1,4 @@
+match_status,count,fraction_of_clinvar_variants
+no_gnomad_record_at_queried_position,962,0.4269862405681314
+position_present_no_exact_allele_match,849,0.37683089214380827
+exact_variant_match,442,0.19618286728806036

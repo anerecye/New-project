@@ -64,5 +64,8 @@ The gnomAD extraction scripts require `bcftools` and internet access to query pu
 - `data/processed/outlier_counts_by_gene.csv`: per-gene `AF > 1e-5` outlier counts, denominators, within-gene fractions, and each gene's share of all outliers.
 - `data/processed/top_variants.csv`: top 10 variants ranked by AF, not the full outlier list.
 - `data/processed/exomes_genomes_af_comparison.csv`: exome/genome AF comparison when overlapping genome inputs are available. In the current small processed example, no overlapping exome/genome variant keys are available.
+- `data/processed/match_qc_summary.csv`: exact-match and unmatched-category counts for ClinVar-to-gnomAD matching.
+- `data/processed/match_qc_by_gene.csv`: per-gene exact-match and unmatched-category counts.
+- `data/processed/gene_outlier_enrichment_tests.csv`: Fisher exact tests for per-gene enrichment of `AF > 1e-5` variants.
 - `figures/af_distribution_updated.png`: threshold-marked AF histogram.
 - `figures/af_categories.png`: AF category barplot.

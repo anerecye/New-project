@@ -34,7 +34,8 @@ AF_DISTRIBUTION_FIGURE = FIGURE_DIR / "af_distribution_updated.png"
 AF_CATEGORIES_FIGURE = FIGURE_DIR / "af_categories.png"
 
 ULTRA_RARE_THRESHOLD = 1e-5
-OUTLIER_THRESHOLD = 1e-4
+COMMON_AF_THRESHOLD = 1e-4
+OUTLIER_THRESHOLD = ULTRA_RARE_THRESHOLD
 AF_CATEGORY_ORDER = ["ultra_rare", "rare", "common"]
 
 
@@ -56,7 +57,7 @@ def parse_boolean_series(series: pd.Series) -> pd.Series:
 def assign_af_categories(af: pd.Series) -> pd.Categorical:
     categories = pd.cut(
         af,
-        bins=[0, ULTRA_RARE_THRESHOLD, OUTLIER_THRESHOLD, np.inf],
+        bins=[0, ULTRA_RARE_THRESHOLD, COMMON_AF_THRESHOLD, np.inf],
         labels=AF_CATEGORY_ORDER,
         include_lowest=True,
     )
@@ -103,12 +104,12 @@ def make_main_metrics(df: pd.DataFrame) -> pd.DataFrame:
         ),
         (
             "af_gt_1e_4_count",
-            int((af_df["AF"] > OUTLIER_THRESHOLD).sum()),
+            int((af_df["AF"] > COMMON_AF_THRESHOLD).sum()),
             "count",
         ),
         (
             "af_gt_1e_4_fraction",
-            fraction(af_df["AF"] > OUTLIER_THRESHOLD),
+            fraction(af_df["AF"] > COMMON_AF_THRESHOLD),
             "fraction",
         ),
         ("max_af", float(af_df["AF"].max()) if not af_df.empty else np.nan, "af"),
@@ -161,9 +162,9 @@ def describe_af(label: str, af: pd.Series) -> dict[str, float | str]:
     for metric, value in description.items():
         row[str(metric)] = float(value)
     row["af_gt_1e_5_count"] = int((clean_af > ULTRA_RARE_THRESHOLD).sum())
-    row["af_gt_1e_4_count"] = int((clean_af > OUTLIER_THRESHOLD).sum())
+    row["af_gt_1e_4_count"] = int((clean_af > COMMON_AF_THRESHOLD).sum())
     row["af_gt_1e_5_fraction"] = fraction(clean_af > ULTRA_RARE_THRESHOLD)
-    row["af_gt_1e_4_fraction"] = fraction(clean_af > OUTLIER_THRESHOLD)
+    row["af_gt_1e_4_fraction"] = fraction(clean_af > COMMON_AF_THRESHOLD)
     return row
 
 
@@ -192,13 +193,35 @@ def make_gene_stats(df: pd.DataFrame) -> pd.DataFrame:
     return stats.sort_values(["max", "count"], ascending=[False, False]).reset_index(drop=True)
 
 
-def make_outlier_counts_by_gene(outliers: pd.DataFrame) -> pd.DataFrame:
-    return (
-        outliers["GeneSymbol"]
-        .value_counts()
-        .rename_axis("GeneSymbol")
-        .reset_index(name="outlier_count")
+def make_outlier_counts_by_gene(df: pd.DataFrame, outliers: pd.DataFrame) -> pd.DataFrame:
+    gene_totals = (
+        df.dropna(subset=["AF"])
+        .groupby("GeneSymbol")
+        .size()
+        .rename("variants_with_af")
+        .reset_index()
     )
+    outlier_counts = (
+        outliers.groupby("GeneSymbol")
+        .size()
+        .rename("outlier_count_af_gt_1e_5")
+        .reset_index()
+    )
+    counts = gene_totals.merge(outlier_counts, on="GeneSymbol", how="left")
+    counts["outlier_count_af_gt_1e_5"] = (
+        counts["outlier_count_af_gt_1e_5"].fillna(0).astype(int)
+    )
+    counts["within_gene_fraction"] = (
+        counts["outlier_count_af_gt_1e_5"] / counts["variants_with_af"]
+    )
+    total_outliers = counts["outlier_count_af_gt_1e_5"].sum()
+    counts["fraction_of_all_outliers"] = (
+        counts["outlier_count_af_gt_1e_5"] / total_outliers if total_outliers else 0.0
+    )
+    return counts.sort_values(
+        ["outlier_count_af_gt_1e_5", "within_gene_fraction", "GeneSymbol"],
+        ascending=[False, False, True],
+    ).reset_index(drop=True)
 
 
 def make_top_variants(df: pd.DataFrame, n: int = 10) -> pd.DataFrame:
@@ -266,7 +289,7 @@ def create_af_distribution_figure(df: pd.DataFrame, output_path: Path) -> None:
         label="1e-5 threshold",
     )
     ax.axvline(
-        np.log10(OUTLIER_THRESHOLD),
+        np.log10(COMMON_AF_THRESHOLD),
         linestyle="--",
         color="#e45756",
         label="1e-4 threshold",
@@ -323,7 +346,7 @@ def main() -> None:
     clinvar_vs_gnomad = make_clinvar_vs_gnomad_summary(df, gnomad_af)
     outliers = make_outlier_table(df)
     gene_stats = make_gene_stats(df)
-    outliers_by_gene = make_outlier_counts_by_gene(outliers)
+    outliers_by_gene = make_outlier_counts_by_gene(df, outliers)
     top_variants = make_top_variants(df)
     exomes_genomes = make_exomes_genomes_comparison()
 

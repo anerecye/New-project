@@ -59,10 +59,10 @@ The gnomAD extraction scripts require `bcftools` and internet access to query pu
 - `data/processed/main_metrics.csv`: headline counts, outlier fractions, maximum AF, and median AF.
 - `data/processed/af_category_counts.csv`: counts by ultra-rare, rare, and common AF categories.
 - `data/processed/clinvar_vs_gnomad_af_summary.csv`: descriptive AF comparison for ClinVar-matched variants versus the queried gnomAD population subset.
-- `data/processed/outlier_variants.csv`: all ClinVar variants with `AF > 1e-4`.
+- `data/processed/outlier_variants.csv`: all ClinVar variants with `AF > 1e-5`.
 - `data/processed/gene_af_stats.csv`: per-gene AF summary statistics.
-- `data/processed/outlier_counts_by_gene.csv`: outlier counts by gene.
-- `data/processed/top_variants.csv`: top variants ranked by AF.
+- `data/processed/outlier_counts_by_gene.csv`: per-gene `AF > 1e-5` outlier counts, denominators, within-gene fractions, and each gene's share of all outliers.
+- `data/processed/top_variants.csv`: top 10 variants ranked by AF, not the full outlier list.
 - `data/processed/exomes_genomes_af_comparison.csv`: exome/genome AF comparison when overlapping genome inputs are available. In the current small processed example, no overlapping exome/genome variant keys are available.
 - `figures/af_distribution_updated.png`: threshold-marked AF histogram.
 - `figures/af_categories.png`: AF category barplot.

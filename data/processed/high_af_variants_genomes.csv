@@ -1,0 +1,4 @@
+CHROM,POS,REF,ALT,AF,AF_category,is_outlier,variant_key,GeneSymbol,Chromosome,Start,ReferenceAllele,AlternateAllele,n_clinvar_rows,ClinicalSignificance_values,ReviewStatus_values,best_review_status,is_high_confidence
+1,115701253,ATCG,A,0.00388249,too_common,True,,,,,,,,,,,
+1,115744877,G,T,0.000105238,too_common,True,,,,,,,,,,,
+1,237388136,C,T,0.0010832,too_common,True,,,,,,,,,,,

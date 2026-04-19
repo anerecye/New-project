@@ -1,0 +1,809 @@
+GeneSymbol,ClinicalSignificance,ReviewStatus,Chromosome,Start,ReferenceAllele,AlternateAllele,Assembly,variant_key
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572981,G,A,GRCh38,11:2572981:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583448,C,T,GRCh38,11:2583448:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570719,G,A,GRCh38,11:2570719:G:A
+KCNQ1,Pathogenic,reviewed by expert panel,11,2572089,G,A,GRCh38,11:2572089:G:A
+KCNQ1,Likely pathogenic,reviewed by expert panel,11,2572882,C,T,GRCh38,11:2572882:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583535,C,A,GRCh38,11:2583535:C:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583535,C,T,GRCh38,11:2583535:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585213,G,A,GRCh38,11:2585213:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583453,G,A,GRCh38,11:2583453:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776032,C,T,GRCh38,11:2776032:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572979,G,C,GRCh38,11:2572979:G:C
+KCNQ1,Likely pathogenic,reviewed by expert panel,11,2768881,C,T,GRCh38,11:2768881:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768902,G,A,GRCh38,11:2768902:G:A
+KCNQ1,Pathogenic,reviewed by expert panel,11,2583545,G,A,GRCh38,11:2583545:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778003,C,T,GRCh38,11:2778003:C:T
+KCNQ1,Pathogenic,reviewed by expert panel,11,2778009,G,A,GRCh38,11:2778009:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572870,G,A,GRCh38,11:2572870:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572871,G,A,GRCh38,11:2572871:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551441,C,T,GRCh38,3:38551441:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560418,T,C,GRCh38,3:38560418:T:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560202,CT,C,GRCh38,3:38560202:CT:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551505,G,A,GRCh38,3:38551505:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38550988,T,C,GRCh38,3:38550988:T:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551504,C,T,GRCh38,3:38551504:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551022,C,T,GRCh38,3:38551022:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551243,G,A,GRCh38,3:38551243:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38554309,C,T,GRCh38,3:38554309:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606709,C,T,GRCh38,3:38606709:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38597787,G,A,GRCh38,3:38597787:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560170,C,T,GRCh38,3:38560170:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38566426,C,T,GRCh38,3:38566426:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38554309,C,G,GRCh38,3:38554309:C:G
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237634937,C,T,GRCh38,1:237634937:C:T
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237791441,C,T,GRCh38,1:237791441:C:T
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237454396,T,C,GRCh38,1:237454396:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951711,G,A,GRCh38,7:150951711:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951615,A,C,GRCh38,7:150951615:A:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948984,C,T,GRCh38,7:150948984:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951511,C,T,GRCh38,7:150951511:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951649,G,A,GRCh38,7:150951649:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952514,C,T,GRCh38,7:150952514:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947477,C,T,GRCh38,7:150947477:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948995,G,A,GRCh38,7:150948995:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950311,C,T,GRCh38,7:150950311:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951629,G,T,GRCh38,7:150951629:G:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948855,C,T,GRCh38,7:150948855:C:T
+CASQ2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,115740794,CCTTAAGAATATACAGG,C,GRCh38,1:115740794:CCTTAAGAATATACAGG:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551513,G,A,GRCh38,3:38551513:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951552,G,A,GRCh38,7:150951552:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572970,C,T,GRCh38,11:2572970:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2571333,G,A,GRCh38,11:2571333:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38613781,C,T,GRCh38,3:38613781:C:T
+CALM1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",14,90404386,A,G,GRCh38,14:90404386:A:G
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115768445,G,A,GRCh38,1:115768445:G:A
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784256,G,C,GRCh38,1:237784256:G:C
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237377365,G,A,GRCh38,1:237377365:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583520,GC,G,GRCh38,11:2583520:GC:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583529,T,C,GRCh38,11:2583529:T:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583527,CCTT,C,GRCh38,11:2583527:CCTT:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583537,C,T,GRCh38,11:2583537:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583540,C,T,GRCh38,11:2583540:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583544,C,T,GRCh38,11:2583544:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583546,G,A,GRCh38,11:2583546:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583550,G,A,GRCh38,11:2583550:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583545,G,C,GRCh38,11:2583545:G:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585225,C,G,GRCh38,11:2585225:C:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585245,C,T,GRCh38,11:2585245:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585254,C,T,GRCh38,11:2585254:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585264,A,G,GRCh38,11:2585264:A:G
+KCNQ1,Likely pathogenic,reviewed by expert panel,11,2585275,C,T,GRCh38,11:2585275:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585276,G,A,GRCh38,11:2585276:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585300,T,A,GRCh38,11:2585300:T:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585300,CTCAT,C,GRCh38,11:2585300:CTCAT:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585308,G,T,GRCh38,11:2585308:G:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587581,G,T,GRCh38,11:2587581:G:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587636,G,GC,GRCh38,11:2587636:G:GC
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588719,GA,G,GRCh38,11:2588719:GA:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588718,G,GA,GRCh38,11:2588718:G:GA
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588799,AC,A,GRCh38,11:2588799:AC:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588798,A,AC,GRCh38,11:2588798:A:AC
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2662051,ACT,A,GRCh38,11:2662051:ACT:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2662080,C,T,GRCh38,11:2662080:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445251,C,G,GRCh38,11:2445251:C:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768881,C,G,GRCh38,11:2768881:C:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768888,T,G,GRCh38,11:2768888:T:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768900,T,G,GRCh38,11:2768900:T:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768917,C,T,GRCh38,11:2768917:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2775977,C,A,GRCh38,11:2775977:C:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2775984,C,T,GRCh38,11:2775984:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776006,C,T,GRCh38,11:2776006:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776033,G,A,GRCh38,11:2776033:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776997,C,A,GRCh38,11:2776997:C:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776997,C,T,GRCh38,11:2776997:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2777000,T,C,GRCh38,11:2777000:T:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2777002,G,A,GRCh38,11:2777002:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2777003,G,C,GRCh38,11:2777003:G:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2777008,GC,G,GRCh38,11:2777008:GC:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778014,C,T,GRCh38,11:2778014:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778015,G,A,GRCh38,11:2778015:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778024,G,A,GRCh38,11:2778024:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778024,G,C,GRCh38,11:2778024:G:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2847863,CCCCAGAGAGGGCGGGGCCCA,C,GRCh38,11:2847863:CCCCAGAGAGGGCGGGGCCCA:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2847859,GC,G,GRCh38,11:2847859:GC:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2847858,G,GC,GRCh38,11:2847858:G:GC
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445430,A,G,GRCh38,11:2445430:A:G
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445439,T,C,GRCh38,11:2445439:T:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445442,A,G,GRCh38,11:2445442:A:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2527992,CCT,C,GRCh38,11:2527992:CCT:C
+KCNQ1,Likely pathogenic,reviewed by expert panel,11,2528023,G,A,GRCh38,11:2528023:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570638,CT,C,GRCh38,11:2570638:CT:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570652,G,A,GRCh38,11:2570652:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570652,G,C,GRCh38,11:2570652:G:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570652,CG,C,GRCh38,11:2570652:CG:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570663,C,G,GRCh38,11:2570663:C:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570670,C,T,GRCh38,11:2570670:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570671,G,A,GRCh38,11:2570671:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570682,G,A,GRCh38,11:2570682:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570685,G,A,GRCh38,11:2570685:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570701,A,C,GRCh38,11:2570701:A:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570716,G,A,GRCh38,11:2570716:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570712,T,TG,GRCh38,11:2570712:T:TG
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570718,C,T,GRCh38,11:2570718:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570720,GGCTGC,G,GRCh38,11:2570720:GGCTGC:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570734,CG,C,GRCh38,11:2570734:CG:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570754,G,A,GRCh38,11:2570754:G:A
+KCNQ1,Likely pathogenic,reviewed by expert panel,11,2571394,C,T,GRCh38,11:2571394:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572015,G,A,GRCh38,11:2572015:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572020,C,T,GRCh38,11:2572020:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572021,G,A,GRCh38,11:2572021:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572033,T,A,GRCh38,11:2572033:T:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572053,G,A,GRCh38,11:2572053:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572056,C,T,GRCh38,11:2572056:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572057,G,A,GRCh38,11:2572057:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572081,T,C,GRCh38,11:2572081:T:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572102,A,G,GRCh38,11:2572102:A:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572104,C,T,GRCh38,11:2572104:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572105,G,A,GRCh38,11:2572105:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572105,G,T,GRCh38,11:2572105:G:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572846,G,A,GRCh38,11:2572846:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572848,G,C,GRCh38,11:2572848:G:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572859,AC,A,GRCh38,11:2572859:AC:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572862,T,C,GRCh38,11:2572862:T:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572880,G,A,GRCh38,11:2572880:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572886,ATCT,A,GRCh38,11:2572886:ATCT:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572890,TCTC,T,GRCh38,11:2572890:TCTC:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572895,C,G,GRCh38,11:2572895:C:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572895,C,T,GRCh38,11:2572895:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572904,T,A,GRCh38,11:2572904:T:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572923,ACGCGGTGAACGAGTCAGGC,A,GRCh38,11:2572923:ACGCGGTGAACGAGTCAGGC:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572979,G,A,GRCh38,11:2572979:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572987,G,T,GRCh38,11:2572987:G:T
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572986,G,A,GRCh38,11:2572986:G:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583441,G,A,GRCh38,11:2583441:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583453,G,C,GRCh38,11:2583453:G:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583454,G,A,GRCh38,11:2583454:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583457,A,C,GRCh38,11:2583457:A:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583457,A,G,GRCh38,11:2583457:A:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583459,G,A,GRCh38,11:2583459:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583462,G,A,GRCh38,11:2583462:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583477,A,G,GRCh38,11:2583477:A:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583478,C,T,GRCh38,11:2583478:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583486,G,A,GRCh38,11:2583486:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583508,TTC,T,GRCh38,11:2583508:TTC:T
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123571099,GCTGT,G,GRCh38,6:123571099:GCTGT:G
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123503899,G,A,GRCh38,6:123503899:G:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583535,C,G,GRCh38,11:2583535:C:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583544,C,A,GRCh38,11:2583544:C:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768894,A,C,GRCh38,11:2768894:A:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2775985,G,A,GRCh38,11:2775985:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776032,C,A,GRCh38,11:2776032:C:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776038,A,G,GRCh38,11:2776038:A:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2527962,G,A,GRCh38,11:2527962:G:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570700,T,C,GRCh38,11:2570700:T:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570706,G,A,GRCh38,11:2570706:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570719,G,T,GRCh38,11:2570719:G:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2571391,C,T,GRCh38,11:2571391:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572053,G,T,GRCh38,11:2572053:G:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572056,C,A,GRCh38,11:2572056:C:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572071,T,C,GRCh38,11:2572071:T:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572102,A,C,GRCh38,11:2572102:A:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572915,G,A,GRCh38,11:2572915:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572970,C,A,GRCh38,11:2572970:C:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572981,G,C,GRCh38,11:2572981:G:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583463,A,G,GRCh38,11:2583463:A:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952718,C,T,GRCh38,7:150952718:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974890,T,C,GRCh38,7:150974890:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952561,G,A,GRCh38,7:150952561:G:A
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952504,T,C,GRCh38,7:150952504:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952481,C,T,GRCh38,7:150952481:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974861,C,G,GRCh38,7:150974861:C:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951793,G,A,GRCh38,7:150951793:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951738,A,G,GRCh38,7:150951738:A:G
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951720,G,T,GRCh38,7:150951720:G:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951712,C,T,GRCh38,7:150951712:C:T
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951708,T,G,GRCh38,7:150951708:T:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951708,T,C,GRCh38,7:150951708:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951682,T,C,GRCh38,7:150951682:T:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951679,C,T,GRCh38,7:150951679:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951678,C,A,GRCh38,7:150951678:C:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974846,C,T,GRCh38,7:150974846:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951643,C,T,GRCh38,7:150951643:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951603,T,C,GRCh38,7:150951603:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951592,C,T,GRCh38,7:150951592:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951583,C,T,GRCh38,7:150951583:C:T
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951580,G,A,GRCh38,7:150951580:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951579,G,A,GRCh38,7:150951579:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951568,C,T,GRCh38,7:150951568:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951555,G,A,GRCh38,7:150951555:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951546,T,C,GRCh38,7:150951546:T:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951540,G,A,GRCh38,7:150951540:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951531,C,T,GRCh38,7:150951531:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951525,G,A,GRCh38,7:150951525:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951517,C,T,GRCh38,7:150951517:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951514,A,G,GRCh38,7:150951514:A:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951508,T,C,GRCh38,7:150951508:T:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951507,T,G,GRCh38,7:150951507:T:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951507,T,C,GRCh38,7:150951507:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951499,G,A,GRCh38,7:150951499:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951495,T,C,GRCh38,7:150951495:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951087,G,A,GRCh38,7:150951087:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974809,T,C,GRCh38,7:150974809:T:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974807,C,G,GRCh38,7:150974807:C:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974803,G,T,GRCh38,7:150974803:G:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974803,G,A,GRCh38,7:150974803:G:A
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950404,G,A,GRCh38,7:150950404:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950312,G,A,GRCh38,7:150950312:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950246,C,A,GRCh38,7:150950246:C:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150949034,A,G,GRCh38,7:150949034:A:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150949034,A,C,GRCh38,7:150949034:A:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948981,G,A,GRCh38,7:150948981:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948939,C,T,GRCh38,7:150948939:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948938,T,C,GRCh38,7:150948938:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947493,T,A,GRCh38,7:150947493:T:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974931,G,T,GRCh38,7:150974931:G:T
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958059,C,A,GRCh38,7:150958059:C:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606751,G,A,GRCh38,3:38606751:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606743,C,T,GRCh38,3:38606743:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606710,G,A,GRCh38,3:38606710:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606689,A,C,GRCh38,3:38606689:A:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606683,G,A,GRCh38,3:38606683:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606682,C,T,GRCh38,3:38606682:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606071,G,T,GRCh38,3:38606071:G:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606058,C,T,GRCh38,3:38606058:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38597737,C,T,GRCh38,3:38597737:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38586038,G,A,GRCh38,3:38586038:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38586037,C,T,GRCh38,3:38586037:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585846,G,A,GRCh38,3:38585846:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585845,C,T,GRCh38,3:38585845:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585800,C,T,GRCh38,3:38585800:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585749,G,A,GRCh38,3:38585749:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38630393,G,A,GRCh38,3:38630393:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38630342,G,A,GRCh38,3:38630342:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38630341,C,T,GRCh38,3:38630341:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38566576,C,T,GRCh38,3:38566576:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38562422,C,A,GRCh38,3:38562422:C:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560404,C,T,GRCh38,3:38560404:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560397,G,A,GRCh38,3:38560397:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38556532,T,C,GRCh38,3:38556532:T:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38622401,C,T,GRCh38,3:38622401:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551486,C,T,GRCh38,3:38551486:C:T
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551154,C,T,GRCh38,3:38551154:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551145,C,T,GRCh38,3:38551145:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551144,C,T,GRCh38,3:38551144:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551085,C,T,GRCh38,3:38551085:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551070,T,C,GRCh38,3:38551070:T:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551003,T,C,GRCh38,3:38551003:T:C
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38550748,A,G,GRCh38,3:38550748:A:G
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38613773,G,A,GRCh38,3:38613773:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38609823,C,T,GRCh38,3:38609823:C:T
+CALM2,Pathogenic,"criteria provided, multiple submitters, no conflicts",2,47161851,T,C,GRCh38,2:47161851:T:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38562414,C,T,GRCh38,3:38562414:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38599005,TG,T,GRCh38,3:38599005:TG:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633053,AG,A,GRCh38,3:38633053:AG:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560397,CG,C,GRCh38,3:38560397:CG:C
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237492973,C,T,GRCh38,1:237492973:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606668,C,T,GRCh38,3:38606668:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950336,G,A,GRCh38,7:150950336:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958290,C,A,GRCh38,7:150958290:C:A
+CALM1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",14,90404482,A,G,GRCh38,14:90404482:A:G
+CALM2,Pathogenic,"criteria provided, multiple submitters, no conflicts",2,47161857,T,A,GRCh38,2:47161857:T:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947670,C,CG,GRCh38,7:150947670:C:CG
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38605949,A,T,GRCh38,3:38605949:A:T
+CASQ2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,115701423,C,CA,GRCh38,1:115701423:C:CA
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115705208,G,A,GRCh38,1:115705208:G:A
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115732900,C,G,GRCh38,1:115732900:C:G
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115768329,GT,G,GRCh38,1:115768329:GT:G
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237377386,G,A,GRCh38,1:237377386:G:A
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237377386,G,T,GRCh38,1:237377386:G:T
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237445488,C,T,GRCh38,1:237445488:C:T
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237445489,G,A,GRCh38,1:237445489:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237614298,G,A,GRCh38,1:237614298:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237638480,G,A,GRCh38,1:237638480:G:A
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237639026,G,A,GRCh38,1:237639026:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237640940,G,A,GRCh38,1:237640940:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237640941,C,T,GRCh38,1:237640941:C:T
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237640983,G,A,GRCh38,1:237640983:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237640983,G,T,GRCh38,1:237640983:G:T
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237778704,C,A,GRCh38,1:237778704:C:A
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237778726,G,A,GRCh38,1:237778726:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237781618,G,A,GRCh38,1:237781618:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237783677,A,G,GRCh38,1:237783677:A:G
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237783980,C,T,GRCh38,1:237783980:C:T
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237783984,C,T,GRCh38,1:237783984:C:T
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784013,C,T,GRCh38,1:237784013:C:T
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784084,C,A,GRCh38,1:237784084:C:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784182,G,A,GRCh38,1:237784182:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784245,A,G,GRCh38,1:237784245:A:G
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784257,A,C,GRCh38,1:237784257:A:C
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237791480,G,T,GRCh38,1:237791480:G:T
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237806236,A,C,GRCh38,1:237806236:A:C
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237806273,A,G,GRCh38,1:237806273:A:G
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237808913,G,A,GRCh38,1:237808913:G:A
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237832588,T,C,GRCh38,1:237832588:T:C
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237832619,G,A,GRCh38,1:237832619:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237832628,A,G,GRCh38,1:237832628:A:G
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38550905,TCAGA,T,GRCh38,3:38550905:TCAGA:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551520,GAGA,G,GRCh38,3:38551520:GAGA:G
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38555671,TGGGCTTCTG,T,GRCh38,3:38555671:TGGGCTTCTG:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38555745,T,C,GRCh38,3:38555745:T:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38557286,CT,C,GRCh38,3:38557286:CT:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560145,A,T,GRCh38,3:38560145:A:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560146,C,G,GRCh38,3:38560146:C:G
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560397,G,C,GRCh38,3:38560397:G:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560428,ACCT,A,GRCh38,3:38560428:ACCT:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38575445,GAC,G,GRCh38,3:38575445:GAC:G
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38576680,T,TG,GRCh38,3:38576680:T:TG
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38581006,CACAGCGATGGG,ACACAGTCAGA,GRCh38,3:38581006:CACAGCGATGGG:ACACAGTCAGA
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585772,G,GGT,GRCh38,3:38585772:G:GGT
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585895,CAA,C,GRCh38,3:38585895:CAA:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585903,G,A,GRCh38,3:38585903:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585926,A,AAC,GRCh38,3:38585926:A:AAC
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585945,AC,A,GRCh38,3:38585945:AC:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38597888,GC,G,GRCh38,3:38597888:GC:G
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38599051,C,T,GRCh38,3:38599051:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38603849,TG,T,GRCh38,3:38603849:TG:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38603891,CT,C,GRCh38,3:38603891:CT:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38604816,TCTTG,T,GRCh38,3:38604816:TCTTG:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606122,G,T,GRCh38,3:38606122:G:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606675,A,T,GRCh38,3:38606675:A:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606729,C,T,GRCh38,3:38606729:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38613782,G,A,GRCh38,3:38613782:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38613782,G,C,GRCh38,3:38613782:G:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38620842,C,T,GRCh38,3:38620842:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38620972,C,T,GRCh38,3:38620972:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150946955,C,CG,GRCh38,7:150946955:C:CG
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947367,A,ACGTCGCCC,GRCh38,7:150947367:A:ACGTCGCCC
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947371,TCGCCCCGGGGC,T,GRCh38,7:150947371:TCGCCCCGGGGC:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947373,GC,G,GRCh38,7:150947373:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947372,G,GC,GRCh38,7:150947372:G:GC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947377,CG,C,GRCh38,7:150947377:CG:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947380,G,GCCGC,GRCh38,7:150947380:G:GCCGC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947440,G,A,GRCh38,7:150947440:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947463,GC,G,GRCh38,7:150947463:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947478,C,T,GRCh38,7:150947478:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947512,C,CGCCT,GRCh38,7:150947512:C:CGCCT
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947611,CAG,C,GRCh38,7:150947611:CAG:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947665,AC,A,GRCh38,7:150947665:AC:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947678,C,CG,GRCh38,7:150947678:C:CG
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947785,T,TC,GRCh38,7:150947785:T:TC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947791,C,T,GRCh38,7:150947791:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947794,CG,C,GRCh38,7:150947794:CG:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947795,G,GC,GRCh38,7:150947795:G:GC
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947832,C,CGCCCG,GRCh38,7:150947832:C:CGCCCG
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947842,G,GGCCCC,GRCh38,7:150947842:G:GGCCCC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948954,T,A,GRCh38,7:150948954:T:A
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948984,C,G,GRCh38,7:150948984:C:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948992,GT,G,GRCh38,7:150948992:GT:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150949029,TC,T,GRCh38,7:150949029:TC:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950962,G,A,GRCh38,7:150950962:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951040,G,A,GRCh38,7:150951040:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951110,A,T,GRCh38,7:150951110:A:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951121,C,T,GRCh38,7:150951121:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951122,T,G,GRCh38,7:150951122:T:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951442,A,G,GRCh38,7:150951442:A:G
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951447,C,T,GRCh38,7:150951447:C:T
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951478,ATCT,A,GRCh38,7:150951478:ATCT:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951493,T,C,GRCh38,7:150951493:T:C
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951511,C,G,GRCh38,7:150951511:C:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951512,G,T,GRCh38,7:150951512:G:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951651,G,T,GRCh38,7:150951651:G:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951689,C,T,GRCh38,7:150951689:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951692,AG,A,GRCh38,7:150951692:AG:A
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951700,C,G,GRCh38,7:150951700:C:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951709,G,A,GRCh38,7:150951709:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952458,CGAAGGGGATGGCGGCCACCATGTCGAT,C,GRCh38,7:150952458:CGAAGGGGATGGCGGCCACCATGTCGAT:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952652,C,A,GRCh38,7:150952652:C:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952697,GC,G,GRCh38,7:150952697:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952789,C,T,GRCh38,7:150952789:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952840,GC,G,GRCh38,7:150952840:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952854,C,T,GRCh38,7:150952854:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952855,T,C,GRCh38,7:150952855:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150957291,C,T,GRCh38,7:150957291:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150957323,G,A,GRCh38,7:150957323:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150957405,TG,T,GRCh38,7:150957405:TG:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958090,GC,G,GRCh38,7:150958090:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958107,GCCTCGATGTCGTCGGCCGA,G,GRCh38,7:150958107:GCCTCGATGTCGTCGGCCGA:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958116,TCGTCGGC,T,GRCh38,7:150958116:TCGTCGGC:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958149,CA,C,GRCh38,7:150958149:CA:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958220,C,CGGGGCGATGGGAGCTGGCCG,GRCh38,7:150958220:C:CGGGGCGATGGGAGCTGGCCG
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958226,G,T,GRCh38,7:150958226:G:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958297,GC,G,GRCh38,7:150958297:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958403,CG,C,GRCh38,7:150958403:CG:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958407,GCGCC,G,GRCh38,7:150958407:GCGCC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150959591,TG,T,GRCh38,7:150959591:TG:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150959670,A,ACCAC,GRCh38,7:150959670:A:ACCAC
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974851,C,A,GRCh38,7:150974851:C:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974864,CA,C,GRCh38,7:150974864:CA:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974879,C,A,GRCh38,7:150974879:C:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974918,GC,G,GRCh38,7:150974918:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974936,T,TA,GRCh38,7:150974936:T:TA
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974942,C,T,GRCh38,7:150974942:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150977883,G,A,GRCh38,7:150977883:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445260,TCGCGCCCGGCGCCCCAGGTCCCG,T,GRCh38,11:2445260:TCGCGCCCGGCGCCCCAGGTCCCG:T
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445419,G,T,GRCh38,11:2445419:G:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445461,A,AT,GRCh38,11:2445461:A:AT
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2527923,T,A,GRCh38,11:2527923:T:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2527943,TG,T,GRCh38,11:2527943:TG:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2527966,CT,C,GRCh38,11:2527966:CT:C
+KCNQ1,Likely pathogenic,reviewed by expert panel,11,2528019,G,A,GRCh38,11:2528019:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570671,G,T,GRCh38,11:2570671:G:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570700,T,TA,GRCh38,11:2570700:T:TA
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570749,ATCATCGGTGAG,A,GRCh38,11:2570749:ATCATCGGTGAG:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2571325,A,G,GRCh38,11:2571325:A:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2571362,C,A,GRCh38,11:2571362:C:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572030,A,C,GRCh38,11:2572030:A:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572870,G,C,GRCh38,11:2572870:G:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572982,GGGGTGGTAAGTC,G,GRCh38,11:2572982:GGGGTGGTAAGTC:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583459,G,T,GRCh38,11:2583459:G:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583474,C,T,GRCh38,11:2583474:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583478,C,G,GRCh38,11:2583478:C:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583482,G,A,GRCh38,11:2583482:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583487,G,A,GRCh38,11:2583487:G:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585210,A,C,GRCh38,11:2585210:A:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585260,C,T,GRCh38,11:2585260:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587617,G,A,GRCh38,11:2587617:G:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587694,T,C,GRCh38,11:2587694:T:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588844,T,A,GRCh38,11:2588844:T:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2661960,G,T,GRCh38,11:2661960:G:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2662012,AC,A,GRCh38,11:2662012:AC:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768851,G,T,GRCh38,11:2768851:G:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776028,TG,T,GRCh38,11:2776028:TG:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776055,G,A,GRCh38,11:2776055:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776986,G,T,GRCh38,11:2776986:G:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776985,AG,A,GRCh38,11:2776985:AG:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778006,T,C,GRCh38,11:2778006:T:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778015,G,T,GRCh38,11:2778015:G:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778023,C,T,GRCh38,11:2778023:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2847773,C,T,GRCh38,11:2847773:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2527984,TA,T,GRCh38,11:2527984:TA:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570707,G,A,GRCh38,11:2570707:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776984,A,G,GRCh38,11:2776984:A:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2777975,G,C,GRCh38,11:2777975:G:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560210,G,C,GRCh38,3:38560210:G:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38554320,C,T,GRCh38,3:38554320:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947386,CG,C,GRCh38,7:150947386:CG:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947420,TG,T,GRCh38,7:150947420:TG:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948861,G,A,GRCh38,7:150948861:G:A
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115732961,CA,C,GRCh38,1:115732961:CA:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38555719,ACTT,A,GRCh38,3:38555719:ACTT:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38579372,G,A,GRCh38,3:38579372:G:A
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951519,A,G,GRCh38,7:150951519:A:G
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123512344,A,AT,GRCh38,6:123512344:A:AT
+CASQ2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115702996,C,A,GRCh38,1:115702996:C:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551478,G,A,GRCh38,3:38551478:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570664,G,GTGGTCCGCCTC,GRCh38,11:2570664:G:GTGGTCCGCCTC
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551015,CAG,C,GRCh38,3:38551015:CAG:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38554272,T,TACCC,GRCh38,3:38554272:T:TACCC
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38554373,G,A,GRCh38,3:38554373:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551487,G,A,GRCh38,3:38551487:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38556455,TG,T,GRCh38,3:38556455:TG:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974806,C,T,GRCh38,7:150974806:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974777,TGCGCGGCA,T,GRCh38,7:150974777:TGCGCGGCA:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570714,G,A,GRCh38,11:2570714:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950920,C,T,GRCh38,7:150950920:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570663,C,A,GRCh38,11:2570663:C:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38622415,C,T,GRCh38,3:38622415:C:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572020,C,A,GRCh38,11:2572020:C:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237377365,G,T,GRCh38,1:237377365:G:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947327,C,A,GRCh38,7:150947327:C:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947372,G,GCC,GRCh38,7:150947372:G:GCC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947381,GC,G,GRCh38,7:150947381:GC:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950167,C,A,GRCh38,7:150950167:C:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958430,G,T,GRCh38,7:150958430:G:T
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633034,C,T,GRCh38,3:38633034:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947453,G,C,GRCh38,7:150947453:G:C
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150959738,T,C,GRCh38,7:150959738:T:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572908,C,A,GRCh38,11:2572908:C:A
+CASQ2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115744914,T,C,GRCh38,1:115744914:T:C
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237330939,C,T,GRCh38,1:237330939:C:T
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237756342,C,T,GRCh38,1:237756342:C:T
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237772077,G,A,GRCh38,1:237772077:G:A
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585690,C,A,GRCh38,3:38585690:C:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38579439,C,T,GRCh38,3:38579439:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38609764,C,A,GRCh38,3:38609764:C:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38550952,CTGAG,C,GRCh38,3:38550952:CTGAG:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38581137,GGGGTGGCAATGCA,G,GRCh38,3:38581137:GGGGTGGCAATGCA:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150959642,TC,T,GRCh38,7:150959642:TC:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572069,ACCTGGAGGCT,A,GRCh38,11:2572069:ACCTGGAGGCT:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587616,G,A,GRCh38,11:2587616:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2847865,C,CA,GRCh38,11:2847865:C:CA
+CALM3,Pathogenic,"criteria provided, multiple submitters, no conflicts",19,46608846,G,C,GRCh38,19:46608846:G:C
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237828390,T,C,GRCh38,1:237828390:T:C
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38550838,C,CCACT,GRCh38,3:38550838:C:CCACT
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560198,TC,T,GRCh38,3:38560198:TC:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38579477,GA,G,GRCh38,3:38579477:GA:G
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38581293,ATC,A,GRCh38,3:38581293:ATC:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38587501,G,GTTGGAAA,GRCh38,3:38587501:G:GTTGGAAA
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38599020,G,A,GRCh38,3:38599020:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947368,ACGTCGCCCCGGGGC,A,GRCh38,7:150947368:ACGTCGCCCCGGGGC:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947679,CG,C,GRCh38,7:150947679:CG:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948978,GC,G,GRCh38,7:150948978:GC:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950983,G,A,GRCh38,7:150950983:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952469,GC,G,GRCh38,7:150952469:GC:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150959571,C,T,GRCh38,7:150959571:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974854,G,T,GRCh38,7:150974854:G:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445478,T,TCG,GRCh38,11:2445478:T:TCG
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2528005,ACT,A,GRCh38,11:2528005:ACT:A
+CALM1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",14,90404512,A,T,GRCh38,14:90404512:A:T
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237781598,A,G,GRCh38,1:237781598:A:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958306,TGCCA,G,GRCh38,7:150958306:TGCCA:G
+CALM1,Pathogenic,"criteria provided, multiple submitters, no conflicts",14,90404691,T,C,GRCh38,14:90404691:T:C
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115725508,C,T,GRCh38,1:115725508:C:T
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115768378,T,C,GRCh38,1:115768378:T:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633205,CCG,C,GRCh38,3:38633205:CCG:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560245,G,A,GRCh38,3:38560245:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560393,TGGACG,T,GRCh38,3:38560393:TGGACG:T
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38622491,T,C,GRCh38,3:38622491:T:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570706,G,T,GRCh38,11:2570706:G:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952424,C,G,GRCh38,7:150952424:C:G
+CALM2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",2,47161744,C,T,GRCh38,2:47161744:C:T
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115768540,A,G,GRCh38,1:115768540:A:G
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237832607,G,A,GRCh38,1:237832607:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38550910,CAG,C,GRCh38,3:38550910:CAG:C
+TRDN,Pathogenic,"criteria provided, multiple submitters, no conflicts",6,123530548,GTCTTA,G,GRCh38,6:123530548:GTCTTA:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445295,TCCCCGGCCGCG,T,GRCh38,11:2445295:TCCCCGGCCGCG:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2571373,A,AG,GRCh38,11:2571373:A:AG
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583456,T,C,GRCh38,11:2583456:T:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633104,A,T,GRCh38,3:38633104:A:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947381,C,CCG,GRCh38,7:150947381:C:CCG
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947383,G,GCCGAC,GRCh38,7:150947383:G:GCCGAC
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115768427,C,A,GRCh38,1:115768427:C:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38566408,C,T,GRCh38,3:38566408:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948510,C,A,GRCh38,7:150948510:C:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38562432,G,A,GRCh38,3:38562432:G:A
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38575452,C,G,GRCh38,3:38575452:C:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947805,GC,G,GRCh38,7:150947805:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150959590,T,TG,GRCh38,7:150959590:T:TG
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947367,A,ACGTCGCC,GRCh38,7:150947367:A:ACGTCGCC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947374,CCCCGGGGCCGCCGA,C,GRCh38,7:150947374:CCCCGGGGCCGCCGA:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974767,CTGCGCGATCTGCGCGGCAGCGCGGCGCTGCG,C,GRCh38,7:150974767:CTGCGCGATCTGCGCGGCAGCGCGGCGCTGCG:C
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38609966,T,C,GRCh38,3:38609966:T:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38603999,G,A,GRCh38,3:38603999:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38603712,C,T,GRCh38,3:38603712:C:T
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115705191,C,A,GRCh38,1:115705191:C:A
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237441382,G,A,GRCh38,1:237441382:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551074,C,T,GRCh38,3:38551074:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38556494,AG,A,GRCh38,3:38556494:AG:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38566437,C,T,GRCh38,3:38566437:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38579462,GC,G,GRCh38,3:38579462:GC:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947014,G,A,GRCh38,7:150947014:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947378,GGGGCCGCCGACCC,G,GRCh38,7:150947378:GGGGCCGCCGACCC:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947386,G,GACCC,GRCh38,7:150947386:G:GACCC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947799,CCCCCGGCCGG,C,GRCh38,7:150947799:CCCCCGGCCGG:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948450,TCCGTGCG,T,GRCh38,7:150948450:TCCGTGCG:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948455,C,CGCCT,GRCh38,7:150948455:C:CGCCT
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948997,ACTTGCCAGGC,A,GRCh38,7:150948997:ACTTGCCAGGC:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952691,A,G,GRCh38,7:150952691:A:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958064,C,CTGGCG,GRCh38,7:150958064:C:CTGGCG
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974710,CC,AA,GRCh38,7:150974710:CC:AA
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570665,GTGGTCCGCCTC,G,GRCh38,11:2570665:GTGGTCCGCCTC:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572059,C,T,GRCh38,11:2572059:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551460,G,A,GRCh38,3:38551460:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958423,G,GCCGCCCGA,GRCh38,7:150958423:G:GCCGCCCGA
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445192,A,T,GRCh38,11:2445192:A:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947833,CGCCCG,C,GRCh38,7:150947833:CGCCCG:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150977847,C,CA,GRCh38,7:150977847:C:CA
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951704,C,T,GRCh38,7:150951704:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572850,T,C,GRCh38,11:2572850:T:C
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237369568,A,G,GRCh38,1:237369568:A:G
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237791480,G,C,GRCh38,1:237791480:G:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38550987,CAT,C,GRCh38,3:38550987:CAT:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551008,CCTCA,C,GRCh38,3:38551008:CCTCA:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768842,CAG,C,GRCh38,11:2768842:CAG:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2571324,G,C,GRCh38,11:2571324:G:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572062,GGGAGGCACCT,G,GRCh38,11:2572062:GGGAGGCACCT:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947866,TG,T,GRCh38,7:150947866:TG:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951063,G,T,GRCh38,7:150951063:G:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952634,G,A,GRCh38,7:150952634:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585305,C,T,GRCh38,11:2585305:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38566565,G,C,GRCh38,3:38566565:G:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952843,CA,C,GRCh38,7:150952843:CA:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947371,C,CG,GRCh38,7:150947371:C:CG
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237707240,A,T,GRCh38,1:237707240:A:T
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237778727,G,A,GRCh38,1:237778727:G:A
+CALM2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",2,47161858,C,A,GRCh38,2:47161858:C:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38575390,C,T,GRCh38,3:38575390:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606674,G,A,GRCh38,3:38606674:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150946976,AGGCGGGC,A,GRCh38,7:150946976:AGGCGGGC:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947809,GC,G,GRCh38,7:150947809:GC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951738,A,T,GRCh38,7:150951738:A:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974871,GC,TT,GRCh38,7:150974871:GC:TT
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572034,TC,T,GRCh38,11:2572034:TC:T
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572055,C,A,GRCh38,11:2572055:C:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2571404,G,A,GRCh38,11:2571404:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38620919,G,A,GRCh38,3:38620919:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951083,TG,T,GRCh38,7:150951083:TG:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2775959,G,A,GRCh38,11:2775959:G:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776056,T,G,GRCh38,11:2776056:T:G
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2528008,T,C,GRCh38,11:2528008:T:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38554372,C,A,GRCh38,3:38554372:C:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948519,C,CG,GRCh38,7:150948519:C:CG
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115740767,G,A,GRCh38,1:115740767:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38603945,C,A,GRCh38,3:38603945:C:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587693,G,A,GRCh38,11:2587693:G:A
+CALM3,Pathogenic,"criteria provided, multiple submitters, no conflicts",19,46608981,G,A,GRCh38,19:46608981:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150957317,TG,T,GRCh38,7:150957317:TG:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570713,TGG,T,GRCh38,11:2570713:TGG:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572019,C,CCG,GRCh38,11:2572019:C:CCG
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115768444,C,T,GRCh38,1:115768444:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38620878,AT,A,GRCh38,3:38620878:AT:A
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123516189,C,A,GRCh38,6:123516189:C:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947653,CA,C,GRCh38,7:150947653:CA:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951815,CA,C,GRCh38,7:150951815:CA:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572107,C,T,GRCh38,11:2572107:C:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585248,C,T,GRCh38,11:2585248:C:T
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38587575,T,C,GRCh38,3:38587575:T:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585288,C,A,GRCh38,11:2585288:C:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2768920,G,A,GRCh38,11:2768920:G:A
+TRDN,Pathogenic,"criteria provided, multiple submitters, no conflicts",6,123636753,C,A,GRCh38,6:123636753:C:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947388,AC,A,GRCh38,7:150947388:AC:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38575364,T,TG,GRCh38,3:38575364:T:TG
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633119,GC,G,GRCh38,3:38633119:GC:G
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633181,G,A,GRCh38,3:38633181:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947870,G,A,GRCh38,7:150947870:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588816,CG,C,GRCh38,11:2588816:CG:C
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38562413,A,ACCCTCATG,GRCh38,3:38562413:A:ACCCTCATG
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947373,CCCCGGGG,GCC,GRCh38,7:150947373:CCCCGGGG:GCC
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445251,C,A,GRCh38,11:2445251:C:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38581343,A,G,GRCh38,3:38581343:A:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2583547,T,C,GRCh38,11:2583547:T:C
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237633671,C,T,GRCh38,1:237633671:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947786,TC,T,GRCh38,7:150947786:TC:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150957416,G,A,GRCh38,7:150957416:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570702,AC,A,GRCh38,11:2570702:AC:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784136,G,A,GRCh38,1:237784136:G:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784046,G,A,GRCh38,1:237784046:G:A
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950197,A,G,GRCh38,7:150950197:A:G
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115727014,C,A,GRCh38,1:115727014:C:A
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237806159,A,G,GRCh38,1:237806159:A:G
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38557230,C,A,GRCh38,3:38557230:C:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2661960,G,C,GRCh38,11:2661960:G:C
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237648522,G,A,GRCh38,1:237648522:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38560304,GC,G,GRCh38,3:38560304:GC:G
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38609733,C,T,GRCh38,3:38609733:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38609767,CA,C,GRCh38,3:38609767:CA:C
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123516160,CT,C,GRCh38,6:123516160:CT:C
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123547341,CT,C,GRCh38,6:123547341:CT:C
+TRDN,Pathogenic,"criteria provided, multiple submitters, no conflicts",6,123636725,T,C,GRCh38,6:123636725:T:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947372,CGCCCCGGG,C,GRCh38,7:150947372:CGCCCCGGG:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947796,GC,G,GRCh38,7:150947796:GC:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958082,CG,C,GRCh38,7:150958082:CG:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958158,G,A,GRCh38,7:150958158:G:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974776,CTGCGCGGCAGCGCGGCGCTGCG,C,GRCh38,7:150974776:CTGCGCGGCAGCGCGGCGCTGCG:C
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588804,C,CA,GRCh38,11:2588804:C:CA
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2777030,C,G,GRCh38,11:2777030:C:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778035,CAA,C,GRCh38,11:2778035:CAA:C
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587690,G,GT,GRCh38,11:2587690:G:GT
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38551459,C,A,GRCh38,3:38551459:C:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38566484,GC,G,GRCh38,3:38566484:GC:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585276,G,T,GRCh38,11:2585276:G:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951535,T,C,GRCh38,7:150951535:T:C
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974786,C,T,GRCh38,7:150974786:C:T
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150977836,A,AC,GRCh38,7:150977836:A:AC
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38587562,TC,T,GRCh38,3:38587562:TC:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947796,CC,A,GRCh38,7:150947796:CC:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38603786,GC,G,GRCh38,3:38603786:GC:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2847842,A,AC,GRCh38,11:2847842:A:AC
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38608217,G,C,GRCh38,3:38608217:G:C
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38557230,AC,A,GRCh38,3:38557230:AC:A
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150977836,A,T,GRCh38,7:150977836:A:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2571323,A,G,GRCh38,11:2571323:A:G
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588712,G,C,GRCh38,11:2588712:G:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2570626,CAGG,C,GRCh38,11:2570626:CAGG:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951471,G,T,GRCh38,7:150951471:G:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572029,C,T,GRCh38,11:2572029:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38585944,A,AC,GRCh38,3:38585944:A:AC
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237445402,C,A,GRCh38,1:237445402:C:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572099,T,TCCACC,GRCh38,11:2572099:T:TCCACC
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588815,GC,G,GRCh38,11:2588815:GC:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445458,GGAAATGCTTC,G,GRCh38,11:2445458:GGAAATGCTTC:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947370,T,TCGCCC,GRCh38,7:150947370:T:TCGCCC
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572072,G,GGA,GRCh38,11:2572072:G:GGA
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237784158,A,G,GRCh38,1:237784158:A:G
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572979,TG,T,GRCh38,11:2572979:TG:T
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115732931,G,T,GRCh38,1:115732931:G:T
+TRDN,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123548453,C,T,GRCh38,6:123548453:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633091,G,A,GRCh38,3:38633091:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587680,AG,A,GRCh38,11:2587680:AG:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572975,T,TGGTG,GRCh38,11:2572975:T:TGGTG
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237772077,G,T,GRCh38,1:237772077:G:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951763,C,CT,GRCh38,7:150951763:C:CT
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123516150,C,A,GRCh38,6:123516150:C:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947381,GCCGC,G,GRCh38,7:150947381:GCCGC:G
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572987,G,A,GRCh38,11:2572987:G:A
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38613742,C,G,GRCh38,3:38613742:C:G
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606811,C,T,GRCh38,3:38606811:C:T
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115705187,C,G,GRCh38,1:115705187:C:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150959621,C,CG,GRCh38,7:150959621:C:CG
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974785,AGCGCGGCGCTGCGT,A,GRCh38,7:150974785:AGCGCGGCGCTGCGT:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585309,T,A,GRCh38,11:2585309:T:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2661959,A,G,GRCh38,11:2661959:A:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947828,GC,G,GRCh38,7:150947828:GC:G
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38581062,G,A,GRCh38,3:38581062:G:A
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38613808,C,T,GRCh38,3:38613808:C:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633133,G,A,GRCh38,3:38633133:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947667,C,CG,GRCh38,7:150947667:C:CG
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633268,CG,C,GRCh38,3:38633268:CG:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38566553,TC,T,GRCh38,3:38566553:TC:T
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38557230,C,T,GRCh38,3:38557230:C:T
+TRDN,Pathogenic,"criteria provided, multiple submitters, no conflicts",6,123571097,T,TAAAA,GRCh38,6:123571097:T:TAAAA
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150959582,C,T,GRCh38,7:150959582:C:T
+TRDN,Pathogenic,"criteria provided, multiple submitters, no conflicts",6,123516158,TTC,T,GRCh38,6:123516158:TTC:T
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115738223,C,T,GRCh38,1:115738223:C:T
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115705206,TC,T,GRCh38,1:115705206:TC:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38633214,G,A,GRCh38,3:38633214:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2585210,A,AGGGGATTCTTGGCTCGGGGTTTGCCCTGAAGGTGCAGCAGAAGCAGAGGCAGAAGCACTTCAACCGGCAGATCCCGGCGGCAGCCT,GRCh38,11:2585210:A:AGGGGATTCTTGGCTCGGGGTTTGCCCTGAAGGTGCAGCAGAAGCAGAGGCAGAAGCACTTCAACCGGCAGATCCCGGCGGCAGCCT
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776986,G,C,GRCh38,11:2776986:G:C
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115744885,C,CT,GRCh38,1:115744885:C:CT
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951106,TAGCAT,A,GRCh38,7:150951106:TAGCAT:A
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950421,C,G,GRCh38,7:150950421:C:G
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38597737,C,G,GRCh38,3:38597737:C:G
+CASQ2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,115768343,G,A,GRCh38,1:115768343:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445203,C,CT,GRCh38,11:2445203:C:CT
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947808,G,GC,GRCh38,7:150947808:G:GC
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947827,TGCCCCCGCCCGGCCCG,T,GRCh38,7:150947827:TGCCCCCGCCCGGCCCG:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947667,C,CGGCG,GRCh38,7:150947667:C:CGGCG
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947677,TC,T,GRCh38,7:150947677:TC:T
+TRDN,Pathogenic,"criteria provided, multiple submitters, no conflicts",6,123636774,A,G,GRCh38,6:123636774:A:G
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947380,G,GC,GRCh38,7:150947380:G:GC
+RYR2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,237640956,A,G,GRCh38,1:237640956:A:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947034,G,GC,GRCh38,7:150947034:G:GC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958446,C,A,GRCh38,7:150958446:C:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38581359,AAG,A,GRCh38,3:38581359:AAG:A
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115726991,C,T,GRCh38,1:115726991:C:T
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38580930,C,G,GRCh38,3:38580930:C:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947458,G,A,GRCh38,7:150947458:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951690,C,T,GRCh38,7:150951690:C:T
+CASQ2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115744826,A,C,GRCh38,1:115744826:A:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38598994,A,T,GRCh38,3:38598994:A:T
+RYR2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237808913,G,T,GRCh38,1:237808913:G:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947713,A,AG,GRCh38,7:150947713:A:AG
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572980,G,A,GRCh38,11:2572980:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445417,C,T,GRCh38,11:2445417:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150957428,CT,C,GRCh38,7:150957428:CT:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778024,G,T,GRCh38,11:2778024:G:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38556452,G,A,GRCh38,3:38556452:G:A
+CASQ2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,115701413,C,T,GRCh38,1:115701413:C:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38599044,GGCGT,G,GRCh38,3:38599044:GGCGT:G
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123548519,CA,C,GRCh38,6:123548519:CA:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150947683,G,GGCCT,GRCh38,7:150947683:G:GGCCT
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606750,G,GGTGTAGCC,GRCh38,3:38606750:G:GGTGTAGCC
+TRDN,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",6,123530507,CT,C,GRCh38,6:123530507:CT:C
+RYR2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,237648521,A,G,GRCh38,1:237648521:A:G
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38566430,C,T,GRCh38,3:38566430:C:T
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150949051,T,C,GRCh38,7:150949051:T:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951110,CA,C,GRCh38,7:150951110:CA:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38576676,TC,T,GRCh38,3:38576676:TC:T
+KCNH2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948995,G,C,GRCh38,7:150948995:G:C
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588712,G,A,GRCh38,11:2588712:G:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2588855,G,A,GRCh38,11:2588855:G:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2662047,G,T,GRCh38,11:2662047:G:T
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2777021,AT,A,GRCh38,11:2777021:AT:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38556550,GT,G,GRCh38,3:38556550:GT:G
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38576660,C,A,GRCh38,3:38576660:C:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38604761,TGGGG,CAGA,GRCh38,3:38604761:TGGGG:CAGA
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38604785,C,A,GRCh38,3:38604785:C:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38587500,CT,C,GRCh38,3:38587500:CT:C
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38586042,C,G,GRCh38,3:38586042:C:G
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2572980,G,C,GRCh38,11:2572980:G:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38581153,TG,T,GRCh38,3:38581153:TG:T
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2445200,C,A,GRCh38,11:2445200:C:A
+KCNQ1,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2587565,CCTCAGACCGCATGGAGGTGCTATGCTG,C,GRCh38,11:2587565:CCTCAGACCGCATGGAGGTGCTATGCTG:C
+CASQ2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115702952,CCTGAATAGGT,C,GRCh38,1:115702952:CCTGAATAGGT:C
+CASQ2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115740727,C,T,GRCh38,1:115740727:C:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150950921,CCG,C,GRCh38,7:150950921:CCG:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38597824,T,TG,GRCh38,3:38597824:T:TG
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974721,G,C,GRCh38,7:150974721:G:C
+CASQ2,Pathogenic,"criteria provided, multiple submitters, no conflicts",1,115740830,T,C,GRCh38,1:115740830:T:C
+SCN5A,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38587410,GGA,G,GRCh38,3:38587410:GGA:G
+CASQ2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115732976,T,C,GRCh38,1:115732976:T:C
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38576777,TG,T,GRCh38,3:38576777:TG:T
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606784,A,AG,GRCh38,3:38606784:A:AG
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150952811,G,A,GRCh38,7:150952811:G:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38587400,C,CAGGCG,GRCh38,3:38587400:C:CAGGCG
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38587443,CA,C,GRCh38,3:38587443:CA:C
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150951076,G,A,GRCh38,7:150951076:G:A
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2776985,G,T,GRCh38,11:2776985:G:T
+SCN5A,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",3,38604026,CG,C,GRCh38,3:38604026:CG:C
+CASQ2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115725554,C,A,GRCh38,1:115725554:C:A
+CASQ2,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",1,115732899,A,T,GRCh38,1:115732899:A:T
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974870,C,A,GRCh38,7:150974870:C:A
+SCN5A,Pathogenic,"criteria provided, multiple submitters, no conflicts",3,38606698,G,A,GRCh38,3:38606698:G:A
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150948466,AG,A,GRCh38,7:150948466:AG:A
+KCNQ1,Likely pathogenic,"criteria provided, multiple submitters, no conflicts",11,2778014,C,G,GRCh38,11:2778014:C:G
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958115,T,TCGTCGGC,GRCh38,7:150958115:T:TCGTCGGC
+KCNH2,Pathogenic,"criteria provided, multiple submitters, no conflicts",7,150958126,ACGAGGCGCGGCGCACG,A,GRCh38,7:150958126:ACGAGGCGCGGCGCACG:A
+KCNH2,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",7,150974766,C,CTGCGCGATCTGCGCGGCAGCGCGGCGCTGCG,GRCh38,7:150974766:C:CTGCGCGATCTGCGCGGCAGCGCGGCGCTGCG
+KCNQ1,Pathogenic,"criteria provided, multiple submitters, no conflicts",11,2777975,G,A,GRCh38,11:2777975:G:A

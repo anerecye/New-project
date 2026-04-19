@@ -1,0 +1,5 @@
+metric,count,proportion
+total_clinvar_variants,2253,1.0
+matched_to_gnomad,442,0.19618286728806036
+unmatched_to_gnomad,1811,0.8038171327119397
+matched_with_missing_af,0,0.0

@@ -1,0 +1,11 @@
+variant_key,Chromosome,Start,ReferenceAllele,AlternateAllele,GeneSymbol,best_review_status,is_high_confidence
+1:115740830:T:C,1,115740830,T,C,CASQ2,"criteria provided, multiple submitters, no conflicts",True
+3:38605949:A:T,3,38605949,A,T,SCN5A,"criteria provided, multiple submitters, no conflicts",True
+3:38557230:C:T,3,38557230,C,T,SCN5A,"criteria provided, multiple submitters, no conflicts",True
+1:237377349:C:T,1,237377349,C,T,RYR2,"criteria provided, single submitter",False
+1:115744826:A:C,1,115744826,A,C,CASQ2,"criteria provided, multiple submitters, no conflicts",True
+7:150952717:G:T,7,150952717,G,T,KCNH2,"criteria provided, single submitter",False
+1:237772078:T:C,1,237772078,T,C,RYR2,"criteria provided, single submitter",False
+14:90404693:C:G,14,90404693,C,G,CALM1,"criteria provided, single submitter",False
+1:237784256:G:C,1,237784256,G,C,RYR2,"criteria provided, multiple submitters, no conflicts",True
+3:38633181:G:A,3,38633181,G,A,SCN5A,"criteria provided, multiple submitters, no conflicts",True

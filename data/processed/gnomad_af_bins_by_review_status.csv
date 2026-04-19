@@ -1,0 +1,21 @@
+best_review_status,af_bin,count,proportion
+"criteria provided, multiple submitters, no conflicts",AF == 0 or missing,35,0.13108614232209737
+"criteria provided, multiple submitters, no conflicts",0 < AF < 1e-5,204,0.7640449438202247
+"criteria provided, multiple submitters, no conflicts",1e-5 <= AF < 1e-4,28,0.10486891385767791
+"criteria provided, multiple submitters, no conflicts",1e-4 <= AF < 1e-3,0,0.0
+"criteria provided, multiple submitters, no conflicts",AF >= 1e-3,0,0.0
+"criteria provided, single submitter",AF == 0 or missing,77,0.48125
+"criteria provided, single submitter",0 < AF < 1e-5,81,0.50625
+"criteria provided, single submitter",1e-5 <= AF < 1e-4,2,0.0125
+"criteria provided, single submitter",1e-4 <= AF < 1e-3,0,0.0
+"criteria provided, single submitter",AF >= 1e-3,0,0.0
+no assertion criteria provided,AF == 0 or missing,1,0.16666666666666666
+no assertion criteria provided,0 < AF < 1e-5,5,0.8333333333333334
+no assertion criteria provided,1e-5 <= AF < 1e-4,0,0.0
+no assertion criteria provided,1e-4 <= AF < 1e-3,0,0.0
+no assertion criteria provided,AF >= 1e-3,0,0.0
+reviewed by expert panel,AF == 0 or missing,1,0.1111111111111111
+reviewed by expert panel,0 < AF < 1e-5,5,0.5555555555555556
+reviewed by expert panel,1e-5 <= AF < 1e-4,2,0.2222222222222222
+reviewed by expert panel,1e-4 <= AF < 1e-3,1,0.1111111111111111
+reviewed by expert panel,AF >= 1e-3,0,0.0

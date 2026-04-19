@@ -1,0 +1,5 @@
+GeneSymbol,ClinicalSignificance,ReviewStatus,Chromosome,Start,ReferenceAllele,AlternateAllele,Assembly,variant_key
+KCNQ1;KCNQ1-AS1;KCNQ1OT1;LOC106783508;LOC132089927;LOC132090832,Likely pathogenic,"criteria provided, single submitter",11,2662082,na,na,GRCh38,11:2662082:na:na
+LOC132090832;KCNQ1;KCNQ1-AS1;KCNQ1OT1;LOC106783508;LOC132089927,Pathogenic,"criteria provided, single submitter",11,2662082,na,na,GRCh38,11:2662082:na:na
+KCNH2,Pathogenic,"criteria provided, single submitter",7,150944956,na,na,GRCh38,7:150944956:na:na
+KCNH2,Pathogenic,"criteria provided, single submitter",7,150944956,na,na,GRCh38,7:150944956:na:na

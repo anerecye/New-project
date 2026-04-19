@@ -1,0 +1,10 @@
+metric,value
+total_clinvar_variants,2253
+variants_with_af,442
+matched_to_gnomad,442
+af_gt_1e_5_count,33
+af_gt_1e_5_fraction,0.074661
+af_gt_1e_4_count,1
+af_gt_1e_4_fraction,0.002262
+max_af,0.000154602
+median_af,6.90125e-07

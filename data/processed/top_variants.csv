@@ -1,0 +1,11 @@
+variant_key,GeneSymbol,AF,AF_category,AC,AN,ClinicalSignificance_values,best_review_status,is_high_confidence
+11:2768881:C:T,KCNQ1,0.000154602,common,226.0,1461822.0,Likely pathogenic,reviewed by expert panel,True
+6:123516150:C:A,TRDN,6.79663e-05,rare,91.0,1338898.0,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",True
+11:2585264:A:G,KCNQ1,6.77285e-05,rare,99.0,1461718.0,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",True
+1:115705208:G:A,CASQ2,6.57509e-05,rare,96.0,1460056.0,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",True
+6:123636725:T:C,TRDN,5.27838e-05,rare,77.0,1458782.0,Pathogenic,"criteria provided, multiple submitters, no conflicts",True
+7:150950166:A:C,KCNH2,4.36702e-05,rare,24.0,549574.0,Likely pathogenic,"criteria provided, single submitter",False
+6:123503899:G:A,TRDN,3.9942e-05,rare,56.0,1402034.0,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",True
+3:38562422:C:A,SCN5A,3.84586e-05,rare,56.0,1456110.0,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",True
+11:2768917:C:T,KCNQ1,3.62766e-05,rare,53.0,1460996.0,Pathogenic,"criteria provided, multiple submitters, no conflicts",True
+11:2661960:G:T,KCNQ1,3.55713e-05,rare,52.0,1461854.0,Pathogenic/Likely pathogenic,"criteria provided, multiple submitters, no conflicts",True

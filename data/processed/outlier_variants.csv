@@ -1,0 +1,2 @@
+variant_key,GeneSymbol,Chromosome,Start,ReferenceAllele,AlternateAllele,n_clinvar_rows,ClinicalSignificance_values,ReviewStatus_values,best_review_status,is_high_confidence,AF,AC,AN,gnomad_match,AF_category
+11:2768881:C:T,KCNQ1,11,2768881,C,T,1,Likely pathogenic,reviewed by expert panel,reviewed by expert panel,True,0.000154602,226.0,1461822.0,True,common

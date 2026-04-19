@@ -27,6 +27,7 @@ python -m pip install -r requirements.txt
 Regenerate the summary tables and gnomAD AF distribution figure from the included processed merge:
 
 ```bash
+python src/create_metric_tables.py
 python src/summarize_gnomad_merge.py
 python src/make_publication_figure.py
 ```
@@ -42,6 +43,7 @@ python src/make_bed_for_gnomad.py
 bash src/split_bed_by_chromosome.sh
 bash src/extract_gnomad_exomes.sh
 python src/merge_gnomad.py --gnomad data/processed/gnomad_subset_with_header.tsv
+python src/create_metric_tables.py
 python src/summarize_gnomad_merge.py
 python src/make_publication_figure.py
 ```
@@ -51,3 +53,16 @@ The gnomAD extraction scripts require `bcftools` and internet access to query pu
 ## Figure
 
 `figures/figure_final_publication.png` compares log10 allele-frequency distributions for gnomAD population variants and ClinVar clinical variants. Dashed vertical lines mark approximate rare-disease frequency thresholds at `1e-5` and `1e-4`. The clinical distribution is concentrated below these thresholds, illustrating the frequency-constrained nature of clinically cataloged pathogenic variation.
+
+## Main Metric Outputs
+
+- `data/processed/main_metrics.csv`: headline counts, outlier fractions, maximum AF, and median AF.
+- `data/processed/af_category_counts.csv`: counts by ultra-rare, rare, and common AF categories.
+- `data/processed/clinvar_vs_gnomad_af_summary.csv`: descriptive AF comparison for ClinVar-matched variants versus the queried gnomAD population subset.
+- `data/processed/outlier_variants.csv`: all ClinVar variants with `AF > 1e-4`.
+- `data/processed/gene_af_stats.csv`: per-gene AF summary statistics.
+- `data/processed/outlier_counts_by_gene.csv`: outlier counts by gene.
+- `data/processed/top_variants.csv`: top variants ranked by AF.
+- `data/processed/exomes_genomes_af_comparison.csv`: exome/genome AF comparison when overlapping genome inputs are available. In the current small processed example, no overlapping exome/genome variant keys are available.
+- `figures/af_distribution_updated.png`: threshold-marked AF histogram.
+- `figures/af_categories.png`: AF category barplot.

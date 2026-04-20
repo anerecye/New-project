@@ -1,0 +1,6 @@
+variant_type,kcnh2_total,kcnh2_observed_non_overlap,other_gene_non_overlap_rate_same_type,kcnh2_expected_non_overlap_at_other_rate,kcnh2_excess_non_overlap_same_type_adjusted
+duplication,102,97,0.8152173913043478,83.15217391304347,13.84782608695653
+deletion,209,181,0.853125,178.303125,2.6968750000000057
+SNV,152,115,0.7408312958435208,112.60635696821517,2.3936430317848334
+MNV_or_substitution,3,3,1.0,3.0,0.0
+insertion,12,10,0.8888888888888888,10.666666666666666,-0.6666666666666661

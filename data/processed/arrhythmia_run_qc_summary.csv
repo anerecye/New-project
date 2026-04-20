@@ -1,0 +1,8 @@
+section,metric,count,fraction,value
+match_category,exact_match,350,0.2021952628538417,
+match_category,allele_discordance,645,0.37261698440207974,
+match_category,no_gnomad_record,736,0.42518775274407855,
+match_category,query_error,0,0.0,
+match_qc,allele_discordance_to_no_record_ratio,,,0.876358695652174
+match_qc,article_ratio_849_to_962,,,0.8825363825363826
+coverage_query_status,ok,200,1.0,

@@ -1,0 +1,5 @@
+scenario,removed_variant_count,remaining_variant_count,remaining_non_overlap_count,remaining_non_overlap_fraction,expected_non_overlap_count_at_global_rate,excess_non_overlap_count
+none_removed,0,478,406,0.8493723849372385,381.35066435586367,24.64933564413633
+remove_long_duplications_gt_50bp,3,475,403,0.848421052631579,378.9572501444252,24.04274985557481
+remove_all_duplications,102,376,309,0.8218085106382979,299.97458116695555,9.025418833044455
+remove_repeatmasker_window_duplications,16,462,390,0.8441558441558441,368.58578856152513,21.414211438474865

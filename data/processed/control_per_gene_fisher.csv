@@ -1,0 +1,5 @@
+gene,n_af_covered,n_outlier,pct_outlier,odds_ratio,fisher_p,bh_q,significant
+BRCA2,58,4,6.9,8.444,0.043812488847491476,0.1752499553899659,False
+BRCA1,60,1,1.7,0.462,0.8847788138924837,1.0,False
+APC,23,0,0.0,0.0,1.0,1.0,False
+MLH1,32,0,0.0,0.0,1.0,1.0,False

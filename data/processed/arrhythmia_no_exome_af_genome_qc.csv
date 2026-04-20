@@ -1,0 +1,17 @@
+gene,clinvar_id,variant_key,variant_id,review_status,gnomad_status,exome_af,exome_ac,exome_an,genome_af,genome_ac,genome_an,has_genome_data
+KCNQ1,VCV001342782,11:2588712:G:C,11-2588712-G-C,"criteria provided, multiple submitters, no conflicts",no_exome_data,,,,6.5788608044630995e-06,1,152002,True
+KCNQ1,VCV000925351,11:2588790:CA:C,11-2588790-CA-C,"criteria provided, single submitter",no_exome_data,,,,0.0,0,151984,True
+KCNH2,VCV001331098,7:150977836:A:T,7-150977836-A-T,"criteria provided, multiple submitters, no conflicts",no_exome_data,,,,0.0,0,40182,True
+SCN5A,VCV003075755,3:38556481:AT:A,3-38556481-AT-A,"criteria provided, single submitter",no_exome_data,,,,6.567281802062126e-06,1,152270,True
+SCN5A,VCV002094285,3:38551234:C:T,3-38551234-C-T,"criteria provided, single submitter",no_exome_data,,,,1.3167597176867165e-05,2,151888,True
+SCN5A,VCV001075437,3:38551532:T:A,3-38551532-T-A,"criteria provided, single submitter",no_exome_data,,,,0.0,0,150870,True
+SCN5A,VCV000979203,3:38585689:A:T,3-38585689-A-T,"criteria provided, single submitter",no_exome_data,,,,0.0,0,7454,True
+SCN5A,VCV000830371,3:38554381:A:G,3-38554381-A-G,no assertion criteria provided,no_exome_data,,,,6.570733950982325e-06,1,152190,True
+SCN5A,VCV000660776,3:38575390:C:T,3-38575390-C-T,"criteria provided, multiple submitters, no conflicts",no_exome_data,,,,6.570215897294385e-06,1,152202,True
+RYR2,VCV003766443,1:237783971:T:C,1-237783971-T-C,"criteria provided, single submitter",no_exome_data,,,,6.565557087518876e-06,1,152310,True
+RYR2,VCV002758112,1:237793882:T:A,1-237793882-T-A,"criteria provided, single submitter",no_exome_data,,,,0.0,0,152146,True
+TRDN,VCV002920531,6:123503894:CTTCTG:C,6-123503894-CTTCTG-C,"criteria provided, single submitter",no_exome_data,,,,6.585272696142348e-06,1,151854,True
+TRDN,VCV002730579,6:123503902:C:T,6-123503902-C-T,"criteria provided, single submitter",no_exome_data,,,,6.588396516055922e-06,1,151782,True
+ANK2,VCV004732021,4:113343099:G:GT,4-113343099-G-GT,"criteria provided, single submitter",no_exome_data,,,,6.570647603027754e-06,1,152192,True
+ANK2,VCV003540989,4:113353367:TGA:T,4-113353367-TGA-T,"criteria provided, single submitter",no_exome_data,,,,6.573584707212537e-06,1,152124,True
+HCN4,VCV000374859,15:73329719:C:G,15-73329719-C-G,"criteria provided, single submitter",no_exome_data,,,,6.569870573549701e-06,1,152210,True

@@ -1,0 +1,33 @@
+{
+  "af_rare": 0.0001,
+  "af_ultra_rare": 1e-05,
+  "cache_metadata_version": 1,
+  "cache_type": "coverage_analysis",
+  "coverage_sample_n": 200,
+  "generated_at_utc": "2026-04-20T02:55:15+00:00",
+  "genes": [
+    "AKAP9",
+    "ANK2",
+    "CACNA1C",
+    "CACNA2D1",
+    "CACNB2",
+    "CALM1",
+    "CALM2",
+    "CALM3",
+    "CASQ2",
+    "HCN4",
+    "KCNE1",
+    "KCNE2",
+    "KCNH2",
+    "KCNJ2",
+    "KCNQ1",
+    "RYR2",
+    "SCN4B",
+    "SCN5A",
+    "SNTA1",
+    "TRDN"
+  ],
+  "gnomad_dataset": "gnomad_r4",
+  "pipeline_version": "arrhythmia-api-v1",
+  "row_count": 200
+}

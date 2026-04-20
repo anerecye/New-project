@@ -1,0 +1,4 @@
+duplication_size_bucket,variant_count,non_overlap_count,non_overlap_fraction,allele_discordance_count,no_gnomad_record_count,exact_match_count,median_duplication_size_bp,max_duplication_size_bp,rmsk_overlap_10bp_window_fraction,simpleRepeat_overlap_10bp_window_fraction
+long_gt_50bp,3,3,1.0,2,1,0,275.0,6314,1.0,0.3333333333333333
+medium_11_50bp,9,9,1.0,7,2,0,17.0,41,0.2222222222222222,0.0
+short_1_10bp,90,85,0.9444444444444444,69,16,5,2.0,10,0.12222222222222222,0.011111111111111112

@@ -365,6 +365,10 @@ The model writes:
 - `data/processed/arrhythmia_vital_lof_subtype_discordance_summary.csv`:
   frameshift, stop_gained, and canonical_splice discordance summary across the
   VITAL continuum.
+- `data/processed/vital_red_manual_review_live_check.csv`:
+  live ClinVar manual-review snapshot for the three VITAL-red variants,
+  including conflicts, submitter status, literature mentions, and unresolved
+  interpretation.
 - `data/processed/arrhythmia_vital_acmg_disagreement.csv`: case-level table
   for variants that a naive ACMG-style frequency screen flags, split by
   whether VITAL agrees or withholds red priority.
@@ -570,12 +574,77 @@ Three examples show how the table becomes a clinical review story:
   `borderline` red call, retained under 2/5 alternative profiles, not an
   anchor case.
 
+### Live Manual Review Snapshot
+
+The three red-priority variants were rechecked against live ClinVar pages on
+April 21, 2026. This is not adjudication; it is the bridge between score output
+and human review.
+
+- `SCN5A` `VCV000440850` remains `Pathogenic` for Brugada syndrome 1 with
+  `no assertion criteria provided` and a single submission. No conflicting or
+  multiple-submitter evidence was present. ClinVar lists submitter-cited PubMed
+  records `10532948`, `15851227`, and `18599870`, plus text-mined citations.
+  Suspicious but unresolved: AFR popmax is too high for a simple fully
+  penetrant Mendelian assertion, but the haplotype has historical literature
+  and drug-response/functional context.
+- `TRDN` `VCV001325231` remains `Likely pathogenic` for catecholaminergic
+  polymorphic ventricular tachycardia 5, with criteria from a single submitter
+  and no conflicts. ClinVar reports no germline citations for this variant.
+  Suspicious but unresolved: it is a frameshift with AMR popmax `2.18e-4` and
+  global `AC=40`, but TRDN interpretation must account for recessive disease
+  architecture, carrier state, phenotype, and missing public segregation data.
+- `KCNH2` `VCV004535537` remains `Likely pathogenic` for Long QT syndrome,
+  with criteria from a single LabCorp submitter and no conflicts. ClinVar cites
+  PMID `36861347`; the submitter text notes affected observations but not
+  unequivocal association, and no experimental functional confirmation. Suspicious
+  but unresolved: this is a plausible canonical splice-donor allele in a
+  constrained gene, yet it has ASJ popmax `1.32e-4`, global `AC=24`, and
+  borderline weight sensitivity.
+
+The live check table is written to
+`data/processed/vital_red_manual_review_live_check.csv`.
+
+### Handling Gray No-Frequency-Evidence Variants
+
+Gray is not green. In the current arrhythmia run, 1,397 variants sit in the
+`gray_no_frequency_evidence` band: 736 `not_observed_in_gnomAD`, 645
+`allele_discordance_no_exact_AF`, and 16 `exact_match_without_AF`. These
+variants are carried forward because absence can mean true rarity, incomplete
+coverage, allele-representation mismatch, or poor detectability.
+
+A practical gray queue should triage by variant type and clinical context:
+SNVs can be reviewed differently from indels/duplications; high-importance or
+dominant constrained genes should move earlier in the queue; indels and
+duplications should receive normalization, repeat-context, and mappability
+checks; patient-facing decisions should trigger orthogonal validation such as
+Sanger/PCR, long-read sequencing, MLPA, or array-based methods where relevant.
+Variants without immediate action should remain in a deferred review queue for
+periodic re-query as ClinVar and gnomAD releases change.
+
 Review fragility is reported as an explicit result rather than hidden inside
 the score. In the current cache, AC-supported frequency signals are mostly
 not weak submissions: 6/9 are multiple-submitter/no-conflict records. VITAL
 does not automatically overturn those; all 3 red-priority calls come from
 review-fragile records, with 2/3 single-submitter and 1/3 weak/no-assertion.
 This makes the review-quality prior auditable and clinically interpretable.
+
+### Practical Implementation
+
+The intended deployment is batch scoring, not one-off spreadsheet triage:
+
+```bash
+python src/arrhythmia_variant_pipeline.py --email EMAIL --output-prefix arrhythmia
+python src/advanced_variant_analyses.py --output-prefix arrhythmia --no-fetch-population-af --no-fetch-exome-genome-af
+python src/generate_supplementary_tables.py --output-prefix arrhythmia
+python src/build_vital_manuscript_docx.py
+```
+
+The key files for a lab workflow are `*_vital_scores.csv`,
+`*_vital_component_breakdown.csv`, and `*_vital_predictions.csv`. Red variants
+go to immediate expert review, orange/yellow variants can be reviewed in batch,
+and gray variants enter the no-frequency-evidence workflow above. The same
+tables could be wrapped in a small web tool showing component breakdowns with
+links to ClinVar, gnomAD, PubMed, and local laboratory evidence.
 
 For historical enrichment analysis across ClinVar releases, generate a VITAL score table
 from an older ClinVar snapshot, then compare that baseline snapshot with a

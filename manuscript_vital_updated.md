@@ -254,9 +254,27 @@ The three VITAL-red variants were the highest-priority re-review candidates as o
 
 These examples illustrate why VITAL is not simply an AF threshold. The naive AF screen flags 115 variants; VITAL prioritizes only 3 because the strongest actionable signals require AC support and fragile review. For example, CACNB2 VCV003774534 has a high VITAL score (71.3) and popmax AF >1e-4 but is not red because qualifying AC is below 20. Conversely, TRDN VCV001325231 remains red despite being a deletion because global AC=40 supports the frequency signal and the assertion is single-submitter.
 
+### Live manual-review snapshot of VITAL-red variants
+
+To close the loop between scoring and clinical review, we manually rechecked the three VITAL-red variants against live ClinVar pages on April 21, 2026 and reviewed whether the records had conflicts, multiple submitters, or variant-specific literature support. This manual review is not a reclassification. It is a case-level audit showing why each variant is suspicious but not resolved by frequency alone.
+
+**SCN5A VCV000440850, c.[3919C>T;694G>A].** Live ClinVar status remained Pathogenic for Brugada syndrome 1, with "no assertion criteria provided" and a single submission. No conflicting or multiple-submitter evidence was present on the live ClinVar page. The submission is literature-only through OMIM and cites PubMed 10532948, 15851227, and 18599870; ClinVar also lists additional text-mined citations. This is the strongest VITAL case because AFR popmax AF is 5.68e-3 with popmax AC=190 and global AC=214. The unresolved point is that this is a haplotype with historical literature and functional/drug-response context, so the appropriate conclusion may be context-dependent susceptibility, low penetrance, pharmacogenomic effect, or modifier behavior rather than simple benignity.
+
+**TRDN VCV001325231, c.1050del (p.Glu351fs).** Live ClinVar status remained Likely pathogenic for catecholaminergic polymorphic ventricular tachycardia 5, with criteria provided by a single submitter (Revvity Omics) and no conflicting or multiple-submitter evidence on the live page. ClinVar reported no germline citations for this variant. The variant remains suspicious because a frameshift allele has AMR popmax AF=2.18e-4 and global AC=40, but the case is not resolved because TRDN disease architecture includes recessive and heterozygous-carrier considerations, and the public record lacks segregation, detailed phenotype, or functional evidence.
+
+**KCNH2 VCV004535537, c.2398+2T>G.** Live ClinVar status remained Likely pathogenic for Long QT syndrome, with criteria provided by a single submitter (LabCorp) and no conflicting or multiple-submitter evidence on the live page. ClinVar cites PMID 36861347, and the submitter text states that the variant has been observed in affected individuals but that available reports do not provide unequivocal conclusions and that no experimental protein-function evidence was reported. This is a biologically plausible canonical splice-donor variant in a constrained dominant arrhythmia gene, but it is still suspicious because ASJ popmax AF is 1.32e-4, global AC=24, and the call is weight-borderline. The unresolved point is whether this represents true splice-disrupting pathogenicity with reduced penetrance/founder enrichment, a transcript-specific effect, or an overcalled single-submitter assertion.
+
+The live manual review supports VITAL's intended role. The framework does not declare these variants benign; it produces a short review queue where a human reviewer can immediately see frequency pressure, review fragility, literature support, and the unresolved clinical question.
+
 ### Review fragility is an explicit result
 
 Review quality was not hidden inside a black-box score. Of the 9 AC-supported frequency signals, 6 came from multiple-submitter/no-conflict records and were not automatically marked red. All 3 VITAL-red variants came from review-fragile records: 2/3 single-submitter and 1/3 weak/no-assertion. This makes review fragility auditable and clinically interpretable.
+
+### Handling no-frequency-evidence variants
+
+The gray no-frequency-evidence band is a managed uncertainty state, not a low-priority or green state. In the current arrhythmia run, 1,397 variants were gray: 736 had no gnomAD record at the queried position, 645 had allele discordance without exact AF, and 16 had an exact match without usable AF. This set was enriched for technically challenging representation states, including 458 deletions, 173 duplications, and 26 insertions, but it also contained 732 SNVs. Therefore, absence must be triaged rather than interpreted uniformly.
+
+We propose a practical gray-queue workflow. First, split SNVs from indels, duplications, and complex alleles because the technical meaning of absence differs by variant type. Second, prioritize gray variants in high-importance genes or dominant, highly constrained disease mechanisms for earlier manual review, while treating recessive heterozygous LOF records as a separate inheritance-aware category. Third, require representation checks for indels and duplications, including normalization, repeat context, and local mappability review. Fourth, use orthogonal validation when the result could affect a patient-facing decision: long-read sequencing, PCR/Sanger across the breakpoint, MLPA/array methods for copy-number-like events, or laboratory-specific evidence review. Fifth, maintain a deferred gray queue for periodic re-query as ClinVar and gnomAD releases change. This turns "not observed" into an auditable workflow state rather than an implicit assumption of rarity.
 
 ### Historical ClinVar analysis: preliminary enrichment in a sparse red set
 
@@ -380,6 +398,19 @@ These results support several practical recommendations for clinical genomics wo
 
 7. Track review burden as a clinical endpoint. A framework that removes false-positive re-evaluation calls can improve laboratory throughput, shorten review queues, and focus expert decision-making on variants most likely to change patient-facing interpretation.
 
+### Practical implementation
+
+VITAL is implemented as a batch-scoring workflow rather than as a manual spreadsheet. A laboratory can run the API pipeline to create ClinVar/gnomAD caches, rerun downstream analyses from cache, and export review queues as CSV/TSV files:
+
+```bash
+python src/arrhythmia_variant_pipeline.py --email EMAIL --output-prefix arrhythmia
+python src/advanced_variant_analyses.py --output-prefix arrhythmia --no-fetch-population-af --no-fetch-exome-genome-af
+python src/generate_supplementary_tables.py --output-prefix arrhythmia
+python src/build_vital_manuscript_docx.py
+```
+
+For archived or laboratory-specific ClinVar-like snapshots, `score_vital_from_variant_summary.py` supports batch scoring from a `variant_summary` file with gene filters, sampling, and cached gnomAD reuse. The core outputs are `*_vital_scores.csv`, `*_vital_component_breakdown.csv`, and `*_vital_predictions.csv`. In a clinical workflow, the red queue should trigger immediate expert review, orange/yellow variants can be monitored or reviewed by batch, and gray variants should enter the no-frequency-evidence workflow described above. A web tool could wrap the same scoring tables into a lightweight interface with per-variant component breakdowns and links to ClinVar, gnomAD, PubMed, and laboratory evidence files.
+
 ## Conclusion
 
 Clinically cataloged P/LP arrhythmia variants are strongly concentrated at ultra-rare population frequencies, but the interpretation of frequency evidence is not reducible to a single AF cutoff. Popmax, AC, variant type, technical detectability, gene context, and ClinVar review strength all materially change which variants should be prioritized for re-review. VITAL formalizes these signals into an explainable 0-100 clinical reclassification risk score, identifies 3 high-priority arrhythmia assertions as of the April 21, 2026 data freeze, suppresses more than 100 naive AF alerts, and preserves explicit no-frequency-evidence states for variants that should not be treated as AF=0. Secondary historical audits across 3,063 pooled-deduplicated variants remain underpowered and should be interpreted only as qualitative consistency checks. The intended clinical value is therefore not prediction in isolation; it is reducing false-positive variant re-evaluation burden without replacing clinician or laboratory decision-making.
@@ -402,6 +433,7 @@ Key output files include:
 - `data/processed/arrhythmia_vital_frequency_function_discordance_summary.csv`: 20-point VITAL-band continuum summary.
 - `data/processed/arrhythmia_vital_signal_reorganization_summary.csv`: naive AF, AC-supported AF, VITAL-band, and VITAL-red signal reorganization summary.
 - `data/processed/arrhythmia_vital_lof_subtype_discordance_summary.csv`: frameshift, stop_gained, and canonical_splice discordance summary across the VITAL continuum.
+- `data/processed/vital_red_manual_review_live_check.csv`: live ClinVar manual-review snapshot for the three VITAL-red variants, including conflicts, submitter status, literature mentions, and unresolved interpretation.
 - `data/processed/arrhythmia_vital_acmg_disagreement.csv`: naive AF flags split by VITAL agreement or non-red status.
 - `data/processed/arrhythmia_vital_top_suspicious.csv`: top VITAL-priority variants.
 - `data/processed/arrhythmia_vital_absence_detectability_bias.csv`: variant-type evidence for absence/detectability bias.

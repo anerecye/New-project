@@ -229,6 +229,21 @@ APPENDIX_TABLES = [
             "max_qualifying_ac",
         ],
     ),
+    (
+        "Appendix Table A13. Live manual-review snapshot for VITAL-red variants",
+        BASE_DIR / "data" / "processed" / "vital_red_manual_review_live_check.csv",
+        [
+            "gene",
+            "clinvar_id",
+            "live_check_date",
+            "live_clinvar_status",
+            "condition",
+            "review_support",
+            "submitter_conflict_status",
+            "clinvar_publications_or_mentions",
+            "why_suspicious_but_not_resolved",
+        ],
+    ),
 ]
 
 

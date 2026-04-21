@@ -1,0 +1,13 @@
+gene,match_category,variant_count
+APC,no_gnomad_record,247
+APC,allele_discordance,227
+APC,exact_match,26
+BRCA1,no_gnomad_record,218
+BRCA1,allele_discordance,215
+BRCA1,exact_match,65
+BRCA2,allele_discordance,221
+BRCA2,no_gnomad_record,216
+BRCA2,exact_match,62
+MLH1,no_gnomad_record,234
+MLH1,allele_discordance,231
+MLH1,exact_match,34

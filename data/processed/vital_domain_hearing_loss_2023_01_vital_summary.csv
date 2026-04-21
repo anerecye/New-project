@@ -1,0 +1,20 @@
+metric,value,numerator,denominator,percent,note
+clinvar_plp_variants_in_vital_table,300.0,300,300,100.0,"All P/LP variants carried through VITAL, including explicit no-frequency-evidence rows."
+exact_af_covered_clinvar_plp_variants,151.0,151,300,50.333333333333336,Variants with observed exact gnomAD AF used for continuous VITAL scoring.
+no_gnomad_frequency_evidence_variants,146.0,146,300,48.666666666666664,No AF imputation is applied; these variants retain NaN frequency fields and gray VITAL band.
+allele_discordance_no_exact_af_variants,0.0,0,300,0.0,ClinVar/gnomAD allele mismatch rows kept outside frequency scoring.
+gnomad_query_error_no_frequency_evidence_variants,3.0,3,300,1.0,Transient gnomAD query failures are flagged separately and kept outside frequency scoring.
+standard_popmax_or_global_af_gt_1e_5_flags,84.0,84,300,28.0,Naive frequency-only ACMG-style contradiction screen.
+standard_popmax_or_global_af_gt_1e_4_flags,22.0,22,300,7.333333333333333,High-frequency subset of the naive screen.
+global_af_gt_1e_5_flags,23.0,23,300,7.666666666666667,Flags found by global AF alone.
+popmax_af_gt_1e_5_flags,84.0,84,300,28.0,Flags found when population maximum AF is considered.
+global_af_gt_1e_4_flags,5.0,5,300,1.6666666666666667,High-frequency flags found by global AF alone.
+popmax_af_gt_1e_4_flags,22.0,22,300,7.333333333333333,High-frequency flags found when population maximum AF is considered.
+ac_supported_frequency_flags,20.0,20,300,6.666666666666667,Frequency signal has AC >= 20 in global or popmax source.
+vital_red_reclassification_predictions,0.0,0,300,0.0,"VITAL >= 70, weak review, and AC-supported frequency signal."
+alert_reduction_vs_standard_frequency_screen_percent,100.0,0,84,100.0,Reduction in action-priority calls versus a naive AF > 1e-5 frequency screen.
+vital_band_blue_low_support_signal,62.0,62,300,20.666666666666668,VITAL score band count.
+vital_band_gray_no_frequency_evidence,149.0,149,300,49.666666666666664,VITAL score band count.
+vital_band_green_frequency_consistent,67.0,67,300,22.333333333333332,VITAL score band count.
+vital_band_orange_high_tension,7.0,7,300,2.3333333333333335,VITAL score band count.
+vital_band_yellow_watchlist,15.0,15,300,5.0,VITAL score band count.

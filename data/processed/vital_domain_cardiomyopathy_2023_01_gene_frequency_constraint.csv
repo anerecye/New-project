@@ -1,0 +1,14 @@
+gene,clinvar_plp_variant_count,exact_af_covered_count,popmax_gt_1e_5_count,popmax_gt_1e_4_count,global_gt_1e_5_count,global_gt_1e_4_count,popmax_gt_1e_5_fraction,popmax_gt_1e_4_fraction,gene_frequency_constraint_proxy,gene_frequency_constraint_label
+DSP,63,12,1,0,0,0,0.08333333333333333,0.0,0.8846153846153846,frequency_constrained
+TPM1,4,2,0,0,0,0,0.0,0.0,0.8333333333333334,frequency_constrained
+DSC2,6,1,0,0,0,0,0.0,0.0,0.75,frequency_constrained
+MYBPC3,67,23,8,1,2,0,0.34782608695652173,0.043478260869565216,0.6458333333333334,intermediate
+LMNA,42,6,2,0,0,0,0.3333333333333333,0.0,0.6428571428571429,intermediate
+DSG2,10,5,2,0,0,0,0.4,0.0,0.5833333333333334,intermediate
+MYH7,33,7,3,0,1,0,0.42857142857142855,0.0,0.5625,intermediate
+PKP2,28,10,5,1,0,0,0.5,0.1,0.5,intermediate
+FLNC,23,3,2,0,0,0,0.6666666666666666,0.0,0.375,permissive_or_founder_prone
+ACTC1,4,1,1,0,0,0,1.0,0.0,0.25,permissive_or_founder_prone
+PLN,1,1,1,0,1,0,1.0,0.0,0.25,permissive_or_founder_prone
+TNNI3,9,1,1,0,1,0,1.0,0.0,0.25,permissive_or_founder_prone
+TNNT2,10,3,3,0,0,0,1.0,0.0,0.125,permissive_or_founder_prone

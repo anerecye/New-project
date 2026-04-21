@@ -1,0 +1,21 @@
+metric,value,numerator,denominator,percent,note
+clinvar_plp_variants_in_vital_table,500.0,500,500,100.0,"All P/LP variants carried through VITAL, including explicit no-frequency-evidence rows."
+exact_af_covered_clinvar_plp_variants,149.0,149,500,29.8,Variants with observed exact gnomAD AF used for continuous VITAL scoring.
+no_gnomad_frequency_evidence_variants,347.0,347,500,69.4,No AF imputation is applied; these variants retain NaN frequency fields and gray VITAL band.
+allele_discordance_no_exact_af_variants,0.0,0,500,0.0,ClinVar/gnomAD allele mismatch rows kept outside frequency scoring.
+gnomad_query_error_no_frequency_evidence_variants,4.0,4,500,0.8,Transient gnomAD query failures are flagged separately and kept outside frequency scoring.
+standard_popmax_or_global_af_gt_1e_5_flags,86.0,86,500,17.2,Naive frequency-only ACMG-style contradiction screen.
+standard_popmax_or_global_af_gt_1e_4_flags,16.0,16,500,3.2,High-frequency subset of the naive screen.
+global_af_gt_1e_5_flags,30.0,30,500,6.0,Flags found by global AF alone.
+popmax_af_gt_1e_5_flags,86.0,86,500,17.2,Flags found when population maximum AF is considered.
+global_af_gt_1e_4_flags,4.0,4,500,0.8,High-frequency flags found by global AF alone.
+popmax_af_gt_1e_4_flags,16.0,16,500,3.2,High-frequency flags found when population maximum AF is considered.
+ac_supported_frequency_flags,26.0,26,500,5.2,Frequency signal has AC >= 20 in global or popmax source.
+vital_red_reclassification_predictions,2.0,2,500,0.4,"VITAL >= 70, weak review, and AC-supported frequency signal."
+alert_reduction_vs_standard_frequency_screen_percent,97.67441860465115,2,86,97.67441860465115,Reduction in action-priority calls versus a naive AF > 1e-5 frequency screen.
+vital_band_blue_low_support_signal,69.0,69,500,13.8,VITAL score band count.
+vital_band_gray_no_frequency_evidence,351.0,351,500,70.2,VITAL score band count.
+vital_band_green_frequency_consistent,63.0,63,500,12.6,VITAL score band count.
+vital_band_orange_high_tension,6.0,6,500,1.2,VITAL score band count.
+vital_band_red_reclassification_priority,2.0,2,500,0.4,VITAL score band count.
+vital_band_yellow_watchlist,9.0,9,500,1.8,VITAL score band count.

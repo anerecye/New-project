@@ -1,0 +1,10 @@
+population,population_label,n_variants_with_an,n_variants_ac_positive,fraction_ac_positive,median_af_nonzero,max_af,n_af_gt_1e_5,n_af_gt_1e_4
+afr,AFR,0,0,0.0,,,0,0
+amr,AMR,0,0,0.0,,,0,0
+asj,ASJ,0,0,0.0,,,0,0
+eas,EAS,0,0,0.0,,,0,0
+fin,FIN,0,0,0.0,,,0,0
+mid,MID,0,0,0.0,,,0,0
+nfe,NFE,0,0,0.0,,,0,0
+sas,SAS,0,0,0.0,,,0,0
+remaining,Remaining,0,0,0.0,,,0,0

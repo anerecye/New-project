@@ -1,0 +1,11 @@
+gene,clinvar_plp_variant_count,exact_af_covered_count,popmax_gt_1e_5_count,popmax_gt_1e_4_count,global_gt_1e_5_count,global_gt_1e_4_count,popmax_gt_1e_5_fraction,popmax_gt_1e_4_fraction,gene_frequency_constraint_proxy,gene_frequency_constraint_label
+TMC1,5,3,1,0,0,0,0.3333333333333333,0.0,0.625,intermediate
+CDH23,34,16,6,2,0,0,0.375,0.125,0.6176470588235294,intermediate
+TECTA,8,6,3,0,1,0,0.5,0.0,0.5,intermediate
+OTOF,6,4,2,0,1,0,0.5,0.0,0.5,intermediate
+GJB6,1,0,0,0,0,0,,,0.5,intermediate
+USH2A,102,37,19,5,4,0,0.5135135135135135,0.13513513513513514,0.4868421052631579,intermediate
+MYO7A,62,33,17,4,6,1,0.5151515151515151,0.12121212121212122,0.4852941176470588,intermediate
+MYO15A,35,21,11,1,4,0,0.5238095238095238,0.047619047619047616,0.4772727272727273,intermediate
+GJB2,21,13,10,2,2,1,0.7692307692307693,0.15384615384615385,0.25,permissive_or_founder_prone
+SLC26A4,26,18,15,8,5,3,0.8333333333333334,0.4444444444444444,0.18421052631578946,permissive_or_founder_prone

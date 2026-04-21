@@ -1,0 +1,9 @@
+metric,value,note
+benchmark_universe_count,75.0,Variants used for operational precision/recall benchmark.
+operational_positive_count,4.0,Weak-review P/LP variants with AC-supported frequency signal.
+high_confidence_retained_plp_proxy_count,71.0,Current P/LP variants with review_score >= 2.
+known_valid_frequency_consistent_green_count,21.0,High-confidence P/LP variants without popmax/global AF > 1e-5 that remain green.
+known_valid_frequency_consistent_count,21.0,Denominator for the green-retention count.
+high_confidence_plp_not_red_count,71.0,High-confidence current P/LP variants with observed frequency evidence not called red by VITAL.
+roc_auc_vital_score_operational_benchmark,0.7640845070422535,Continuous VITAL score AUC on operational benchmark.
+average_precision_vital_score_operational_benchmark,0.12325637325637326,Continuous VITAL score average precision on operational benchmark.

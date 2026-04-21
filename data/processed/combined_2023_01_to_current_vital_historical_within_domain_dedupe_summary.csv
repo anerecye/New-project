@@ -1,0 +1,2 @@
+dedupe_stage,raw_rows_before_within_domain_dedupe,rows_after_within_domain_dedupe,removed_duplicate_variation_id_rows,removed_duplicate_variant_key_rows,vital_red_before_dedupe,vital_red_after_dedupe,vital_red_removed_by_dedupe,kept_rule
+within_domain,3069,3069,0,0,4,4,0,"within each domain, keep max VITAL score per variation_id, then max VITAL score per variant_key"

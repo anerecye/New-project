@@ -1,0 +1,6 @@
+threshold,tp,fp,fn,tn,tpr_recall,fpr,precision,specificity,curve_model
+inf,0,0,0,10,,0.0,,1.0,VITAL_score
+40.64717938517526,0,1,0,9,,0.1,0.0,0.9,VITAL_score
+33.9763641380001,0,2,0,8,,0.2,0.0,0.8,VITAL_score
+0.0,0,10,0,0,,1.0,0.0,0.0,VITAL_score
+-inf,0,10,0,0,,1.0,0.0,0.0,VITAL_score

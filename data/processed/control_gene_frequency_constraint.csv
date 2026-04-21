@@ -1,0 +1,5 @@
+gene,clinvar_plp_variant_count,exact_af_covered_count,popmax_gt_1e_5_count,popmax_gt_1e_4_count,global_gt_1e_5_count,global_gt_1e_4_count,popmax_gt_1e_5_fraction,popmax_gt_1e_4_fraction,gene_frequency_constraint_proxy,gene_frequency_constraint_label
+BRCA1,500,60,0,0,1,0,0.0,0.0,0.9918032786885246,frequency_constrained
+BRCA2,500,58,0,0,4,0,0.0,0.0,0.9915254237288136,frequency_constrained
+MLH1,500,32,0,0,0,0,0.0,0.0,0.9848484848484849,frequency_constrained
+APC,500,23,0,0,0,0,0.0,0.0,0.9791666666666666,frequency_constrained

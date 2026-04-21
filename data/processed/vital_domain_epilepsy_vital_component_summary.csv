@@ -1,0 +1,8 @@
+component,mean_points,median_points,max_points_observed,variants_with_nonzero_component
+AF pressure,2.759033166129441,0.0,19.540745481734426,5
+Review fragility,1.6,0.0,10.0,5
+Popmax enrichment,1.585109059047742,0.0,8.738751003874267,5
+AC reliability,1.5724934996248372,0.0,10.57267893638896,5
+Technical detectability,1.5596039603960397,0.0,6.238415841584159,5
+Gene constraint,1.1625,0.0,7.0,5
+Variant type tension,0.0,0.0,0.0,0

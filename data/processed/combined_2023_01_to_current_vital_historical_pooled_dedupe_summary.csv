@@ -1,0 +1,2 @@
+dedupe_stage,raw_rows_before_pooled_dedupe,rows_after_within_domain_input,rows_after_pooled_dedupe,removed_cross_domain_variation_id_rows,removed_cross_domain_variant_key_rows,vital_red_before_pooled_dedupe,vital_red_after_pooled_dedupe,vital_red_removed_by_pooled_dedupe,kept_rule
+pooled_cross_domain,3069,3069,3063,6,0,4,4,0,prefer domain priority arrhythmia > cardiomyopathy > epilepsy > hearing_loss > random_clinvar_plp; within same key/domain priority keep max VITAL score

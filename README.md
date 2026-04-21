@@ -144,6 +144,21 @@ Main CSV outputs include:
 - `data/processed/arrhythmia_exome_genome_af_summary.csv`
 - `data/processed/arrhythmia_reclassification_risk.csv`
 - `data/processed/arrhythmia_reclassification_risk_summary.csv`
+- `data/processed/arrhythmia_vital_scores.csv`
+- `data/processed/arrhythmia_vital_summary.csv`
+- `data/processed/arrhythmia_vital_predictions.csv`
+- `data/processed/arrhythmia_gene_frequency_constraint.csv`
+- `data/processed/arrhythmia_variant_type_detectability.csv`
+- `data/processed/arrhythmia_vital_component_breakdown.csv`
+- `data/processed/arrhythmia_vital_component_summary.csv`
+- `data/processed/arrhythmia_vital_method_comparison.csv`
+- `data/processed/arrhythmia_vital_validation_curves.csv`
+- `data/processed/arrhythmia_vital_retention_summary.csv`
+- `data/processed/arrhythmia_vital_threshold_sweep.csv`
+- `data/processed/arrhythmia_vital_acmg_disagreement.csv`
+- `data/processed/arrhythmia_vital_top_suspicious.csv`
+- `data/processed/arrhythmia_vital_absence_detectability_bias.csv`
+- `data/processed/arrhythmia_review_fragility_summary.csv`
 - `data/processed/arrhythmia_gene_variant_type_summary.csv`
 - `data/processed/arrhythmia_gene_lof_missense_af_summary.csv`
 - `data/processed/arrhythmia_gene_non_overlap_summary.csv`
@@ -157,14 +172,25 @@ Machine-readable supplementary tables are generated as TSV files:
 python src/generate_supplementary_tables.py --output-prefix arrhythmia
 ```
 
-This writes `supplementary_tables/Supplementary_Table_S2_reclassification_candidates.tsv`
-and `supplementary_tables/Supplementary_Table_S5_gene_non_overlap_summary.tsv`.
+This writes `supplementary_tables/Supplementary_Table_S2_reclassification_candidates.tsv`,
+`supplementary_tables/Supplementary_Table_S5_gene_non_overlap_summary.tsv`,
+`supplementary_tables/Supplementary_Table_S6_VITAL_scores.tsv`,
+`supplementary_tables/Supplementary_Table_S7_VITAL_method_comparison.tsv`, and
+`supplementary_tables/Supplementary_Table_S8_review_fragility_summary.tsv`,
+plus S9-S12 for the VITAL threshold sweep, ACMG/VITAL disagreement table, top
+suspicious variants, and absence/detectability bias analysis.
 
 Main figures include:
 
 - `figures/arrhythmia_population_af_distribution.png`
 - `figures/arrhythmia_population_af_outliers.png`
 - `figures/arrhythmia_reclassification_risk.png`
+- `figures/arrhythmia_vital_score_model.png`
+- `figures/arrhythmia_vital_validation_curves.png`
+- `figures/vital_clinical_workflow.png`
+- `figures/arrhythmia_review_fragility.png`
+- `figures/arrhythmia_vital_absence_not_rarity.png`
+- `figures/vital_external_panel_score_distribution.png`
 - `figures/arrhythmia_variant_type_by_gene.png`
 - `figures/arrhythmia_non_overlap_features.png`
 - `figures/arrhythmia_non_overlap_genes.png`
@@ -179,6 +205,512 @@ python src/advanced_variant_analyses.py --output-prefix arrhythmia --no-fetch-po
 Exome/genome AF queries are cached in
 `arrhythmia_exome_genome_af_comparison.csv`. Reuse this cache with
 `--no-fetch-exome-genome-af`; use `--force-exome-genome-fetch` to refresh it.
+
+## VITAL Clinical Reclassification Risk Prioritization Framework
+
+The analysis now formalizes the population-frequency critique as **VITAL**
+(`Variant Interpretation Tension and Allele Load`), a 0-100 clinical
+reclassification risk prioritization score. VITAL is designed to reduce
+false-positive variant re-evaluation burden in clinical genomics workflows. It
+is not a replacement for clinical interpretation and does not declare every
+frequency outlier benign. It asks a narrower workflow question: which ClinVar
+P/LP assertions are under enough frequency, review, gene, and technical
+pressure that they should be prioritized for human expert re-review?
+
+VITAL combines seven components:
+
+- global AF and ancestry `popmax_af`, scaled from `1e-5` to `1e-3`;
+- AC reliability, saturated at `AC >= 20`;
+- popmax enrichment over global AF;
+- variant-type tension (`SNV`, indel, duplication, or unresolved);
+- a gene-specific frequency-constraint proxy estimated from the gene's
+  observed popmax outlier burden;
+- a technical detectability index that explicitly downweights variant classes
+  with poorer exact-match behavior, especially duplications and indels;
+- review fragility from ClinVar review status and submitter count.
+
+The component weights are expert-specified rather than empirically fitted.
+They are intentionally reported as part of the framework: AF pressure has the
+largest maximum weight, AC reliability acts as required support, and review
+fragility plus technical detectability remain visible but insufficient on their
+own. Weight sensitivity is therefore a required output rather than a hidden
+implementation detail. These weights should not be assumed to transfer
+unchanged to other disease areas without local calibration or explicit
+sensitivity reporting.
+
+Conceptually, VITAL is a **variant pathogenicity tension continuum**, not only
+a red flag. It positions each ClinVar P/LP assertion in a space of discordance
+between population frequency, AC support, ancestry enrichment, review quality,
+technical detectability, gene context, and functional annotation. In the
+current lightweight implementation, functional context comes from
+HGVS-derived `functional_class` plus the internal gene-frequency constraint
+proxy. A fuller implementation could add MAVE scores, LOEUF, missense Z, and
+protein-domain or transcript-specific annotations where coverage is available.
+Those external resources are not forced into the current analysis because they
+are incomplete across this variant set.
+
+The continuum also splits LOF calls into HGVS-derived subtypes so frameshift,
+stop_gained, and canonical_splice assertions are not silently merged into one
+bucket. This subtype annotation is descriptive and is not part of the VITAL
+score. In the current arrhythmia cache, AF-observed LOF variants include 82
+frameshift, 108 stop_gained, and 60 canonical_splice records. Naive AF flags are
+common in all three groups (35.4%, 30.6%, and 38.3%, respectively), but
+AC-supported contradictions are much rarer (1.2%, 2.8%, and 3.3%). High-tension
+VITAL scores still appear in severe-looking subtypes: 2 frameshift variants, 1
+stop_gained variant, and 1 canonical_splice variant fall in VITAL 60-100. TRDN
+`VCV001325231` is the key example: a frameshift red-priority record with AMR
+popmax AF `2.18e-4` and global AC `40`. This is the concrete "not all LOF
+behaves like textbook high-penetrance" result.
+
+In the current cached arrhythmia run, the VITAL audit table carries all 1,731
+ClinVar P/LP variants forward rather than silently dropping unmatched records.
+Only 334 variants have observed exact-match gnomAD AF evidence and are eligible
+for continuous frequency scoring. Another 736 are explicitly labeled
+`not_observed_in_gnomAD`, 645 are `allele_discordance_no_exact_AF`, and 16 are
+`exact_match_without_AF`; these rows retain `NaN` frequency fields and the
+separate `gray_no_frequency_evidence` band rather than being converted to
+`AF = 0`.
+
+Within the 334 AF-covered exact matches, the naive ACMG-style frequency screen
+flags 115 ClinVar P/LP variants (34.4%) when popmax is used, compared with only
+13/334 (3.9%) from global AF alone. The high-frequency subset (`AF > 1e-4`) is
+9/334 (2.7%) with popmax versus 1/334 (0.3%) with global AF alone. Requiring
+AC support narrows the frequency contradiction to 9/334 variants, and VITAL's
+red reclassification-priority band narrows the actionable review-priority set to
+3/334 (0.9%). That is a 97.4% reduction in action-priority calls versus a naive
+`AF > 1e-5` screen while preserving the strongest frequency-supported
+weak-review signals.
+
+The model writes:
+
+- `data/processed/arrhythmia_vital_scores.csv`: per-variant component scores,
+  final VITAL score, band, and signal reasons.
+- `data/processed/arrhythmia_vital_summary.csv`: headline counts showing how
+  many P/LP variants violate popmax/global frequency screens, how many have
+  `AC >= 20`, and how many survive as VITAL red review-priority calls.
+- `data/processed/arrhythmia_vital_predictions.csv`: red and orange
+  reclassification-priority candidates.
+- `data/processed/arrhythmia_gene_frequency_constraint.csv`: gene-level
+  frequency-constraint proxy used by the model.
+- `data/processed/arrhythmia_variant_type_detectability.csv`: empirical
+  exact-match/non-overlap structure by variant type plus detectability index.
+- `data/processed/arrhythmia_vital_component_breakdown.csv`: long-format
+  explainability table with one row per variant-component pair, so a score can
+  be read as, for example, AF pressure + AC reliability + review fragility
+  rather than as an opaque model output.
+- `data/processed/arrhythmia_vital_method_comparison.csv`: explicit
+  baseline comparison against global AF, popmax/global AF, high-frequency
+  screens, and AF+AC filtering with TP/FP/FN/TN, precision, recall, and
+  specificity.
+- `data/processed/arrhythmia_vital_validation_curves.csv` and
+  `figures/arrhythmia_vital_validation_curves.png`: ROC and precision-recall
+  points for the operational benchmark.
+- `data/processed/arrhythmia_vital_threshold_sweep.csv`: sensitivity sweep
+  showing how precision, recall, and false positives change as the VITAL score
+  cutoff is moved.
+- `data/processed/arrhythmia_vital_ac_threshold_sensitivity.csv`: AC gate
+  sensitivity at `AC >= 5`, `10`, `20`, and `50`, with red-set composition,
+  gained variants, and lost variants tracked relative to the prespecified
+  `AC >= 20` actionability gate.
+- `data/processed/arrhythmia_vital_weight_sensitivity_summary.csv`: expert
+  weight-profile sensitivity summary. Across five alternative profiles, no new
+  red variants appear, red count ranges from 1 to 3, proxy false-positive count
+  remains 0, and compression versus naive AF screening remains 97.4%-99.1%.
+- `data/processed/arrhythmia_vital_weight_sensitivity_variant_matrix.csv` and
+  `data/processed/arrhythmia_vital_weight_sensitivity_variant_profile_table.csv`:
+  red-variant stability tables. SCN5A `VCV000440850` is `anchor`, TRDN
+  `VCV001325231` is `near-stable`, and KCNH2 `VCV004535537` is `borderline`.
+- `supplementary_tables/Supplementary_Table_S13_VITAL_weight_sensitivity.tsv`:
+  long-format 5 alternative weight profiles x 3 current red variants table.
+- `data/processed/arrhythmia_vital_pathogenicity_tension_continuum.csv`:
+  per-variant 20-point tension band and frequency-function discordance class.
+- `data/processed/arrhythmia_vital_frequency_function_discordance_summary.csv`:
+  VITAL 0-20/20-40/40-60/60-80/80-100 band summary showing how frequency,
+  AC, review, variant-type, and functional signals reorganize along the
+  continuum.
+- `data/processed/arrhythmia_vital_signal_reorganization_summary.csv`:
+  comparison of all AF-observed variants, naive AF flags, AC-supported flags,
+  upper VITAL bands, and VITAL-red calls.
+- `data/processed/arrhythmia_vital_lof_subtype_discordance_summary.csv`:
+  frameshift, stop_gained, and canonical_splice discordance summary across the
+  VITAL continuum.
+- `data/processed/arrhythmia_vital_acmg_disagreement.csv`: case-level table
+  for variants that a naive ACMG-style frequency screen flags, split by
+  whether VITAL agrees or withholds red priority.
+- `data/processed/arrhythmia_vital_top_suspicious.csv`: top 10 review-priority
+  ClinVar assertions ranked by VITAL score and annotated with the component
+  reasons.
+- `data/processed/arrhythmia_vital_absence_detectability_bias.csv` and
+  `figures/arrhythmia_vital_absence_not_rarity.png`: variant-type evidence that
+  absence from gnomAD is partly a detectability/representation signal rather
+  than proof of rarity.
+- `data/processed/arrhythmia_review_fragility_summary.csv`: review-strength
+  stratification showing how many frequency-supported outliers come from
+  single-submitters, weak/no-assertion records, or multiple-submitter records.
+- `data/processed/vital_external_panel_summary.csv`,
+  `data/processed/vital_external_panel_band_distribution.csv`,
+  `data/processed/vital_external_panel_score_distribution.csv`, and
+  `figures/vital_external_panel_score_distribution.png`: small external-domain
+  stress tests for cardiomyopathy, epilepsy, hearing-loss genes, random ClinVar
+  P/LP variants, and the BRCA/MMR/APC descriptive comparator cache.
+- `figures/vital_clinical_workflow.png`: clinician-facing workflow schematic
+  showing how ClinVar P/LP assertions move through VITAL risk prioritization,
+  into a short review queue, and then back to human expert ACMG/AMP
+  decision-making.
+- `figures/arrhythmia_vital_score_model.png`: score-versus-frequency view of
+  the model bands.
+
+The current operational benchmark treats weak-review, AC-supported frequency
+signals as positives and current `review_score >= 2` P/LP variants as a
+high-confidence retained-P/LP proxy. This is not a substitute for prospective
+clinical truth and it is partly circular: weak review support and AC-supported
+frequency tension help define the proxy-positive class and also contribute to
+the VITAL red actionability gate. The benchmark is therefore a workflow
+diagnostic for false-positive re-evaluation burden, not an independent estimate
+of clinical accuracy. Precision 1.00 and recall 1.00 in this proxy task are
+artifacts of design concordance, not evidence of perfect clinical performance.
+Under this benchmark
+VITAL red has 3 true positives, 0 false positives, 0 false negatives, and 109
+true negatives, with precision 1.00 (`95% CI 0.44-1.00`), recall 1.00
+(`95% CI 0.44-1.00`), specificity 1.00 (`95% CI 0.966-1.00`), and false
+positive rate 0.00 (`95% CI 0.00-0.034`). The competing popmax/global
+`AF > 1e-5` screen has the same recall but 53 false positives, precision 0.054
+(`95% CI 0.018-0.146`), and false-positive rate 0.486
+(`95% CI 0.394-0.579`). The `AF > 1e-5` plus `AC >= 20` screen still has 6
+false positives. All 56 high-confidence, frequency-consistent P/LP variants
+remain green, and all 109 high-confidence P/LP proxy variants remain non-red.
+
+The clinical workflow implication is burden reduction. A naive popmax/global AF
+screen would send 115 current arrhythmia P/LP assertions into urgent manual
+re-evaluation; VITAL red sends 3, suppressing 112 potential false-positive
+review triggers. At an illustrative 30-60 minutes per first-pass variant
+review, that corresponds to roughly 56-112 reviewer-hours avoided in this
+1,731-variant audit, while leaving final classification with human ACMG/AMP
+reviewers.
+
+The AC gate is treated as an actionability filter, not as part of the scoring
+function. This separates signal detection (`vital_score`) from operational
+decision thresholds (`qualifying_frequency_ac`). AC sensitivity shows the red
+core is stable across `AC >= 5`, `AC >= 10`, and `AC >= 20`: SCN5A
+`VCV000440850`, TRDN `VCV001325231`, and KCNH2 `VCV004535537` remain red.
+CACNB2 `VCV003774534` appears only at `AC >= 5` and `AC >= 10`; at `AC >= 50`,
+only SCN5A remains red. This makes threshold dependence visible rather than
+hidden.
+
+Weight-profile sensitivity shows which red calls are robust to expert-weight
+choices. Five alternative weighting profiles produce no gained red variants.
+SCN5A `VCV000440850` is retained under all five alternatives (`anchor`), TRDN
+`VCV001325231` is retained under 4/5 (`near-stable`), and KCNH2
+`VCV004535537` is retained under 2/5 (`borderline`). KCNH2 is therefore a
+threshold-adjacent re-review signal rather than an anchor call. The long-format
+S13 table makes this explicit as 5 profiles x 3 variants.
+
+The threshold sweep shows that this is not a brittle single-cutoff result. In
+the current operational benchmark, a VITAL cutoff of 60 keeps recall at 1.00
+but leaves 2 false positives; cutoffs of 65 and 70 keep recall at 1.00 with 0
+false positives; cutoffs of 75 and above trade recall down to 0.33. This gives
+reviewers an explicit sensitivity/specificity dial rather than a hidden
+threshold.
+
+The continuum output removes binary thinking from the descriptive analysis.
+Across 20-point VITAL bands, higher bands concentrate frequency-function
+discordance. The 0-20 band has no popmax `AF > 1e-4` signals and no
+AC-supported contradictions. The 40-60 band has median max AF `3.01e-5`,
+9.8% AC-supported signals, and 39.3% indel/duplication representation. The
+60-80 band has 100% popmax `AF > 1e-4`, 40% AC-supported signals, 40%
+indel/duplication representation, and 100% LOF/splice/unresolved annotations.
+The 80-100 band is the SCN5A composite assertion with popmax `AF=5.68e-3` and
+qualifying `AC=214`. This is not perfectly monotonic for every component
+because the upper bands are intentionally tiny, but it shows VITAL reorganizing
+AF signals into progressively more discordant strata.
+
+Layer comparison makes the same point. Naive `AF > 1e-5` captures 115 variants
+with median VITAL 41.1 and only 7.8% AC-supported signals. The AC-supported
+layer contains 9 variants with median VITAL 52.6. VITAL 60-80 contains 5
+variants with 100% popmax `AF > 1e-4` and 100% LOF/splice/unresolved
+annotations. VITAL red contains 3 variants, all AC-supported, all weak/single
+review, and all LOF/splice/unresolved/composite. This is the
+frequency-function discordant class: variants that may be overcalled,
+low-penetrance, hypomorphic, ancestry-enriched, transcript/domain-specific, or
+otherwise inconsistent with canonical high-penetrance assumptions.
+
+The ACMG/VITAL disagreement table is the case-level answer to the obvious
+pushback. A naive popmax/global `AF > 1e-5` screen flags 115 AF-covered P/LP
+variants; VITAL agrees with only 3 as red. The other 112 are not discarded:
+they are annotated with reasons such as `AC_below_20`, `stronger_review`, or
+`score_below_70`. This makes the model a re-review prioritizer rather than a
+frequency-only benign classifier.
+
+The absence/detectability analysis makes the core assumption explicit:
+frequency-based criteria implicitly assume that variants are technically and
+representationally detectable. In the current arrhythmia table, exact AF
+evidence is available for 238/970 SNVs (24.5%) but only 71/529 deletions
+(13.4%) and 21/194 duplications (10.8%). Deletions have 458/529 (86.6%) rows
+without exact frequency evidence, and duplications have 173/194 (89.2%); both
+are significantly more absence-prone than SNVs (`p=2.36e-7` for deletions,
+`p=1.16e-5` for duplications). The practical implication is direct: absence
+from gnomAD is not equivalent to rarity for structurally complex variants.
+
+As an orthogonal stress-test, the same VITAL machinery was run on three small
+non-arrhythmia disease panels and one random ClinVar P/LP sample:
+
+```bash
+python src/run_vital_external_panels.py \
+  --panel-sample-size 300 \
+  --random-sample-size 500 \
+  --random-seed 37
+```
+
+This is intentionally small: it is a stress test for overfitting and
+false-positive burden, not a full disease-specific validation or sensitivity
+analysis. Approximately 300 variants per domain is not enough to conclude that
+VITAL would recover true reclassification candidates outside arrhythmia. The
+result is conservative outside the arrhythmia training context, but absence of
+red calls cannot prove that true reclassification candidates were not missed.
+Cardiomyopathy, the nearest disease-domain comparator, has
+23 naive `AF > 1e-5` flags among 300 sampled P/LP variants, but only 1 VITAL red
+call. Epilepsy has 5 naive AF flags and 0 VITAL red calls. Hearing-loss genes
+have many more population-frequency hits (76/300 naive AF flags and 16
+AC-supported flags), but still 0 red calls; the signal remains in yellow/orange
+watchlist territory rather than becoming an automatic reclassification queue.
+The random ClinVar P/LP sample behaves similarly: 94/500 naive AF flags and 20
+AC-supported flags, but 0 VITAL red calls.
+
+| domain | N | exact AF rows | naive AF flags | AC-supported flags | VITAL red | score >=70 | max score |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| cardiomyopathy | 300 | 64 | 23 | 2 | 1 | 1 | 80.8 |
+| epilepsy | 300 | 20 | 5 | 0 | 0 | 0 | 59.9 |
+| hearing loss | 300 | 120 | 76 | 16 | 0 | 3 | 77.4 |
+| random ClinVar P/LP | 500 | 167 | 94 | 20 | 0 | 7 | 85.1 |
+| BRCA/MMR/APC descriptive comparator | 2,000 | 173 | 5 | 2 | 0 | 0 | 57.8 |
+
+This is a workload-compression result, not just a scoring result. In the random
+ClinVar P/LP sample, a naive AF screen produces 94/500 actionable flags
+(18.8%), whereas VITAL red produces 0/500. In hearing-loss genes, naive AF
+produces 76/300 flags (25.3%) and VITAL red again produces 0/300. This
+represents a greater-than-10-fold reduction in actionable review flags without
+manual curation, converting population-frequency noise into a short, auditable
+clinical reclassification risk queue.
+
+The BRCA1/BRCA2/MLH1/APC cache has 0 red calls, 0 variants with score `>=60`, 0
+variants with score `>=70`, and maximum VITAL score 57.8. This is reassuring as
+a descriptive comparator, but it should not be treated as a clean negative
+control because cancer-predisposition genes differ from arrhythmia genes in
+penetrance, founder architecture, and disease mechanism. The external
+hearing-loss and random-P/LP samples do show some high-tension variants, which
+is useful: VITAL does not flatten all non-arrhythmia data into green, but it
+also does not turn ordinary AF noise into red-priority calls.
+
+Three examples show how the table becomes a clinical review story:
+
+- `SCN5A` `VCV000440850` is the highest-priority VITAL case
+  (`VITAL=96.1`). The variant is globally present at `AF=1.46e-4` with
+  `AC=214`, but the ancestry-specific maximum is far higher
+  (`popmax_af=5.68e-3`, AFR `AC=190`). ClinVar review support is weak
+  (`no assertion criteria provided`). VITAL marks it red because every major
+  re-review axis aligns: frequency pressure is saturated, AC reliability is
+  saturated, popmax enrichment is strong, and the review assertion is fragile.
+  This is the highest-priority example of why VITAL is not just an AF screen:
+  although naive `AF > 1e-5` criteria flag 115 arrhythmia P/LP variants, VITAL
+  prioritizes only 3, including this one, where high AC and fragile review
+  support make the frequency contradiction actionable.
+- `TRDN` `VCV001325231` (`c.1050del`, `p.Glu351fs`) is a loss-of-function
+  deletion with `VITAL=74.3`. It has `global_AF=2.77e-5` and `global_AC=40`,
+  enough to pass the AC-supported frequency screen, while the AMR popmax is
+  `2.18e-4`. The ClinVar record is single-submitter. VITAL still treats the
+  deletion's lower technical detectability cautiously, but the combination of
+  AF pressure, `AC >= 20`, LOF/variant-type tension, and single-submitter
+  review support keeps it in the red re-review band. A naive AF threshold would
+  also flag many stronger-review variants; VITAL elevates this deletion because
+  the frequency signal is AC-supported and the clinical assertion is
+  review-fragile, while 112 other AF-flagged variants are withheld from red
+  priority.
+- `KCNH2` `VCV004535537` (`c.2398+2T>G`) is a splice-region/LOF SNV with
+  `VITAL=70.3`, just over the red threshold. It has `global_AF=4.37e-5` and
+  `global_AC=24`; the ASJ popmax reaches `1.32e-4`, although popmax AC is only
+  2. The AC support therefore comes from the global count, not from the
+  ancestry popmax alone. ClinVar support is single-submitter. VITAL marks it
+  red because a constrained arrhythmia gene, global `AC >= 20`, high popmax,
+  good SNV detectability, and fragile review status all point toward
+  re-review. Naive AF logic would place this in the same bucket as dozens of
+  lower-support frequency outliers; VITAL separates it because the global AC
+  clears the reliability floor and the review record lacks multi-submitter
+  support. Weight sensitivity makes the caveat explicit: this is a
+  `borderline` red call, retained under 2/5 alternative profiles, not an
+  anchor case.
+
+Review fragility is reported as an explicit result rather than hidden inside
+the score. In the current cache, AC-supported frequency signals are mostly
+not weak submissions: 6/9 are multiple-submitter/no-conflict records. VITAL
+does not automatically overturn those; all 3 red-priority calls come from
+review-fragile records, with 2/3 single-submitter and 1/3 weak/no-assertion.
+This makes the review-quality prior auditable and clinically interpretable.
+
+For historical enrichment analysis across ClinVar releases, generate a VITAL score table
+from an older ClinVar snapshot, then compare that baseline snapshot with a
+later one:
+
+```bash
+python src/score_vital_from_variant_summary.py \
+  --variant-summary data/raw/variant_summary_2023-01.txt.gz \
+  --output-prefix arrhythmia_2023_01
+
+python src/validate_vital_reclassification.py \
+  --score-table data/processed/arrhythmia_2023_01_vital_scores.csv \
+  --baseline-variant-summary data/raw/variant_summary_2023-01.txt.gz \
+  --followup-variant-summary data/variant_summary.txt.gz \
+  --output-prefix arrhythmia_2023_01_to_current
+```
+
+The validator labels baseline P/LP variants that later become B/LB or VUS
+(`strict_PLP_to_BLB_or_VUS`) and also reports a broader destabilization target
+that includes conflicting, other, or missing follow-up classifications. Outputs
+include ROC AUC, average precision, precision at top decile, and VITAL red-band
+precision/recall, plus baseline method-comparison tables and ROC/PR curve
+figures. ClinVar monthly archived releases are available from the NCBI
+tab-delimited archive:
+`https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/archive/`.
+
+The 2023-01 to current analysis is intentionally reported as a sparse secondary
+audit layer, not as a finished prospective classifier. It is kept in the main
+manuscript for transparency around alignment, endpoint definitions, and
+negative evidence against overclaiming; its evidentiary weight is lower than
+the current workflow-compression and explainability results. Given the
+intentionally small red set, historical validation is underpowered and serves
+only as a directional consistency check rather than a definitive predictive
+evaluation. The 2023-01 baseline
+contains 1,669 arrhythmia P/LP variants: 455 with observed exact AF evidence
+and 1,214 `not_observed_in_gnomAD` gray rows. By the current ClinVar snapshot,
+17 baseline P/LP variants meet the strict P/LP-to-B/LB-or-VUS endpoint and 113
+meet the broader P/LP-to-non-P/LP-or-missing endpoint. VITAL red identifies
+2 baseline variants. For the strict endpoint it has 0/2 precision and 0 recall
+(`ROC AUC=0.482`, `AP=0.0098`). For the broader endpoint it has 1/2 precision
+(`0.50`) and 1/113 recall (`0.0089`; `ROC AUC=0.512`, `AP=0.090`). Among the
+455 frequency-observed baseline variants, the broader-endpoint recall is 1/38
+(`0.027`) at the same 1/2 red precision. This is consistent with VITAL red as a
+review-priority enrichment signal, while showing that the current score does
+not capture most future ClinVar downgrades. Because only two baseline variants
+were red, the result should be treated as preliminary and uncertainty should be
+shown prominently.
+
+The enrichment framing is the key interpretation: VITAL red is not broad, but
+it is enriched in this sparse snapshot. For the broader historical endpoint, the overall downgrade or
+destabilization rate is 113/1,669 (6.8%), while the VITAL-red rate is 1/2
+(50.0%), a 7.38-fold enrichment over baseline. Restricting to the 455
+frequency-observed baseline variants gives 38/455 (8.4%) overall versus 1/2
+(50.0%) among VITAL red, a 5.99-fold enrichment. The threshold sweep makes the
+same tradeoff explicit: at score cutoffs of 50, 60, 70, and 80, broad-endpoint
+precision is 0.175, 0.235, 0.250, and 0.400 while recall falls from 0.062 to
+0.035 to 0.018 to 0.018.
+
+A one-event perturbation makes the instability explicit: the observed broad
+endpoint is 1/2 red events (50.0%; 7.38x enrichment), but if the single red
+event were absent the enrichment would be 0x, and if one additional red event
+occurred it would become 14.77x. Adding one red non-event would reduce the
+estimate to 4.92x. The historical result should therefore be interpreted
+qualitatively: it is a directional consistency check for an extreme-priority
+subset, not a stable prediction effect size.
+
+The expanded historical validation now runs the same logic across arrhythmia,
+cardiomyopathy, epilepsy, hearing-loss genes, and a random ClinVar P/LP sample:
+
+```bash
+python src/run_combined_historical_validation.py \
+  --baseline-variant-summary data/raw/variant_summary_2023-01.txt.gz \
+  --followup-variant-summary data/variant_summary.txt.gz \
+  --output-prefix combined_2023_01_to_current_vital
+```
+
+This writes within-domain metrics and pooled-deduplicated metrics separately.
+That separation is intentional: disease architecture, baseline reclassification
+rate, and error mechanisms differ by domain. The raw combined table has 3,069
+baseline rows. Within-domain duplicate checks found 0 duplicate variation IDs
+and 0 duplicate variant keys. Cross-domain leakage was limited to 6 variants
+appearing both in a fixed disease panel and the random ClinVar sample; pooled
+dedupe removed those 6 rows and removed 0 VITAL-red rows, leaving 3,063 pooled
+variants. Pooled dedupe uses a fixed priority order
+`arrhythmia > cardiomyopathy > epilepsy > hearing_loss > random_clinvar_plp`,
+with max VITAL score only as a tie-breaker within the same priority level.
+
+The combined historical result is larger but still sparse. VITAL red appears in
+arrhythmia (2 variants) and random ClinVar P/LP (2 variants), but not in the
+cardiomyopathy, epilepsy, or hearing-loss historical samples at the prespecified
+`AC >= 20` red gate. In pooled-deduplicated analysis, strict reclassification is
+not enriched (`0/4` red events vs `24/3063` overall). The broad endpoint has
+`2/4` red events vs `174/3063` overall (`8.80x` enrichment), and the expanded
+endpoint has `3/4` red events vs `818/3063` overall (`2.81x` enrichment). This
+supports qualitative enrichment under broader instability definitions, not a
+stand-alone prediction model.
+
+Sanity outputs are first-class results, not decoration:
+
+- `data/processed/combined_2023_01_to_current_vital_historical_sanity_domain_summary.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_alignment_breakdown.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_missing_cases_for_manual_review.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_cross_domain_dedupe_decisions.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_within_domain_dedupe_summary.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_pooled_dedupe_summary.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_endpoint_summary.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_stratified_bootstrap_summary.csv`
+
+Alignment checks found 18 baseline variants missing by VariationID in the 2026
+snapshot: 13 disappeared completely or lacked a current GRCh38 key match, while
+5 had the same variant key present under a current record and were labeled as
+mapping failures or VariationID changes. The highest-scoring missing case was a
+yellow-watchlist random ClinVar MUC4 variant, not a red call.
+
+The stratified bootstrap resamples after dedupe, within domain. It should be
+read as binary-noise sensitivity for sparse red sets. For the broad endpoint,
+10.9% of usable bootstrap samples have 0 red events and 30.7% have exactly 1;
+for the expanded endpoint, 2.5% have 0 and 15.9% have exactly 1. That behavior
+is precisely why the manuscript frames the historical result as directional
+consistency rather than stable effect-size estimation.
+
+Historical confidence intervals are intentionally reported even when wide. For
+the broad endpoint, VITAL-red event rate is 1/2 (`50.0%`, `95% CI 9.5-90.5%`)
+versus 113/1,669 overall (`6.8%`, `95% CI 5.7-8.1%`), with 7.44-fold
+enrichment versus non-red variants (`95% CI 2.36-23.31`). The historical AC
+sensitivity table shows red-set composition: `AC >= 10` and `AC >= 20` select
+the same two baseline red variants, KCNE1 `VCV001202620` and TRDN
+`VCV001325231`; `AC >= 5` adds ANK2 `VCV000207942`, and `AC >= 50` retains only
+KCNE1. The corresponding AC-supported baseline screens still carry false
+positive burden for the broad endpoint: 36, 34, 25, and 7 false positives at
+`AC >= 5`, `10`, `20`, and `50`, respectively.
+
+Historical threshold calibration is saved with both pre-fix and corrected
+field-mapping outputs. The retained field-mapping-inconsistent calibration run
+has 0 red-gate-compatible flags because `weak_review_signal` was absent from
+the historical prediction table and defaulted to false. The corrected
+calibration derives weak review from `review_score <= 1` or
+`submitter_count <= 1`, and it can derive AC support from
+`qualifying_frequency_ac >= 20` plus the frequency signal if
+`frequency_signal_ac_ge_20` is absent. After correction, the threshold-70
+arrhythmia historical red set matches the validator: KCNE1 `VCV001202620` and
+TRDN `VCV001325231`. KCNH2 `VCV004535537` is not red in the 2023 snapshot
+because it is not present there as the same allele-specific record. The 2023
+table contains the same splice position as VCV000560686, `c.2398+2T>A`
+(`A>T`), with `AC=0` and non-red status. The current red record,
+VCV004535537, `c.2398+2T>G` (`A>C`), was created/submitted on 2025-12-14 and
+has current global `AC=24` with single-submitter review. KCNH2 therefore did
+not cross the gate through review-score drift within the same VCV record; it
+entered the current red set as a later allele-specific assertion with sufficient
+AC support, consistent with its current `borderline` weight-stability label.
+
+Calibration also shows why threshold optimization is not overclaimed. For the
+arrhythmia broad endpoint, the best enrichment occurs at threshold 80
+(`1/1` broad event, `14.77x`), while the prespecified threshold 70 has `1/2`
+events (`7.38x`). In the pooled combined historical table, threshold 70 has
+4 red flags and 2 broad events (`8.80x`), while the broad-endpoint enrichment
+maximum occurs at threshold 80 with 3 flags and 2 events (`11.74x`). This is a
+sparse calibration stress test, not a refit.
+
+Related outputs:
+
+- `data/processed/arrhythmia_2023_01_to_current_vital_historical_threshold_calibration_field_mapping_inconsistent.csv`
+- `data/processed/arrhythmia_2023_01_to_current_vital_historical_threshold_calibration_field_mapping_audit.csv`
+- `data/processed/arrhythmia_2023_01_to_current_vital_historical_threshold_calibration_mapping_fix_summary.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_threshold_calibration.csv`
+- `data/processed/combined_2023_01_to_current_vital_historical_threshold_calibration_mapping_fix_summary.csv`
 
 For existing ClinVar caches that were generated before the XML parser included
 `NumberOfSubmitters`, submitter counts in the risk table are lower-bound
@@ -220,6 +752,15 @@ median-split Fisher test is not conventionally significant in the current
 cache (`p=0.081918`), so the manuscript should avoid claiming a definite
 temporal improvement. The year-by-year distribution is provided in
 `data/processed/arrhythmia_kcnh2_submission_date_summary.csv`.
+
+The KCNH2 duplication result should also be framed statistically rather than
+mechanistically. Duplications account for much of the observed KCNH2
+non-overlap excess, but the current analyses do not establish whether the cause
+is technical representation, local sequence context not captured by GC/repeat
+annotations, biological depletion, ClinVar ascertainment, or a mixture of
+these. The defensible clinical claim is narrower: absence of a KCNH2
+duplication from gnomAD should not be treated as strong rarity evidence without
+orthogonal validation. The mechanism remains an open question.
 
 TRDN counts depend on which pipeline/table is used. The legacy reviewer-QC
 table reports 6/23 AF-covered TRDN variants above `1e-5` (26.1%,

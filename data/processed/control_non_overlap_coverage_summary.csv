@@ -1,0 +1,4 @@
+match_category,has_any_gnomad,count,fraction
+allele_discordance,True,99,1.0
+no_gnomad_record,False,30,0.297029702970297
+no_gnomad_record,True,71,0.7029702970297029

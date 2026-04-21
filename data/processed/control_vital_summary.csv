@@ -1,0 +1,19 @@
+metric,value,numerator,denominator,percent,note
+clinvar_plp_variants_in_vital_table,2000.0,2000,2000,100.0,"All P/LP variants carried through VITAL, including explicit no-frequency-evidence rows."
+exact_af_covered_clinvar_plp_variants,173.0,173,2000,8.65,Variants with observed exact gnomAD AF used for continuous VITAL scoring.
+no_gnomad_frequency_evidence_variants,915.0,915,2000,45.75,No AF imputation is applied; these variants retain NaN frequency fields and gray VITAL band.
+allele_discordance_no_exact_af_variants,894.0,894,2000,44.7,ClinVar/gnomAD allele mismatch rows kept outside frequency scoring.
+gnomad_query_error_no_frequency_evidence_variants,0.0,0,2000,0.0,Transient gnomAD query failures are flagged separately and kept outside frequency scoring.
+standard_popmax_or_global_af_gt_1e_5_flags,5.0,5,2000,0.25,Naive frequency-only ACMG-style contradiction screen.
+standard_popmax_or_global_af_gt_1e_4_flags,0.0,0,2000,0.0,High-frequency subset of the naive screen.
+global_af_gt_1e_5_flags,5.0,5,2000,0.25,Flags found by global AF alone.
+popmax_af_gt_1e_5_flags,0.0,0,2000,0.0,Flags found when population maximum AF is considered.
+global_af_gt_1e_4_flags,0.0,0,2000,0.0,High-frequency flags found by global AF alone.
+popmax_af_gt_1e_4_flags,0.0,0,2000,0.0,High-frequency flags found when population maximum AF is considered.
+ac_supported_frequency_flags,2.0,2,2000,0.1,Frequency signal has AC >= 20 in global or popmax source.
+vital_red_reclassification_predictions,0.0,0,2000,0.0,"VITAL >= 70, weak review, and AC-supported frequency signal."
+alert_reduction_vs_standard_frequency_screen_percent,100.0,0,5,100.0,Reduction in action-priority calls versus a naive AF > 1e-5 frequency screen.
+vital_band_blue_low_support_signal,4.0,4,2000,0.2,VITAL score band count.
+vital_band_gray_no_frequency_evidence,1827.0,1827,2000,91.35,VITAL score band count.
+vital_band_green_frequency_consistent,168.0,168,2000,8.4,VITAL score band count.
+vital_band_yellow_watchlist,1.0,1,2000,0.05,VITAL score band count.

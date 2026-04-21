@@ -1,0 +1,4 @@
+review_strength,variant_count,frequency_flag_count,ac_supported_frequency_count,vital_red_count,median_vital_score,max_vital_score,variant_fraction,ac_supported_fraction_within_review_strength,vital_red_fraction_within_review_strength,share_of_ac_supported_frequency_variants,share_of_vital_red_variants
+single_submitter,225,3,0,0,0.0,40.829836335128846,0.75,0.0,0.0,,
+multiple_submitters_no_conflicts,46,4,0,0,34.17239257953664,42.37865810358505,0.15333333333333332,0.0,0.0,,
+weak_or_no_assertion,29,0,0,0,0.0,0.0,0.09666666666666666,0.0,0.0,,

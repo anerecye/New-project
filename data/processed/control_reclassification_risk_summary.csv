@@ -1,0 +1,3 @@
+risk_level,review_strength,frequency_signal_ac_filter,variant_count
+moderate_frequency_stronger_review,expert_panel,below_AC_20_or_missing,3
+moderate_frequency_stronger_review,expert_panel,passes_AC_ge_20,2

@@ -1,0 +1,13 @@
+dedupe_key_type,dedupe_key,variation_ids_present,variant_keys_present,domains_present,kept_domain,kept_variation_id,kept_variant_key,kept_vital_score,dropped_domains,candidate_count,reason_kept,tie_break_rule
+variation_id,1074239,1074239,1:216289411:C:T,hearing_loss|random_clinvar_plp,hearing_loss,1074239,1:216289411:C:T,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variation_id,1213111,1213111,1:237772037:G:C,arrhythmia|random_clinvar_plp,arrhythmia,1213111,1:237772037:G:C,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variation_id,179222,179222,17:18171691:C:A,hearing_loss|random_clinvar_plp,hearing_loss,179222,17:18171691:C:A,0.0,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variation_id,201330,201330,1:237784084:C:A,arrhythmia|random_clinvar_plp,arrhythmia,201330,1:237784084:C:A,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variation_id,496690,496690,11:2661990:AGCAT:A,arrhythmia|random_clinvar_plp,arrhythmia,496690,11:2661990:AGCAT:A,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variation_id,981438,981438,17:70175977:GCTCTTA:G,arrhythmia|random_clinvar_plp,arrhythmia,981438,17:70175977:GCTCTTA:G,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variant_key,11:2661990:AGCAT:A,496690,11:2661990:AGCAT:A,arrhythmia|random_clinvar_plp,arrhythmia,496690,11:2661990:AGCAT:A,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variant_key,17:18171691:C:A,179222,17:18171691:C:A,hearing_loss|random_clinvar_plp,hearing_loss,179222,17:18171691:C:A,0.0,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variant_key,17:70175977:GCTCTTA:G,981438,17:70175977:GCTCTTA:G,arrhythmia|random_clinvar_plp,arrhythmia,981438,17:70175977:GCTCTTA:G,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variant_key,1:216289411:C:T,1074239,1:216289411:C:T,hearing_loss|random_clinvar_plp,hearing_loss,1074239,1:216289411:C:T,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variant_key,1:237772037:G:C,1213111,1:237772037:G:C,arrhythmia|random_clinvar_plp,arrhythmia,1213111,1:237772037:G:C,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority
+variant_key,1:237784084:C:A,201330,1:237784084:C:A,arrhythmia|random_clinvar_plp,arrhythmia,201330,1:237784084:C:A,,random_clinvar_plp,2,higher_priority_domain,max_vital_score_within_same_domain_priority

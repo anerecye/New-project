@@ -1,0 +1,7 @@
+variant_type,clinvar_plp_variant_count,frequency_observed_count,no_frequency_evidence_count,frequency_observed_fraction,no_frequency_evidence_fraction,absence_enrichment_vs_snv,odds_ratio_vs_snv,fisher_p_vs_snv
+duplication,24,0,24,0.0,1.0,1.1186440677966103,inf,0.13918531688883184
+Microsatellite,7,0,7,0.0,1.0,1.1186440677966103,inf,1.0
+indel,5,0,5,0.0,1.0,1.1186440677966103,inf,1.0
+insertion,5,0,5,0.0,1.0,1.1186440677966103,inf,1.0
+deletion,61,2,59,0.03278688524590164,0.9672131147540983,1.081967213114754,3.5,0.11924942376522235
+SNV,198,21,177,0.10606060606060606,0.8939393939393939,1.0,,

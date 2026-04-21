@@ -294,9 +294,69 @@ def make_s5(prefix: str, gene_loci: pd.DataFrame) -> pd.DataFrame:
     return summary.loc[:, [column for column in ordered_columns if column in summary.columns]]
 
 
+def make_s6(prefix: str) -> pd.DataFrame:
+    vital_path = data_path(prefix, "vital_scores.csv")
+    if not vital_path.exists():
+        raise FileNotFoundError(
+            f"Missing {vital_path}. Run advanced_variant_analyses.py first."
+        )
+    vital = pd.read_csv(vital_path)
+    preferred_columns = [
+        "variant_key",
+        "gene",
+        "clinvar_id",
+        "variation_id",
+        "title",
+        "clinsig",
+        "review_status",
+        "review_strength",
+        "submitter_count",
+        "match_category",
+        "frequency_evidence_status",
+        "variant_type",
+        "functional_class",
+        "global_af",
+        "global_ac",
+        "popmax_af",
+        "popmax_ac",
+        "popmax_population",
+        "max_frequency_signal",
+        "max_frequency_source",
+        "qualifying_frequency_ac",
+        "standard_acmg_frequency_flag",
+        "standard_acmg_high_frequency_flag",
+        "frequency_signal_ac_ge_20",
+        "weak_review_signal",
+        "gene_frequency_constraint_proxy",
+        "technical_detectability_index",
+        "frequency_pressure_score",
+        "ac_reliability_score",
+        "popmax_enrichment_score",
+        "variant_type_tension_score",
+        "technical_detectability_score",
+        "gene_constraint_score",
+        "review_fragility_score",
+        "vital_score",
+        "vital_band",
+        "vital_red_flag",
+        "predicted_revision_direction",
+        "vital_signal_reason",
+    ]
+    columns = [column for column in preferred_columns if column in vital.columns]
+    columns.extend(column for column in vital.columns if column not in columns)
+    return vital.loc[:, columns]
+
+
+def load_prefixed_table(prefix: str, name: str) -> pd.DataFrame:
+    path = data_path(prefix, name)
+    if not path.exists():
+        raise FileNotFoundError(f"Missing {path}. Run advanced_variant_analyses.py first.")
+    return pd.read_csv(path)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Generate machine-readable supplementary tables S2 and S5."
+        description="Generate machine-readable supplementary tables S2, S5, and VITAL supplements."
     )
     parser.add_argument("--output-prefix", default="arrhythmia")
     parser.add_argument("--refresh-gene-loci", action="store_true")
@@ -311,9 +371,23 @@ def main() -> None:
 
     s2 = make_s2(prefix)
     s5 = make_s5(prefix, gene_loci)
+    s6 = make_s6(prefix)
+    s7 = load_prefixed_table(prefix, "vital_method_comparison.csv")
+    s8 = load_prefixed_table(prefix, "review_fragility_summary.csv")
+    s9 = load_prefixed_table(prefix, "vital_threshold_sweep.csv")
+    s10 = load_prefixed_table(prefix, "vital_acmg_disagreement.csv")
+    s11 = load_prefixed_table(prefix, "vital_top_suspicious.csv")
+    s12 = load_prefixed_table(prefix, "vital_absence_detectability_bias.csv")
 
     save_table(s2, supplementary_path("Supplementary_Table_S2_reclassification_candidates.tsv"), sep="\t")
     save_table(s5, supplementary_path("Supplementary_Table_S5_gene_non_overlap_summary.tsv"), sep="\t")
+    save_table(s6, supplementary_path("Supplementary_Table_S6_VITAL_scores.tsv"), sep="\t")
+    save_table(s7, supplementary_path("Supplementary_Table_S7_VITAL_method_comparison.tsv"), sep="\t")
+    save_table(s8, supplementary_path("Supplementary_Table_S8_review_fragility_summary.tsv"), sep="\t")
+    save_table(s9, supplementary_path("Supplementary_Table_S9_VITAL_threshold_sweep.tsv"), sep="\t")
+    save_table(s10, supplementary_path("Supplementary_Table_S10_ACMG_VITAL_disagreement.tsv"), sep="\t")
+    save_table(s11, supplementary_path("Supplementary_Table_S11_top_suspicious_variants.tsv"), sep="\t")
+    save_table(s12, supplementary_path("Supplementary_Table_S12_absence_detectability_bias.tsv"), sep="\t")
     save_table(s5, data_path(prefix, "gene_non_overlap_summary.csv"))
 
 

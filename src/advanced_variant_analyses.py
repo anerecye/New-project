@@ -38,6 +38,35 @@ AF_ULTRA_RARE = 1e-5
 AF_RARE = 1e-4
 MIN_RECLASSIFICATION_AC = 20
 LIFT_PSEUDOCOUNT = 1e-12
+VITAL_ACTION_THRESHOLD = 70.0
+
+TECHNICAL_DETECTABILITY_PRIORS = {
+    "SNV": 0.95,
+    "MNV_or_substitution": 0.80,
+    "deletion": 0.72,
+    "insertion": 0.70,
+    "duplication": 0.45,
+    "other_or_unresolved": 0.60,
+}
+
+VARIANT_TYPE_TENSION_SCORES = {
+    "SNV": 0.0,
+    "MNV_or_substitution": 1.0,
+    "deletion": 3.0,
+    "insertion": 3.0,
+    "duplication": 6.0,
+    "other_or_unresolved": 2.0,
+}
+
+REVIEW_FRAGILITY_SCORES = {
+    "practice_guideline": 0.0,
+    "expert_panel": 0.0,
+    "multiple_submitters_no_conflicts": 3.0,
+    "other_review": 5.0,
+    "single_submitter": 8.0,
+    "weak_or_no_assertion": 10.0,
+    "missing_review": 10.0,
+}
 
 POPULATIONS = ("afr", "amr", "asj", "eas", "fin", "mid", "nfe", "sas", "remaining")
 POPULATION_LABELS = {
@@ -129,8 +158,39 @@ def figure_path(prefix: str, name: str) -> Path:
 
 def save_table(df: pd.DataFrame, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(output_path, index=False)
-    log.info("Saved: %s (%s rows)", output_path, len(df))
+    temp_path = output_path.with_name(f".{output_path.name}.tmp")
+    last_error: PermissionError | None = None
+    for attempt in range(1, 7):
+        try:
+            df.to_csv(temp_path, index=False)
+            temp_path.replace(output_path)
+            log.info("Saved: %s (%s rows)", output_path, len(df))
+            return
+        except PermissionError as exc:
+            last_error = exc
+            delay = 1.5 * attempt
+            log.warning(
+                "Could not save %s on attempt %s/6; retrying in %.1fs: %s",
+                output_path,
+                attempt,
+                delay,
+                exc,
+            )
+            time.sleep(delay)
+    if last_error is not None:
+        raise last_error
+
+
+def gnomad_errors_are_variant_not_found(errors: object) -> bool:
+    if not isinstance(errors, list):
+        return False
+    messages = []
+    for error in errors:
+        if isinstance(error, dict):
+            messages.append(str(error.get("message", "")))
+        else:
+            messages.append(str(error))
+    return bool(messages) and all("Variant not found" in message for message in messages)
 
 
 def normalize_chrom(value: object) -> str:
@@ -422,6 +482,8 @@ def post_gnomad_graphql(
             )
             payload = response.json()
             if payload.get("errors"):
+                if gnomad_errors_are_variant_not_found(payload["errors"]):
+                    return {"data": {"variant": None}, "errors": payload["errors"]}
                 raise RuntimeError(json.dumps(payload["errors"], ensure_ascii=True))
             response.raise_for_status()
             return payload
@@ -458,7 +520,11 @@ def fetch_population_af_record(
         return base
 
     variant = payload.get("data", {}).get("variant")
-    exome = variant.get("exome") if variant else None
+    if not variant:
+        base["population_query_status"] = "no_gnomad_record"
+        return base
+
+    exome = variant.get("exome")
     if not exome:
         base["population_query_status"] = "missing_exome"
         return base
@@ -523,9 +589,12 @@ def load_or_fetch_population_af(
     else:
         usable_existing = existing.copy()
         if "population_query_status" in usable_existing.columns:
+            population_status = usable_existing["population_query_status"].fillna("").astype(str)
             usable_existing = usable_existing[
-                usable_existing["population_query_status"].astype(str).str.startswith("ok")
-                | usable_existing["population_query_status"].isna()
+                population_status.eq("ok")
+                | population_status.eq("missing_exome")
+                | population_status.eq("no_gnomad_record")
+                | population_status.str.contains("Variant not found", na=False)
             ]
         existing_keys = set(usable_existing.get("variant_key", pd.Series(dtype=str)).astype(str))
     missing = exact.loc[~exact["variant_key"].astype(str).isin(existing_keys)].copy()
@@ -534,9 +603,20 @@ def load_or_fetch_population_af(
     if fetch and not missing.empty:
         with requests.Session() as session:
             session.headers.update({"User-Agent": "advanced-variant-analyses/1.0"})
-            for _, row in tqdm(missing.iterrows(), total=len(missing), desc="gnomAD population AF"):
+            for index, (_, row) in enumerate(
+                tqdm(missing.iterrows(), total=len(missing), desc="gnomAD population AF"),
+                start=1,
+            ):
                 records.append(fetch_population_af_record(session, row, dataset=dataset))
+                if index % 25 == 0:
+                    partial = pd.concat([existing, pd.DataFrame(records)], ignore_index=True)
+                    partial = partial.drop_duplicates(subset="variant_key", keep="last").reset_index(drop=True)
+                    save_table(partial, output_path)
                 time.sleep(pause)
+            if records:
+                partial = pd.concat([existing, pd.DataFrame(records)], ignore_index=True)
+                partial = partial.drop_duplicates(subset="variant_key", keep="last").reset_index(drop=True)
+                save_table(partial, output_path)
     elif not fetch and existing.empty:
         log.warning("Population AF fetch disabled and no cache exists; population analyses will be sparse.")
         records = [
@@ -628,17 +708,31 @@ def load_or_fetch_exome_genome_af(
     if fetch:
         usable_existing = existing.copy()
         if "exome_genome_query_status" in usable_existing.columns:
+            exome_genome_status = usable_existing["exome_genome_query_status"].fillna("").astype(str)
             usable_existing = usable_existing[
-                usable_existing["exome_genome_query_status"].fillna("").astype(str).eq("ok")
+                exome_genome_status.eq("ok")
+                | exome_genome_status.eq("no_gnomad_record")
+                | exome_genome_status.str.contains("Variant not found", na=False)
             ]
         existing_keys = set(usable_existing.get("variant_key", pd.Series(dtype="object")).astype(str))
         missing = exact.loc[~exact["variant_key"].astype(str).isin(existing_keys)].copy()
         if not missing.empty:
             with requests.Session() as session:
                 session.headers.update({"User-Agent": "advanced-variant-analyses/1.0"})
-                for _, row in tqdm(missing.iterrows(), total=len(missing), desc="gnomAD exome/genome AF"):
+                for index, (_, row) in enumerate(
+                    tqdm(missing.iterrows(), total=len(missing), desc="gnomAD exome/genome AF"),
+                    start=1,
+                ):
                     records.append(fetch_exome_genome_af_record(session, row, dataset=dataset))
+                    if index % 25 == 0:
+                        partial = pd.concat([existing, pd.DataFrame(records)], ignore_index=True)
+                        partial = partial.drop_duplicates(subset="variant_key", keep="last").reset_index(drop=True)
+                        save_table(partial, output_path)
                     time.sleep(pause)
+                if records:
+                    partial = pd.concat([existing, pd.DataFrame(records)], ignore_index=True)
+                    partial = partial.drop_duplicates(subset="variant_key", keep="last").reset_index(drop=True)
+                    save_table(partial, output_path)
     elif existing.empty:
         log.warning("Exome/genome AF fetch disabled and no cache exists; genome sensitivity will be sparse.")
         records = [
@@ -1096,6 +1190,1273 @@ def make_reclassification_risk_table(annotated: pd.DataFrame, population_df: pd.
     return table, summary
 
 
+def scale_log_frequency_pressure(values: pd.Series) -> pd.Series:
+    numeric = pd.to_numeric(values, errors="coerce").fillna(0)
+    scaled = 45 * np.clip(
+        np.log10((numeric + LIFT_PSEUDOCOUNT) / AF_ULTRA_RARE) / 2,
+        0,
+        1,
+    )
+    return pd.Series(np.where(numeric > AF_ULTRA_RARE, scaled, 0), index=values.index)
+
+
+def make_variant_type_detectability_table(annotated: pd.DataFrame) -> pd.DataFrame:
+    if annotated.empty:
+        return pd.DataFrame(
+            columns=[
+                "variant_type",
+                "clinvar_plp_variant_count",
+                "exact_match_count",
+                "allele_discordance_count",
+                "no_gnomad_record_count",
+                "exact_match_fraction",
+                "non_overlap_fraction",
+                "technical_detectability_prior",
+                "technical_detectability_index",
+            ]
+        )
+
+    counts = (
+        annotated.groupby(["variant_type", "match_category"], dropna=False)
+        .size()
+        .rename("variant_count")
+        .reset_index()
+        .pivot_table(
+            index="variant_type",
+            columns="match_category",
+            values="variant_count",
+            fill_value=0,
+            aggfunc="sum",
+        )
+        .reset_index()
+    )
+    for column in ["exact_match", "allele_discordance", "no_gnomad_record"]:
+        if column not in counts.columns:
+            counts[column] = 0
+    counts["clinvar_plp_variant_count"] = counts[
+        [column for column in counts.columns if column != "variant_type"]
+    ].sum(axis=1)
+    counts["exact_match_count"] = counts["exact_match"].astype(int)
+    counts["allele_discordance_count"] = counts["allele_discordance"].astype(int)
+    counts["no_gnomad_record_count"] = counts["no_gnomad_record"].astype(int)
+    counts["non_overlap_count"] = counts["allele_discordance_count"] + counts["no_gnomad_record_count"]
+    denominator = counts["clinvar_plp_variant_count"].where(counts["clinvar_plp_variant_count"] > 0, other=np.nan)
+    counts["exact_match_fraction"] = counts["exact_match_count"] / denominator
+    counts["non_overlap_fraction"] = counts["non_overlap_count"] / denominator
+    counts["technical_detectability_prior"] = counts["variant_type"].map(
+        TECHNICAL_DETECTABILITY_PRIORS
+    ).fillna(TECHNICAL_DETECTABILITY_PRIORS["other_or_unresolved"])
+    counts["technical_detectability_index"] = (
+        0.8 * counts["technical_detectability_prior"]
+        + 0.2 * counts["exact_match_fraction"].fillna(0)
+    )
+    keep = [
+        "variant_type",
+        "clinvar_plp_variant_count",
+        "exact_match_count",
+        "allele_discordance_count",
+        "no_gnomad_record_count",
+        "non_overlap_count",
+        "exact_match_fraction",
+        "non_overlap_fraction",
+        "technical_detectability_prior",
+        "technical_detectability_index",
+    ]
+    return counts.loc[:, keep].sort_values(
+        ["clinvar_plp_variant_count", "variant_type"], ascending=[False, True]
+    ).reset_index(drop=True)
+
+
+def make_gene_frequency_constraint_table(annotated: pd.DataFrame, exact: pd.DataFrame) -> pd.DataFrame:
+    all_genes = (
+        annotated.groupby("gene", dropna=False)
+        .size()
+        .rename("clinvar_plp_variant_count")
+        .reset_index()
+    )
+    if exact.empty:
+        all_genes["exact_af_covered_count"] = 0
+        all_genes["popmax_gt_1e_5_count"] = 0
+        all_genes["popmax_gt_1e_4_count"] = 0
+        all_genes["popmax_gt_1e_5_fraction"] = np.nan
+        all_genes["popmax_gt_1e_4_fraction"] = np.nan
+        all_genes["gene_frequency_constraint_proxy"] = 0.5
+        return all_genes
+
+    source = exact.copy()
+    source["popmax_af"] = pd.to_numeric(source.get("popmax_af"), errors="coerce")
+    source["global_af"] = pd.to_numeric(source.get("global_af"), errors="coerce")
+    gene_stats = (
+        source.groupby("gene", dropna=False)
+        .agg(
+            exact_af_covered_count=("variant_key", "count"),
+            popmax_gt_1e_5_count=("popmax_af", lambda values: int((pd.to_numeric(values, errors="coerce") > AF_ULTRA_RARE).sum())),
+            popmax_gt_1e_4_count=("popmax_af", lambda values: int((pd.to_numeric(values, errors="coerce") > AF_RARE).sum())),
+            global_gt_1e_5_count=("global_af", lambda values: int((pd.to_numeric(values, errors="coerce") > AF_ULTRA_RARE).sum())),
+            global_gt_1e_4_count=("global_af", lambda values: int((pd.to_numeric(values, errors="coerce") > AF_RARE).sum())),
+        )
+        .reset_index()
+    )
+    result = all_genes.merge(gene_stats, on="gene", how="left")
+    count_columns = [
+        "exact_af_covered_count",
+        "popmax_gt_1e_5_count",
+        "popmax_gt_1e_4_count",
+        "global_gt_1e_5_count",
+        "global_gt_1e_4_count",
+    ]
+    for column in count_columns:
+        result[column] = result[column].fillna(0).astype(int)
+
+    denominator = result["exact_af_covered_count"].where(result["exact_af_covered_count"] > 0, other=np.nan)
+    result["popmax_gt_1e_5_fraction"] = result["popmax_gt_1e_5_count"] / denominator
+    result["popmax_gt_1e_4_fraction"] = result["popmax_gt_1e_4_count"] / denominator
+    result["gene_frequency_constraint_proxy"] = (
+        result["exact_af_covered_count"] - result["popmax_gt_1e_5_count"] + 0.5
+    ) / (result["exact_af_covered_count"] + 1)
+    result.loc[result["exact_af_covered_count"].eq(0), "gene_frequency_constraint_proxy"] = 0.5
+    result["gene_frequency_constraint_label"] = pd.cut(
+        result["gene_frequency_constraint_proxy"],
+        bins=[-np.inf, 0.4, 0.7, np.inf],
+        labels=["permissive_or_founder_prone", "intermediate", "frequency_constrained"],
+    ).astype(str)
+    return result.sort_values(
+        ["gene_frequency_constraint_proxy", "exact_af_covered_count"],
+        ascending=[False, False],
+    ).reset_index(drop=True)
+
+
+def make_unscored_frequency_evidence_rows(
+    annotated: pd.DataFrame,
+    type_detectability: pd.DataFrame,
+    gene_constraint: pd.DataFrame,
+    component_columns: list[str],
+) -> pd.DataFrame:
+    scored_mask = (annotated["match_category"] == "exact_match") & annotated["gnomad_af"].notna()
+    unscored = annotated.loc[~scored_mask].copy()
+    if unscored.empty:
+        return pd.DataFrame()
+
+    match_category = unscored["match_category"].fillna("").astype(str)
+    unscored["frequency_evidence_status"] = np.select(
+        [
+            match_category.eq("no_gnomad_record"),
+            match_category.eq("allele_discordance"),
+            match_category.eq("gnomad_query_error"),
+            match_category.eq("exact_match"),
+        ],
+        [
+            "not_observed_in_gnomAD",
+            "allele_discordance_no_exact_AF",
+            "gnomad_query_error_no_frequency_evidence",
+            "exact_match_without_AF",
+        ],
+        default="not_scored_no_frequency_evidence",
+    )
+    for column in [
+        "global_af",
+        "global_ac",
+        "global_an",
+        "popmax_af",
+        "popmax_ac",
+        "popmax_global_ratio",
+        "max_frequency_signal",
+        "qualifying_frequency_ac",
+    ]:
+        unscored[column] = np.nan
+    for column in [
+        "popmax_population",
+        "max_frequency_source",
+        "predicted_revision_direction",
+    ]:
+        unscored[column] = ""
+    for column in [
+        "standard_acmg_frequency_flag",
+        "standard_acmg_high_frequency_flag",
+        "popmax_only_frequency_flag",
+        "frequency_signal_ac_ge_20",
+        "vital_red_flag",
+    ]:
+        unscored[column] = False
+
+    unscored["weak_review_signal"] = (
+        (unscored["review_score"] <= 1) | (unscored["submitter_count"].fillna(99) <= 1)
+    )
+    detectability_map = type_detectability.set_index("variant_type")[
+        "technical_detectability_index"
+    ].to_dict()
+    unscored["technical_detectability_index"] = unscored["variant_type"].map(detectability_map).fillna(
+        TECHNICAL_DETECTABILITY_PRIORS["other_or_unresolved"]
+    )
+    constraint_map = gene_constraint.set_index("gene")["gene_frequency_constraint_proxy"].to_dict()
+    unscored["gene_frequency_constraint_proxy"] = unscored["gene"].map(constraint_map).fillna(0.5)
+    for column in component_columns:
+        unscored[column] = np.nan
+    unscored["vital_score"] = np.nan
+    unscored["vital_band"] = "gray_no_frequency_evidence"
+    unscored["vital_signal_reason"] = unscored["frequency_evidence_status"]
+    return unscored
+
+
+def make_vital_score_tables(
+    annotated: pd.DataFrame,
+    population_df: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    exact = merge_population_fields(
+        annotated[(annotated["match_category"] == "exact_match") & annotated["gnomad_af"].notna()],
+        population_df,
+    )
+    exact = add_popmax_ac_from_population_columns(exact)
+    type_detectability = make_variant_type_detectability_table(annotated)
+    gene_constraint = make_gene_frequency_constraint_table(annotated, exact)
+    component_columns = [
+        "frequency_pressure_score",
+        "ac_reliability_score",
+        "popmax_enrichment_score",
+        "variant_type_tension_score",
+        "technical_detectability_score",
+        "gene_constraint_score",
+        "review_fragility_score",
+    ]
+    unscored = make_unscored_frequency_evidence_rows(
+        annotated,
+        type_detectability,
+        gene_constraint,
+        component_columns,
+    )
+
+    if exact.empty:
+        score_columns = [
+            "variant_key",
+            "gene",
+            "clinvar_id",
+            "variation_id",
+            "title",
+            "clinsig",
+            "review_status",
+            "review_strength",
+            "review_score",
+            "submitter_count",
+            "submitter_count_source",
+            "match_category",
+            "frequency_evidence_status",
+            "variant_type",
+            "functional_class",
+            "global_af",
+            "global_ac",
+            "global_an",
+            "popmax_af",
+            "popmax_ac",
+            "popmax_population",
+            "popmax_global_ratio",
+            "max_frequency_signal",
+            "max_frequency_source",
+            "qualifying_frequency_ac",
+            "standard_acmg_frequency_flag",
+            "standard_acmg_high_frequency_flag",
+            "popmax_only_frequency_flag",
+            "frequency_signal_ac_ge_20",
+            "weak_review_signal",
+            "gene_frequency_constraint_proxy",
+            "technical_detectability_index",
+            *component_columns,
+            "vital_score",
+            "vital_band",
+            "vital_red_flag",
+            "predicted_revision_direction",
+            "vital_signal_reason",
+        ]
+        scores = unscored.loc[:, [column for column in score_columns if column in unscored.columns]].copy()
+        summary = make_vital_summary_table(scores)
+        return scores, summary, pd.DataFrame(), gene_constraint, type_detectability
+
+    for column, fallback_column in [("global_ac", "gnomad_ac"), ("global_an", "gnomad_an")]:
+        if column not in exact.columns:
+            exact[column] = exact.get(fallback_column, np.nan)
+        exact[column] = pd.to_numeric(exact[column], errors="coerce")
+    for column in ["global_af", "popmax_af", "popmax_ac"]:
+        exact[column] = pd.to_numeric(exact.get(column), errors="coerce")
+
+    exact["max_frequency_signal"] = exact[["global_af", "popmax_af"]].max(axis=1, skipna=True)
+    popmax_is_max = exact["popmax_af"].notna() & (
+        exact["global_af"].isna() | exact["popmax_af"].ge(exact["global_af"])
+    )
+    exact["max_frequency_source"] = np.where(popmax_is_max, "popmax", "global")
+    exact.loc[exact["max_frequency_signal"].isna(), "max_frequency_source"] = ""
+    exact["qualifying_global_ac"] = np.where(
+        exact["global_af"] > AF_ULTRA_RARE,
+        exact["global_ac"].fillna(0),
+        0,
+    )
+    exact["qualifying_popmax_ac"] = np.where(
+        exact["popmax_af"] > AF_ULTRA_RARE,
+        exact["popmax_ac"].fillna(0),
+        0,
+    )
+    exact["qualifying_frequency_ac"] = np.maximum(
+        exact["qualifying_global_ac"],
+        exact["qualifying_popmax_ac"],
+    )
+    exact["global_frequency_signal_ac_ge_20"] = (
+        (exact["global_af"] > AF_ULTRA_RARE) & (exact["global_ac"] >= MIN_RECLASSIFICATION_AC)
+    )
+    exact["popmax_frequency_signal_ac_ge_20"] = (
+        (exact["popmax_af"] > AF_ULTRA_RARE) & (exact["popmax_ac"] >= MIN_RECLASSIFICATION_AC)
+    )
+    exact["frequency_signal_ac_ge_20"] = (
+        exact["global_frequency_signal_ac_ge_20"] | exact["popmax_frequency_signal_ac_ge_20"]
+    )
+    exact["weak_review_signal"] = (exact["review_score"] <= 1) | (exact["submitter_count"].fillna(99) <= 1)
+    exact["standard_acmg_frequency_flag"] = exact["max_frequency_signal"] > AF_ULTRA_RARE
+    exact["standard_acmg_high_frequency_flag"] = exact["max_frequency_signal"] > AF_RARE
+    exact["popmax_only_frequency_flag"] = (
+        (exact["popmax_af"] > AF_ULTRA_RARE) & ~(exact["global_af"] > AF_ULTRA_RARE)
+    )
+    exact["popmax_global_ratio"] = (
+        (exact["popmax_af"].fillna(0) + LIFT_PSEUDOCOUNT)
+        / (exact["global_af"].fillna(0) + LIFT_PSEUDOCOUNT)
+    )
+
+    exact["frequency_pressure_score"] = scale_log_frequency_pressure(exact["max_frequency_signal"])
+    exact["ac_reliability_score"] = 20 * np.clip(
+        np.log1p(exact["qualifying_frequency_ac"].fillna(0)) / np.log1p(MIN_RECLASSIFICATION_AC),
+        0,
+        1,
+    )
+    exact.loc[~exact["standard_acmg_frequency_flag"], "ac_reliability_score"] = 0
+    exact["popmax_enrichment_score"] = 10 * np.clip(
+        np.log10(exact["popmax_global_ratio"]) / 2,
+        0,
+        1,
+    )
+    exact.loc[~exact["standard_acmg_frequency_flag"], "popmax_enrichment_score"] = 0
+    exact["variant_type_tension_score"] = exact["variant_type"].map(
+        VARIANT_TYPE_TENSION_SCORES
+    ).fillna(VARIANT_TYPE_TENSION_SCORES["other_or_unresolved"])
+
+    detectability_map = type_detectability.set_index("variant_type")[
+        "technical_detectability_index"
+    ].to_dict()
+    exact["technical_detectability_index"] = exact["variant_type"].map(detectability_map).fillna(
+        TECHNICAL_DETECTABILITY_PRIORS["other_or_unresolved"]
+    )
+    exact["technical_detectability_score"] = 8 * exact["technical_detectability_index"]
+    exact.loc[~exact["standard_acmg_frequency_flag"], "technical_detectability_score"] = 0
+
+    constraint_map = gene_constraint.set_index("gene")["gene_frequency_constraint_proxy"].to_dict()
+    exact["gene_frequency_constraint_proxy"] = exact["gene"].map(constraint_map).fillna(0.5)
+    exact["gene_constraint_score"] = 10 * exact["gene_frequency_constraint_proxy"]
+    exact.loc[~exact["standard_acmg_frequency_flag"], "gene_constraint_score"] = 0
+    exact["review_fragility_score"] = exact["review_strength"].map(REVIEW_FRAGILITY_SCORES).fillna(5.0)
+    exact.loc[~exact["standard_acmg_frequency_flag"], "review_fragility_score"] = 0
+
+    exact["vital_score"] = exact[component_columns].sum(axis=1).clip(lower=0, upper=100)
+    exact["frequency_evidence_status"] = "frequency_observed"
+    exact["vital_red_flag"] = (
+        (exact["vital_score"] >= VITAL_ACTION_THRESHOLD)
+        & exact["frequency_signal_ac_ge_20"]
+        & exact["weak_review_signal"]
+    )
+    exact["vital_band"] = np.select(
+        [
+            ~exact["standard_acmg_frequency_flag"],
+            exact["vital_red_flag"],
+            exact["vital_score"] >= VITAL_ACTION_THRESHOLD,
+            exact["vital_score"] >= 55,
+        ],
+        [
+            "green_frequency_consistent",
+            "red_reclassification_priority",
+            "orange_high_tension",
+            "yellow_watchlist",
+        ],
+        default="blue_low_support_signal",
+    )
+    exact["predicted_revision_direction"] = np.where(
+        exact["vital_red_flag"],
+        "P/LP_to_VUS_or_B_review_recommended",
+        "",
+    )
+    exact["vital_signal_reason"] = exact.apply(
+        lambda row: "; ".join(
+            reason
+            for reason in [
+                "popmax_AF_gt_1e-4" if row.get("popmax_af", 0) > AF_RARE else "",
+                (
+                    "popmax_AF_gt_1e-5"
+                    if row.get("popmax_af", 0) > AF_ULTRA_RARE and row.get("popmax_af", 0) <= AF_RARE
+                    else ""
+                ),
+                "global_AF_gt_1e-5" if row.get("global_af", 0) > AF_ULTRA_RARE else "",
+                f"AC_ge_{MIN_RECLASSIFICATION_AC}" if row.get("frequency_signal_ac_ge_20") else "",
+                "weak_review" if row.get("weak_review_signal") else "",
+                f"type={row.get('variant_type', '')}" if row.get("variant_type", "") else "",
+                f"gene_constraint={row.get('gene_frequency_constraint_proxy', np.nan):.2f}",
+                f"detectability={row.get('technical_detectability_index', np.nan):.2f}",
+            ]
+            if reason
+        ),
+        axis=1,
+    )
+
+    score_columns = [
+        "variant_key",
+        "gene",
+        "clinvar_id",
+        "variation_id",
+        "title",
+        "clinsig",
+        "review_status",
+        "review_strength",
+        "review_score",
+        "submitter_count",
+        "submitter_count_source",
+        "match_category",
+        "frequency_evidence_status",
+        "variant_type",
+        "functional_class",
+        "global_af",
+        "global_ac",
+        "global_an",
+        "popmax_af",
+        "popmax_ac",
+        "popmax_population",
+        "popmax_global_ratio",
+        "max_frequency_signal",
+        "max_frequency_source",
+        "qualifying_frequency_ac",
+        "standard_acmg_frequency_flag",
+        "standard_acmg_high_frequency_flag",
+        "popmax_only_frequency_flag",
+        "frequency_signal_ac_ge_20",
+        "weak_review_signal",
+        "gene_frequency_constraint_proxy",
+        "technical_detectability_index",
+        *component_columns,
+        "vital_score",
+        "vital_band",
+        "vital_red_flag",
+        "predicted_revision_direction",
+        "vital_signal_reason",
+    ]
+    score_frames = [
+        frame.loc[:, [column for column in score_columns if column in frame.columns]].copy()
+        for frame in [exact, unscored]
+        if not frame.empty
+    ]
+    scores = pd.concat(score_frames, ignore_index=True) if score_frames else pd.DataFrame()
+    scores = scores.sort_values(
+        ["vital_red_flag", "vital_score", "max_frequency_signal"],
+        ascending=[False, False, False],
+    ).reset_index(drop=True)
+    summary = make_vital_summary_table(scores)
+    predictions = scores.loc[
+        scores["vital_band"].isin(["red_reclassification_priority", "orange_high_tension"]),
+        :,
+    ].copy()
+    return scores, summary, predictions, gene_constraint, type_detectability
+
+
+def make_vital_summary_table(scores: pd.DataFrame) -> pd.DataFrame:
+    if scores.empty:
+        return pd.DataFrame(columns=["metric", "value", "numerator", "denominator", "percent", "note"])
+
+    denominator = len(scores)
+    frequency_status = scores.get(
+        "frequency_evidence_status",
+        pd.Series("frequency_observed", index=scores.index, dtype="object"),
+    ).fillna("").astype(str)
+    frequency_observed_count = int(frequency_status.eq("frequency_observed").sum())
+    no_gnomad_evidence_count = int(frequency_status.eq("not_observed_in_gnomAD").sum())
+    allele_discordance_count = int(frequency_status.eq("allele_discordance_no_exact_AF").sum())
+    query_error_count = int(frequency_status.eq("gnomad_query_error_no_frequency_evidence").sum())
+    standard_flags = int(scores["standard_acmg_frequency_flag"].fillna(False).sum())
+    high_flags = int(scores["standard_acmg_high_frequency_flag"].fillna(False).sum())
+    ac_supported = int(
+        (
+            scores["standard_acmg_frequency_flag"].fillna(False)
+            & scores["frequency_signal_ac_ge_20"].fillna(False)
+        ).sum()
+    )
+    red_flags = int(scores["vital_red_flag"].fillna(False).sum())
+    popmax_flags = int((pd.to_numeric(scores["popmax_af"], errors="coerce") > AF_ULTRA_RARE).sum())
+    global_flags = int((pd.to_numeric(scores["global_af"], errors="coerce") > AF_ULTRA_RARE).sum())
+    popmax_high = int((pd.to_numeric(scores["popmax_af"], errors="coerce") > AF_RARE).sum())
+    global_high = int((pd.to_numeric(scores["global_af"], errors="coerce") > AF_RARE).sum())
+    reduction = (
+        100 * (1 - red_flags / standard_flags)
+        if standard_flags
+        else np.nan
+    )
+
+    def row(metric: str, value: object, numerator: int | float | None = None, note: str = "") -> dict[str, object]:
+        return {
+            "metric": metric,
+            "value": value,
+            "numerator": numerator if numerator is not None else "",
+            "denominator": denominator,
+            "percent": 100 * numerator / denominator if isinstance(numerator, (int, float)) and denominator else "",
+            "note": note,
+        }
+
+    rows = [
+        row("clinvar_plp_variants_in_vital_table", denominator, denominator, "All P/LP variants carried through VITAL, including explicit no-frequency-evidence rows."),
+        row("exact_af_covered_clinvar_plp_variants", frequency_observed_count, frequency_observed_count, "Variants with observed exact gnomAD AF used for continuous VITAL scoring."),
+        row("no_gnomad_frequency_evidence_variants", no_gnomad_evidence_count, no_gnomad_evidence_count, "No AF imputation is applied; these variants retain NaN frequency fields and gray VITAL band."),
+        row("allele_discordance_no_exact_af_variants", allele_discordance_count, allele_discordance_count, "ClinVar/gnomAD allele mismatch rows kept outside frequency scoring."),
+        row("gnomad_query_error_no_frequency_evidence_variants", query_error_count, query_error_count, "Transient gnomAD query failures are flagged separately and kept outside frequency scoring."),
+        row("standard_popmax_or_global_af_gt_1e_5_flags", standard_flags, standard_flags, "Naive frequency-only ACMG-style contradiction screen."),
+        row("standard_popmax_or_global_af_gt_1e_4_flags", high_flags, high_flags, "High-frequency subset of the naive screen."),
+        row("global_af_gt_1e_5_flags", global_flags, global_flags, "Flags found by global AF alone."),
+        row("popmax_af_gt_1e_5_flags", popmax_flags, popmax_flags, "Flags found when population maximum AF is considered."),
+        row("global_af_gt_1e_4_flags", global_high, global_high, "High-frequency flags found by global AF alone."),
+        row("popmax_af_gt_1e_4_flags", popmax_high, popmax_high, "High-frequency flags found when population maximum AF is considered."),
+        row("ac_supported_frequency_flags", ac_supported, ac_supported, f"Frequency signal has AC >= {MIN_RECLASSIFICATION_AC} in global or popmax source."),
+        row("vital_red_reclassification_predictions", red_flags, red_flags, f"VITAL >= {VITAL_ACTION_THRESHOLD:g}, weak review, and AC-supported frequency signal."),
+        {
+            "metric": "alert_reduction_vs_standard_frequency_screen_percent",
+            "value": reduction,
+            "numerator": red_flags,
+            "denominator": standard_flags,
+            "percent": reduction,
+            "note": "Reduction in action-priority calls versus a naive AF > 1e-5 frequency screen.",
+        },
+    ]
+    band_counts = scores["vital_band"].value_counts().to_dict()
+    for band, count in sorted(band_counts.items()):
+        rows.append(row(f"vital_band_{band}", int(count), int(count), "VITAL score band count."))
+    return pd.DataFrame(rows)
+
+
+def vital_bool(series: pd.Series) -> pd.Series:
+    if series.dtype == bool:
+        return series.fillna(False)
+    return series.fillna(False).astype(str).str.lower().isin({"true", "1", "yes"})
+
+
+def safe_divide(numerator: int | float, denominator: int | float) -> float:
+    return float(numerator / denominator) if denominator else np.nan
+
+
+def wilson_ci(successes: int | float, total: int | float, z: float = 1.96) -> tuple[float, float]:
+    successes = int(successes)
+    total = int(total)
+    if total <= 0:
+        return np.nan, np.nan
+    proportion = successes / total
+    denominator = 1 + (z**2 / total)
+    center = (proportion + (z**2 / (2 * total))) / denominator
+    margin = (
+        z
+        * math.sqrt((proportion * (1 - proportion) / total) + (z**2 / (4 * total**2)))
+        / denominator
+    )
+    return max(0.0, center - margin), min(1.0, center + margin)
+
+
+def add_binary_metric_cis(row: dict[str, object], tp: int, fp: int, fn: int, tn: int) -> dict[str, object]:
+    for metric, successes, total in [
+        ("precision", tp, tp + fp),
+        ("recall", tp, tp + fn),
+        ("specificity", tn, tn + fp),
+        ("false_positive_rate", fp, fp + tn),
+        ("false_negative_rate", fn, fn + tp),
+    ]:
+        low, high = wilson_ci(successes, total)
+        row[f"{metric}_ci_low"] = low
+        row[f"{metric}_ci_high"] = high
+    return row
+
+
+def binary_roc_auc(labels: pd.Series, scores: pd.Series) -> float:
+    labels = labels.astype(bool)
+    n_positive = int(labels.sum())
+    n_negative = int((~labels).sum())
+    if n_positive == 0 or n_negative == 0:
+        return np.nan
+    ranks = pd.to_numeric(scores, errors="coerce").fillna(0).rank(method="average")
+    rank_sum_positive = ranks[labels].sum()
+    return float((rank_sum_positive - n_positive * (n_positive + 1) / 2) / (n_positive * n_negative))
+
+
+def binary_average_precision(labels: pd.Series, scores: pd.Series) -> float:
+    ordered = pd.DataFrame(
+        {
+            "label": labels.astype(bool),
+            "score": pd.to_numeric(scores, errors="coerce").fillna(0),
+        }
+    ).sort_values("score", ascending=False)
+    n_positive = int(ordered["label"].sum())
+    if n_positive == 0:
+        return np.nan
+    ordered["rank"] = np.arange(1, len(ordered) + 1)
+    ordered["cumulative_positive"] = ordered["label"].cumsum()
+    precision_at_positive = (
+        ordered.loc[ordered["label"], "cumulative_positive"]
+        / ordered.loc[ordered["label"], "rank"]
+    )
+    return float(precision_at_positive.mean())
+
+
+def make_curve_points(labels: pd.Series, scores: pd.Series) -> pd.DataFrame:
+    curve = pd.DataFrame(
+        {
+            "label": labels.astype(bool).to_numpy(),
+            "score": pd.to_numeric(scores, errors="coerce").fillna(0).to_numpy(),
+        }
+    ).sort_values("score", ascending=False)
+    n_positive = int(curve["label"].sum())
+    n_negative = int((~curve["label"]).sum())
+    rows: list[dict[str, object]] = []
+    thresholds = [np.inf, *curve["score"].drop_duplicates().tolist(), -np.inf]
+    for threshold in thresholds:
+        predicted = curve["score"] >= threshold
+        tp = int((predicted & curve["label"]).sum())
+        fp = int((predicted & ~curve["label"]).sum())
+        fn = int((~predicted & curve["label"]).sum())
+        tn = int((~predicted & ~curve["label"]).sum())
+        rows.append(
+            {
+                "threshold": threshold,
+                "tp": tp,
+                "fp": fp,
+                "fn": fn,
+                "tn": tn,
+                "tpr_recall": safe_divide(tp, n_positive),
+                "fpr": safe_divide(fp, n_negative),
+                "precision": safe_divide(tp, tp + fp),
+                "specificity": safe_divide(tn, tn + fp),
+            }
+        )
+    points = pd.DataFrame(rows)
+    points["curve_model"] = "VITAL_score"
+    return points
+
+
+def make_vital_component_breakdown(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    component_defs = [
+        ("frequency_pressure_score", "AF pressure", 45.0),
+        ("ac_reliability_score", "AC reliability", 20.0),
+        ("popmax_enrichment_score", "Popmax enrichment", 10.0),
+        ("variant_type_tension_score", "Variant type tension", 6.0),
+        ("technical_detectability_score", "Technical detectability", 8.0),
+        ("gene_constraint_score", "Gene constraint", 10.0),
+        ("review_fragility_score", "Review fragility", 10.0),
+    ]
+    records: list[dict[str, object]] = []
+    identity_columns = [
+        "variant_key",
+        "gene",
+        "clinvar_id",
+        "variation_id",
+        "title",
+        "review_strength",
+        "variant_type",
+        "vital_score",
+        "vital_band",
+        "vital_red_flag",
+    ]
+    available_identity = [column for column in identity_columns if column in scores.columns]
+    for _, row in scores.iterrows():
+        base = {column: row.get(column, "") for column in available_identity}
+        for component_column, component_label, max_points in component_defs:
+            points = pd.to_numeric(pd.Series([row.get(component_column, np.nan)]), errors="coerce").iloc[0]
+            records.append(
+                {
+                    **base,
+                    "component": component_label,
+                    "component_column": component_column,
+                    "points": points,
+                    "max_points": max_points,
+                    "fraction_of_vital_score": safe_divide(points, row.get("vital_score", np.nan)),
+                }
+            )
+    breakdown = pd.DataFrame(records)
+    if breakdown.empty:
+        summary = pd.DataFrame(columns=["component", "mean_points", "median_points", "max_points_observed"])
+    else:
+        summary = (
+            breakdown.groupby("component", dropna=False)
+            .agg(
+                mean_points=("points", "mean"),
+                median_points=("points", "median"),
+                max_points_observed=("points", "max"),
+                variants_with_nonzero_component=("points", lambda values: int((pd.to_numeric(values, errors="coerce") > 0).sum())),
+            )
+            .reset_index()
+            .sort_values("mean_points", ascending=False)
+        )
+    return breakdown, summary
+
+
+def make_review_fragility_summary(scores: pd.DataFrame) -> pd.DataFrame:
+    if scores.empty:
+        return pd.DataFrame()
+    table = scores.copy()
+    for column in [
+        "standard_acmg_frequency_flag",
+        "frequency_signal_ac_ge_20",
+        "weak_review_signal",
+        "vital_red_flag",
+    ]:
+        table[column] = vital_bool(table[column])
+    table["vital_score"] = pd.to_numeric(table["vital_score"], errors="coerce")
+    total = len(table)
+    grouped = (
+        table.groupby("review_strength", dropna=False)
+        .agg(
+            variant_count=("variant_key", "count"),
+            frequency_flag_count=("standard_acmg_frequency_flag", "sum"),
+            ac_supported_frequency_count=("frequency_signal_ac_ge_20", "sum"),
+            vital_red_count=("vital_red_flag", "sum"),
+            median_vital_score=("vital_score", "median"),
+            max_vital_score=("vital_score", "max"),
+        )
+        .reset_index()
+    )
+    grouped["variant_fraction"] = grouped["variant_count"] / total if total else np.nan
+    grouped["ac_supported_fraction_within_review_strength"] = grouped.apply(
+        lambda row: safe_divide(row["ac_supported_frequency_count"], row["variant_count"]),
+        axis=1,
+    )
+    grouped["vital_red_fraction_within_review_strength"] = grouped.apply(
+        lambda row: safe_divide(row["vital_red_count"], row["variant_count"]),
+        axis=1,
+    )
+    ac_supported_total = int(table["frequency_signal_ac_ge_20"].sum())
+    red_total = int(table["vital_red_flag"].sum())
+    grouped["share_of_ac_supported_frequency_variants"] = grouped["ac_supported_frequency_count"].map(
+        lambda value: safe_divide(value, ac_supported_total)
+    )
+    grouped["share_of_vital_red_variants"] = grouped["vital_red_count"].map(
+        lambda value: safe_divide(value, red_total)
+    )
+    return grouped.sort_values(
+        ["vital_red_count", "ac_supported_frequency_count", "variant_count"],
+        ascending=[False, False, False],
+    ).reset_index(drop=True)
+
+
+def make_vital_benchmark_tables(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    if scores.empty:
+        empty = pd.DataFrame()
+        return empty, empty, empty
+    table = scores.copy()
+    for column in [
+        "standard_acmg_frequency_flag",
+        "standard_acmg_high_frequency_flag",
+        "frequency_signal_ac_ge_20",
+        "weak_review_signal",
+        "vital_red_flag",
+    ]:
+        table[column] = vital_bool(table[column])
+    for column in [
+        "review_score",
+        "global_af",
+        "popmax_af",
+        "max_frequency_signal",
+        "vital_score",
+    ]:
+        table[column] = pd.to_numeric(table[column], errors="coerce")
+
+    if "frequency_evidence_status" in table.columns:
+        frequency_observed = table["frequency_evidence_status"].fillna("").astype(str).eq("frequency_observed")
+    else:
+        frequency_observed = table["max_frequency_signal"].notna()
+    table["frequency_evidence_observed"] = frequency_observed
+    table["operational_positive"] = (
+        table["frequency_evidence_observed"] & table["weak_review_signal"] & table["frequency_signal_ac_ge_20"]
+    )
+    table["high_confidence_retained_plp_proxy"] = (
+        table["frequency_evidence_observed"] & (table["review_score"] >= 2)
+    )
+    universe = table[table["operational_positive"] | table["high_confidence_retained_plp_proxy"]].copy()
+    positives = universe["operational_positive"]
+    negatives = universe["high_confidence_retained_plp_proxy"]
+
+    method_flags = {
+        "global_AF_gt_1e-5": universe["global_af"] > AF_ULTRA_RARE,
+        "global_AF_gt_1e-4": universe["global_af"] > AF_RARE,
+        "popmax_or_global_AF_gt_1e-5": universe["max_frequency_signal"] > AF_ULTRA_RARE,
+        "popmax_or_global_AF_gt_1e-4": universe["max_frequency_signal"] > AF_RARE,
+        "AF_gt_1e-5_and_AC_ge_20": (
+            (universe["max_frequency_signal"] > AF_ULTRA_RARE)
+            & universe["frequency_signal_ac_ge_20"]
+        ),
+        "VITAL_red": universe["vital_red_flag"],
+    }
+    rows: list[dict[str, object]] = []
+    for method, flags in method_flags.items():
+        flags = flags.fillna(False).astype(bool)
+        tp = int((flags & positives).sum())
+        fp = int((flags & negatives).sum())
+        fn = int((~flags & positives).sum())
+        tn = int((~flags & negatives).sum())
+        rows.append(
+            add_binary_metric_cis(
+                {
+                    "method": method,
+                    "true_positives": tp,
+                    "false_positives": fp,
+                    "false_negatives": fn,
+                    "true_negatives": tn,
+                    "precision": safe_divide(tp, tp + fp),
+                    "recall": safe_divide(tp, tp + fn),
+                    "specificity": safe_divide(tn, tn + fp),
+                    "false_positive_rate": safe_divide(fp, fp + tn),
+                    "false_negative_rate": safe_divide(fn, fn + tp),
+                    "benchmark_positive_definition": "weak_review_and_AC_supported_frequency_signal",
+                    "benchmark_negative_definition": "review_score_ge_2_current_PLP_proxy",
+                    "confidence_interval_method": "Wilson 95%",
+                },
+                tp,
+                fp,
+                fn,
+                tn,
+            )
+        )
+    method_comparison = pd.DataFrame(rows)
+
+    curve_points = make_curve_points(positives, universe["vital_score"])
+    retention_rows = [
+        {
+            "metric": "benchmark_universe_count",
+            "value": len(universe),
+            "note": "Variants used for operational precision/recall benchmark.",
+        },
+        {
+            "metric": "operational_positive_count",
+            "value": int(positives.sum()),
+            "note": "Weak-review P/LP variants with AC-supported frequency signal.",
+        },
+        {
+            "metric": "high_confidence_retained_plp_proxy_count",
+            "value": int(negatives.sum()),
+            "note": "Current P/LP variants with review_score >= 2.",
+        },
+        {
+            "metric": "known_valid_frequency_consistent_green_count",
+            "value": int(
+                (
+                    (table["review_score"] >= 2)
+                    & table["frequency_evidence_observed"]
+                    & (table["max_frequency_signal"] <= AF_ULTRA_RARE)
+                    & table["vital_band"].eq("green_frequency_consistent")
+                ).sum()
+            ),
+            "note": "High-confidence P/LP variants without popmax/global AF > 1e-5 that remain green.",
+        },
+        {
+            "metric": "known_valid_frequency_consistent_count",
+            "value": int(
+                (
+                    (table["review_score"] >= 2)
+                    & table["frequency_evidence_observed"]
+                    & (table["max_frequency_signal"] <= AF_ULTRA_RARE)
+                ).sum()
+            ),
+            "note": "Denominator for the green-retention count.",
+        },
+        {
+            "metric": "high_confidence_plp_not_red_count",
+            "value": int(
+                (
+                    (table["review_score"] >= 2)
+                    & table["frequency_evidence_observed"]
+                    & ~table["vital_red_flag"]
+                ).sum()
+            ),
+            "note": "High-confidence current P/LP variants with observed frequency evidence not called red by VITAL.",
+        },
+        {
+            "metric": "roc_auc_vital_score_operational_benchmark",
+            "value": binary_roc_auc(positives, universe["vital_score"]),
+            "note": "Continuous VITAL score AUC on operational benchmark.",
+        },
+        {
+            "metric": "average_precision_vital_score_operational_benchmark",
+            "value": binary_average_precision(positives, universe["vital_score"]),
+            "note": "Continuous VITAL score average precision on operational benchmark.",
+        },
+    ]
+    return method_comparison, curve_points, pd.DataFrame(retention_rows)
+
+
+def prepare_vital_benchmark_universe(scores: pd.DataFrame) -> pd.DataFrame:
+    table = scores.copy()
+    for column in [
+        "standard_acmg_frequency_flag",
+        "standard_acmg_high_frequency_flag",
+        "frequency_signal_ac_ge_20",
+        "weak_review_signal",
+        "vital_red_flag",
+    ]:
+        if column not in table.columns:
+            table[column] = False
+        table[column] = vital_bool(table[column])
+    for column in ["review_score", "max_frequency_signal", "vital_score"]:
+        table[column] = pd.to_numeric(table.get(column), errors="coerce")
+    if "frequency_evidence_status" in table.columns:
+        frequency_observed = table["frequency_evidence_status"].fillna("").astype(str).eq("frequency_observed")
+    else:
+        frequency_observed = table["max_frequency_signal"].notna()
+    table["frequency_evidence_observed"] = frequency_observed
+    table["operational_positive"] = (
+        table["frequency_evidence_observed"] & table["weak_review_signal"] & table["frequency_signal_ac_ge_20"]
+    )
+    table["high_confidence_retained_plp_proxy"] = (
+        table["frequency_evidence_observed"] & (table["review_score"] >= 2)
+    )
+    return table[table["operational_positive"] | table["high_confidence_retained_plp_proxy"]].copy()
+
+
+def make_vital_threshold_sweep(scores: pd.DataFrame) -> pd.DataFrame:
+    universe = prepare_vital_benchmark_universe(scores)
+    if universe.empty:
+        return pd.DataFrame()
+    positives = universe["operational_positive"].astype(bool)
+    thresholds = sorted({*range(40, 96, 5), int(VITAL_ACTION_THRESHOLD)})
+    rows: list[dict[str, object]] = []
+    for threshold in thresholds:
+        predicted = pd.to_numeric(universe["vital_score"], errors="coerce").fillna(-np.inf) >= threshold
+        tp = int((predicted & positives).sum())
+        fp = int((predicted & ~positives).sum())
+        fn = int((~predicted & positives).sum())
+        tn = int((~predicted & ~positives).sum())
+        rows.append(
+            {
+                "score_threshold": threshold,
+                "flagged_count": int(predicted.sum()),
+                "true_positives": tp,
+                "false_positives": fp,
+                "false_negatives": fn,
+                "true_negatives": tn,
+                "precision": safe_divide(tp, tp + fp),
+                "recall": safe_divide(tp, tp + fn),
+                "specificity": safe_divide(tn, tn + fp),
+                "false_positive_rate": safe_divide(fp, fp + tn),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def make_vital_ac_threshold_sensitivity(scores: pd.DataFrame) -> pd.DataFrame:
+    if scores.empty:
+        return pd.DataFrame()
+    table = scores.copy()
+    for column in ["weak_review_signal", "vital_red_flag", "standard_acmg_frequency_flag"]:
+        if column not in table.columns:
+            table[column] = False
+        table[column] = vital_bool(table[column])
+    for column in [
+        "review_score",
+        "max_frequency_signal",
+        "qualifying_frequency_ac",
+        "vital_score",
+    ]:
+        table[column] = pd.to_numeric(table.get(column), errors="coerce")
+    if "frequency_evidence_status" in table.columns:
+        observed = table["frequency_evidence_status"].fillna("").astype(str).eq("frequency_observed")
+    else:
+        observed = table["max_frequency_signal"].notna()
+    frequency_signal = observed & (table["max_frequency_signal"] > AF_ULTRA_RARE)
+    negatives = observed & (table["review_score"] >= 2)
+    naive_predicted = frequency_signal
+
+    def red_set(ac_threshold: int) -> set[str]:
+        ac_supported = frequency_signal & (table["qualifying_frequency_ac"].fillna(0) >= ac_threshold)
+        red = (
+            (table["vital_score"] >= VITAL_ACTION_THRESHOLD)
+            & table["weak_review_signal"]
+            & ac_supported
+        )
+        return set(table.loc[red, "variant_key"].fillna("").astype(str))
+
+    def variant_summary(keys: set[str]) -> str:
+        if not keys:
+            return ""
+        subset = table.loc[table["variant_key"].astype(str).isin(keys)].copy()
+        labels = []
+        for _, row in subset.sort_values(["gene", "variation_id", "variant_key"]).iterrows():
+            gene = str(row.get("gene", ""))
+            variation = str(row.get("clinvar_id", row.get("variation_id", "")))
+            score = row.get("vital_score", np.nan)
+            score_label = f"{score:.1f}" if pd.notna(score) else "NA"
+            labels.append(f"{gene}:{variation}:VITAL={score_label}")
+        return "; ".join(labels)
+
+    reference_red = red_set(MIN_RECLASSIFICATION_AC)
+    rows: list[dict[str, object]] = []
+    for ac_threshold in [5, 10, 20, 50]:
+        ac_supported = frequency_signal & (table["qualifying_frequency_ac"].fillna(0) >= ac_threshold)
+        weak_ac_supported = ac_supported & table["weak_review_signal"]
+        vital_red_at_threshold = (
+            (table["vital_score"] >= VITAL_ACTION_THRESHOLD)
+            & table["weak_review_signal"]
+            & ac_supported
+        )
+        threshold_red = set(table.loc[vital_red_at_threshold, "variant_key"].fillna("").astype(str))
+        shared_with_reference = threshold_red & reference_red
+        gained_vs_reference = threshold_red - reference_red
+        lost_vs_reference = reference_red - threshold_red
+        universe = weak_ac_supported | negatives
+        positives = weak_ac_supported.loc[universe]
+        naive_flags = naive_predicted.loc[universe]
+        ac_flags = ac_supported.loc[universe]
+        vital_flags = vital_red_at_threshold.loc[universe]
+        for method, predicted in [
+            ("naive_AF_gt_1e-5", naive_flags),
+            (f"AF_gt_1e-5_and_AC_ge_{ac_threshold}", ac_flags),
+            (f"VITAL_red_AC_ge_{ac_threshold}", vital_flags),
+        ]:
+            predicted = predicted.fillna(False).astype(bool)
+            tp = int((predicted & positives).sum())
+            fp = int((predicted & ~positives).sum())
+            fn = int((~predicted & positives).sum())
+            tn = int((~predicted & ~positives).sum())
+            row = {
+                "ac_threshold": ac_threshold,
+                "method": method,
+                "frequency_observed_count": int(observed.sum()),
+                "naive_af_flag_count_all_observed": int(naive_predicted.sum()),
+                "ac_supported_frequency_flag_count_all_observed": int(ac_supported.sum()),
+                "vital_red_count_all_observed": int(vital_red_at_threshold.sum()),
+                "vital_red_variants": variant_summary(threshold_red),
+                "vital_red_shared_with_ac_ge_20_count": len(shared_with_reference),
+                "vital_red_shared_with_ac_ge_20_variants": variant_summary(shared_with_reference),
+                "vital_red_gained_vs_ac_ge_20_count": len(gained_vs_reference),
+                "vital_red_gained_vs_ac_ge_20_variants": variant_summary(gained_vs_reference),
+                "vital_red_lost_vs_ac_ge_20_count": len(lost_vs_reference),
+                "vital_red_lost_vs_ac_ge_20_variants": variant_summary(lost_vs_reference),
+                "operational_positive_count": int(weak_ac_supported.sum()),
+                "high_confidence_retained_plp_proxy_count": int(negatives.sum()),
+                "true_positives": tp,
+                "false_positives": fp,
+                "false_negatives": fn,
+                "true_negatives": tn,
+                "precision": safe_divide(tp, tp + fp),
+                "recall": safe_divide(tp, tp + fn),
+                "specificity": safe_divide(tn, tn + fp),
+                "false_positive_rate": safe_divide(fp, fp + tn),
+                "false_negative_rate": safe_divide(fn, fn + tp),
+                "confidence_interval_method": "Wilson 95%",
+            }
+            rows.append(add_binary_metric_cis(row, tp, fp, fn, tn))
+
+    result = pd.DataFrame(rows)
+    if result.empty:
+        return result
+    naive_fp = (
+        result.loc[result["method"].eq("naive_AF_gt_1e-5"), ["ac_threshold", "false_positives"]]
+        .rename(columns={"false_positives": "naive_false_positives"})
+    )
+    result = result.merge(naive_fp, on="ac_threshold", how="left")
+    result["false_positive_reduction_vs_naive"] = result["naive_false_positives"] - result["false_positives"]
+    result["false_positive_reduction_vs_naive_percent"] = result.apply(
+        lambda row: safe_divide(row["false_positive_reduction_vs_naive"], row["naive_false_positives"]) * 100
+        if row["naive_false_positives"]
+        else np.nan,
+        axis=1,
+    )
+    return result
+
+
+def make_vital_acmg_disagreement_table(scores: pd.DataFrame) -> pd.DataFrame:
+    if scores.empty:
+        return pd.DataFrame()
+    table = scores.copy()
+    for column in [
+        "standard_acmg_frequency_flag",
+        "standard_acmg_high_frequency_flag",
+        "frequency_signal_ac_ge_20",
+        "weak_review_signal",
+        "vital_red_flag",
+    ]:
+        if column not in table.columns:
+            table[column] = False
+        table[column] = vital_bool(table[column])
+    for column in [
+        "global_af",
+        "global_ac",
+        "popmax_af",
+        "popmax_ac",
+        "max_frequency_signal",
+        "qualifying_frequency_ac",
+        "vital_score",
+    ]:
+        table[column] = pd.to_numeric(table.get(column), errors="coerce")
+    observed = table.get(
+        "frequency_evidence_status",
+        pd.Series("", index=table.index, dtype="object"),
+    ).fillna("").astype(str).eq("frequency_observed")
+    table = table.loc[observed & (table["standard_acmg_frequency_flag"] | table["vital_red_flag"])].copy()
+    if table.empty:
+        return pd.DataFrame()
+    table["acmg_vital_relation"] = np.select(
+        [
+            table["standard_acmg_frequency_flag"] & table["vital_red_flag"],
+            table["standard_acmg_frequency_flag"] & ~table["vital_red_flag"],
+            ~table["standard_acmg_frequency_flag"] & table["vital_red_flag"],
+        ],
+        [
+            "ACMG_frequency_flag_and_VITAL_red",
+            "ACMG_frequency_flag_but_VITAL_not_red",
+            "VITAL_red_without_ACMG_frequency_flag",
+        ],
+        default="other",
+    )
+    table["why_not_red"] = table.apply(
+        lambda row: "; ".join(
+            reason
+            for reason in [
+                "AC_below_20" if not row.get("frequency_signal_ac_ge_20", False) else "",
+                "stronger_review" if not row.get("weak_review_signal", False) else "",
+                "score_below_70" if row.get("vital_score", 0) < VITAL_ACTION_THRESHOLD else "",
+            ]
+            if reason
+        ),
+        axis=1,
+    )
+    columns = [
+        "acmg_vital_relation",
+        "variant_key",
+        "gene",
+        "clinvar_id",
+        "variation_id",
+        "title",
+        "review_status",
+        "review_strength",
+        "submitter_count",
+        "variant_type",
+        "functional_class",
+        "global_af",
+        "global_ac",
+        "popmax_af",
+        "popmax_ac",
+        "popmax_population",
+        "max_frequency_signal",
+        "qualifying_frequency_ac",
+        "frequency_signal_ac_ge_20",
+        "weak_review_signal",
+        "standard_acmg_frequency_flag",
+        "standard_acmg_high_frequency_flag",
+        "vital_score",
+        "vital_band",
+        "vital_red_flag",
+        "why_not_red",
+        "vital_signal_reason",
+    ]
+    return table.loc[:, [column for column in columns if column in table.columns]].sort_values(
+        ["acmg_vital_relation", "vital_score", "max_frequency_signal"],
+        ascending=[True, False, False],
+    ).reset_index(drop=True)
+
+
+def make_vital_top_suspicious_table(scores: pd.DataFrame, limit: int = 10) -> pd.DataFrame:
+    if scores.empty:
+        return pd.DataFrame()
+    table = scores.copy()
+    observed = table.get(
+        "frequency_evidence_status",
+        pd.Series("", index=table.index, dtype="object"),
+    ).fillna("").astype(str).eq("frequency_observed")
+    table = table.loc[observed].copy()
+    if table.empty:
+        return pd.DataFrame()
+    for column in [
+        "global_af",
+        "global_ac",
+        "popmax_af",
+        "popmax_ac",
+        "max_frequency_signal",
+        "qualifying_frequency_ac",
+        "vital_score",
+    ]:
+        table[column] = pd.to_numeric(table.get(column), errors="coerce")
+    table["priority_rank"] = table["vital_score"].rank(method="first", ascending=False).astype(int)
+    columns = [
+        "priority_rank",
+        "variant_key",
+        "gene",
+        "clinvar_id",
+        "variation_id",
+        "title",
+        "review_strength",
+        "submitter_count",
+        "variant_type",
+        "functional_class",
+        "global_af",
+        "global_ac",
+        "popmax_af",
+        "popmax_ac",
+        "popmax_population",
+        "qualifying_frequency_ac",
+        "vital_score",
+        "vital_band",
+        "vital_red_flag",
+        "vital_signal_reason",
+    ]
+    return table.sort_values(
+        ["vital_score", "max_frequency_signal"],
+        ascending=[False, False],
+    ).head(limit).loc[:, [column for column in columns if column in table.columns]].reset_index(drop=True)
+
+
+def make_absence_detectability_bias_table(scores: pd.DataFrame) -> pd.DataFrame:
+    if scores.empty:
+        return pd.DataFrame()
+    table = scores.copy()
+    status = table.get(
+        "frequency_evidence_status",
+        pd.Series("", index=table.index, dtype="object"),
+    ).fillna("").astype(str)
+    table["is_frequency_observed"] = status.eq("frequency_observed")
+    table["is_no_frequency_evidence"] = status.ne("frequency_observed")
+    grouped = (
+        table.groupby("variant_type", dropna=False)
+        .agg(
+            clinvar_plp_variant_count=("variant_key", "count"),
+            frequency_observed_count=("is_frequency_observed", "sum"),
+            no_frequency_evidence_count=("is_no_frequency_evidence", "sum"),
+        )
+        .reset_index()
+    )
+    grouped["frequency_observed_fraction"] = grouped.apply(
+        lambda row: safe_divide(row["frequency_observed_count"], row["clinvar_plp_variant_count"]),
+        axis=1,
+    )
+    grouped["no_frequency_evidence_fraction"] = grouped.apply(
+        lambda row: safe_divide(row["no_frequency_evidence_count"], row["clinvar_plp_variant_count"]),
+        axis=1,
+    )
+    snv = grouped.loc[grouped["variant_type"].eq("SNV")]
+    snv_absence_fraction = (
+        float(snv["no_frequency_evidence_fraction"].iloc[0])
+        if not snv.empty
+        else np.nan
+    )
+    grouped["absence_enrichment_vs_snv"] = grouped["no_frequency_evidence_fraction"].map(
+        lambda value: safe_divide(value, snv_absence_fraction)
+    )
+
+    rows = []
+    snv_no = int(snv["no_frequency_evidence_count"].iloc[0]) if not snv.empty else 0
+    snv_yes = int(snv["frequency_observed_count"].iloc[0]) if not snv.empty else 0
+    for _, row in grouped.iterrows():
+        no_freq = int(row["no_frequency_evidence_count"])
+        observed = int(row["frequency_observed_count"])
+        if row["variant_type"] == "SNV" or (snv_no + snv_yes == 0):
+            odds_ratio = np.nan
+            p_value = np.nan
+        else:
+            odds_ratio, p_value = fisher_exact([[no_freq, observed], [snv_no, snv_yes]])
+        rows.append({**row.to_dict(), "odds_ratio_vs_snv": odds_ratio, "fisher_p_vs_snv": p_value})
+    return pd.DataFrame(rows).sort_values(
+        ["no_frequency_evidence_fraction", "clinvar_plp_variant_count"],
+        ascending=[False, False],
+    ).reset_index(drop=True)
+
+
 def make_gene_variant_type_tables(annotated: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     counts = (
         annotated.groupby(["gene", "functional_class"], dropna=False)
@@ -1379,6 +2740,155 @@ def plot_reclassification_risk(table: pd.DataFrame, output_path: Path) -> None:
     log.info("Saved: %s", output_path)
 
 
+def plot_vital_model(scores: pd.DataFrame, output_path: Path) -> None:
+    if scores.empty:
+        log.warning("Skipping VITAL figure because score table is empty.")
+        return
+    plot_df = scores[scores["max_frequency_signal"].fillna(0) > 0].copy()
+    if plot_df.empty:
+        log.warning("Skipping VITAL figure because all frequency signals are zero/missing.")
+        return
+    plot_df["log10_max_frequency_signal"] = np.log10(plot_df["max_frequency_signal"])
+    band_order = [
+        "green_frequency_consistent",
+        "blue_low_support_signal",
+        "yellow_watchlist",
+        "orange_high_tension",
+        "red_reclassification_priority",
+    ]
+    palette = {
+        "green_frequency_consistent": "#16A34A",
+        "blue_low_support_signal": "#2563EB",
+        "yellow_watchlist": "#D97706",
+        "orange_high_tension": "#EA580C",
+        "red_reclassification_priority": "#DC2626",
+    }
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(8.5, 5.2))
+    sns.scatterplot(
+        data=plot_df,
+        x="log10_max_frequency_signal",
+        y="vital_score",
+        hue="vital_band",
+        hue_order=[band for band in band_order if band in set(plot_df["vital_band"])],
+        palette=palette,
+        s=42,
+        alpha=0.85,
+        edgecolor="white",
+        linewidth=0.4,
+        ax=ax,
+    )
+    ax.axvline(np.log10(AF_ULTRA_RARE), color="#6B7280", linestyle="--", linewidth=1)
+    ax.axvline(np.log10(AF_RARE), color="#111827", linestyle="--", linewidth=1)
+    ax.axhline(VITAL_ACTION_THRESHOLD, color="#DC2626", linestyle="--", linewidth=1)
+    ax.set_xlabel("log10(max global/popmax AF)")
+    ax.set_ylabel("VITAL score")
+    ax.set_title("VITAL reclassification-priority model")
+    ax.legend(title="VITAL band", frameon=False, bbox_to_anchor=(1.02, 1), loc="upper left")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=180, bbox_inches="tight")
+    plt.close(fig)
+    log.info("Saved: %s", output_path)
+
+
+def plot_vital_validation_curves(curve_points: pd.DataFrame, output_path: Path) -> None:
+    if curve_points.empty:
+        log.warning("Skipping VITAL validation curves because curve table is empty.")
+        return
+    plot_df = curve_points.copy()
+    roc_auc = np.trapezoid(
+        plot_df.sort_values("fpr")["tpr_recall"].fillna(0),
+        plot_df.sort_values("fpr")["fpr"].fillna(0),
+    )
+    valid_pr = plot_df.sort_values("tpr_recall")
+    pr_auc = np.trapezoid(
+        valid_pr["precision"].fillna(0),
+        valid_pr["tpr_recall"].fillna(0),
+    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
+    axes[0].plot(plot_df["fpr"], plot_df["tpr_recall"], color="#2563EB", linewidth=2)
+    axes[0].plot([0, 1], [0, 1], color="#9CA3AF", linestyle="--", linewidth=1)
+    axes[0].set_xlabel("False positive rate")
+    axes[0].set_ylabel("Recall")
+    axes[0].set_title(f"ROC (AUC={roc_auc:.2f})")
+    axes[0].set_xlim(-0.02, 1.02)
+    axes[0].set_ylim(-0.02, 1.02)
+
+    axes[1].plot(
+        plot_df["tpr_recall"],
+        plot_df["precision"].fillna(1),
+        color="#DC2626",
+        linewidth=2,
+    )
+    axes[1].set_xlabel("Recall")
+    axes[1].set_ylabel("Precision")
+    axes[1].set_title(f"Precision-recall (AUC={pr_auc:.2f})")
+    axes[1].set_xlim(-0.02, 1.02)
+    axes[1].set_ylim(-0.02, 1.02)
+    fig.suptitle("VITAL operational benchmark curves")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=180)
+    plt.close(fig)
+    log.info("Saved: %s", output_path)
+
+
+def plot_review_fragility(summary: pd.DataFrame, output_path: Path) -> None:
+    if summary.empty:
+        log.warning("Skipping review-fragility figure because summary table is empty.")
+        return
+    plot_df = summary.copy()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+    sns.barplot(
+        data=plot_df,
+        y="review_strength",
+        x="ac_supported_frequency_count",
+        color="#7C3AED",
+        ax=ax,
+    )
+    ax.set_xlabel("AC-supported frequency-signal variant count")
+    ax.set_ylabel("")
+    ax.set_title("Review fragility among frequency-supported P/LP outliers")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=180)
+    plt.close(fig)
+    log.info("Saved: %s", output_path)
+
+
+def plot_absence_detectability_bias(table: pd.DataFrame, output_path: Path) -> None:
+    if table.empty:
+        log.warning("Skipping absence/detectability figure because table is empty.")
+        return
+    plot_df = table.sort_values("no_frequency_evidence_fraction", ascending=False).copy()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(8.5, 4.8))
+    sns.barplot(
+        data=plot_df,
+        y="variant_type",
+        x="no_frequency_evidence_fraction",
+        color="#0F766E",
+        ax=ax,
+    )
+    for index, row in plot_df.reset_index(drop=True).iterrows():
+        ax.text(
+            row["no_frequency_evidence_fraction"] + 0.01,
+            index,
+            f"n={int(row['clinvar_plp_variant_count'])}",
+            va="center",
+            fontsize=8,
+            color="#374151",
+        )
+    ax.set_xlim(0, min(1.05, max(1.0, plot_df["no_frequency_evidence_fraction"].max() + 0.12)))
+    ax.set_xlabel("Fraction without exact observed gnomAD AF")
+    ax.set_ylabel("")
+    ax.set_title("Absence in gnomAD is partly a detectability signal, not rarity")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=180)
+    plt.close(fig)
+    log.info("Saved: %s", output_path)
+
+
 def plot_variant_type_by_gene(counts: pd.DataFrame, output_path: Path) -> None:
     if counts.empty:
         log.warning("Skipping variant-type figure because counts are empty.")
@@ -1495,6 +3005,22 @@ def run_advanced_analyses(
         "exome_genome_af_summary": data_path(prefix, "exome_genome_af_summary.csv"),
         "reclassification_risk": data_path(prefix, "reclassification_risk.csv"),
         "reclassification_risk_summary": data_path(prefix, "reclassification_risk_summary.csv"),
+        "vital_scores": data_path(prefix, "vital_scores.csv"),
+        "vital_summary": data_path(prefix, "vital_summary.csv"),
+        "vital_predictions": data_path(prefix, "vital_predictions.csv"),
+        "gene_frequency_constraint": data_path(prefix, "gene_frequency_constraint.csv"),
+        "variant_type_detectability": data_path(prefix, "variant_type_detectability.csv"),
+        "vital_component_breakdown": data_path(prefix, "vital_component_breakdown.csv"),
+        "vital_component_summary": data_path(prefix, "vital_component_summary.csv"),
+        "vital_method_comparison": data_path(prefix, "vital_method_comparison.csv"),
+        "vital_validation_curves": data_path(prefix, "vital_validation_curves.csv"),
+        "vital_retention_summary": data_path(prefix, "vital_retention_summary.csv"),
+        "vital_threshold_sweep": data_path(prefix, "vital_threshold_sweep.csv"),
+        "vital_ac_threshold_sensitivity": data_path(prefix, "vital_ac_threshold_sensitivity.csv"),
+        "vital_acmg_disagreement": data_path(prefix, "vital_acmg_disagreement.csv"),
+        "vital_top_suspicious": data_path(prefix, "vital_top_suspicious.csv"),
+        "vital_absence_detectability_bias": data_path(prefix, "vital_absence_detectability_bias.csv"),
+        "review_fragility_summary": data_path(prefix, "review_fragility_summary.csv"),
         "gene_variant_type_summary": data_path(prefix, "gene_variant_type_summary.csv"),
         "gene_lof_missense_af_summary": data_path(prefix, "gene_lof_missense_af_summary.csv"),
         "non_overlap_feature_summary": data_path(prefix, "non_overlap_feature_summary.csv"),
@@ -1536,6 +3062,38 @@ def run_advanced_analyses(
     save_table(risk_table, output_paths["reclassification_risk"])
     save_table(risk_summary, output_paths["reclassification_risk_summary"])
 
+    (
+        vital_scores,
+        vital_summary,
+        vital_predictions,
+        gene_frequency_constraint,
+        variant_type_detectability,
+    ) = make_vital_score_tables(annotated, population_df)
+    save_table(vital_scores, output_paths["vital_scores"])
+    save_table(vital_summary, output_paths["vital_summary"])
+    save_table(vital_predictions, output_paths["vital_predictions"])
+    save_table(gene_frequency_constraint, output_paths["gene_frequency_constraint"])
+    save_table(variant_type_detectability, output_paths["variant_type_detectability"])
+    vital_component_breakdown, vital_component_summary = make_vital_component_breakdown(vital_scores)
+    vital_method_comparison, vital_validation_curves, vital_retention_summary = make_vital_benchmark_tables(vital_scores)
+    vital_threshold_sweep = make_vital_threshold_sweep(vital_scores)
+    vital_ac_threshold_sensitivity = make_vital_ac_threshold_sensitivity(vital_scores)
+    vital_acmg_disagreement = make_vital_acmg_disagreement_table(vital_scores)
+    vital_top_suspicious = make_vital_top_suspicious_table(vital_scores)
+    vital_absence_detectability_bias = make_absence_detectability_bias_table(vital_scores)
+    review_fragility_summary = make_review_fragility_summary(vital_scores)
+    save_table(vital_component_breakdown, output_paths["vital_component_breakdown"])
+    save_table(vital_component_summary, output_paths["vital_component_summary"])
+    save_table(vital_method_comparison, output_paths["vital_method_comparison"])
+    save_table(vital_validation_curves, output_paths["vital_validation_curves"])
+    save_table(vital_retention_summary, output_paths["vital_retention_summary"])
+    save_table(vital_threshold_sweep, output_paths["vital_threshold_sweep"])
+    save_table(vital_ac_threshold_sensitivity, output_paths["vital_ac_threshold_sensitivity"])
+    save_table(vital_acmg_disagreement, output_paths["vital_acmg_disagreement"])
+    save_table(vital_top_suspicious, output_paths["vital_top_suspicious"])
+    save_table(vital_absence_detectability_bias, output_paths["vital_absence_detectability_bias"])
+    save_table(review_fragility_summary, output_paths["review_fragility_summary"])
+
     gene_type_counts, gene_af_summary = make_gene_variant_type_tables(annotated)
     save_table(gene_type_counts, output_paths["gene_variant_type_summary"])
     save_table(gene_af_summary, output_paths["gene_lof_missense_af_summary"])
@@ -1565,6 +3123,22 @@ def run_advanced_analyses(
         plot_reclassification_risk(
             risk_table,
             figure_path(prefix, "reclassification_risk.png"),
+        )
+        plot_vital_model(
+            vital_scores,
+            figure_path(prefix, "vital_score_model.png"),
+        )
+        plot_vital_validation_curves(
+            vital_validation_curves,
+            figure_path(prefix, "vital_validation_curves.png"),
+        )
+        plot_review_fragility(
+            review_fragility_summary,
+            figure_path(prefix, "review_fragility.png"),
+        )
+        plot_absence_detectability_bias(
+            vital_absence_detectability_bias,
+            figure_path(prefix, "vital_absence_not_rarity.png"),
         )
         plot_variant_type_by_gene(
             gene_type_counts,

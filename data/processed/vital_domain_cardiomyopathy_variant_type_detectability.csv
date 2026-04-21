@@ -1,0 +1,7 @@
+variant_type,clinvar_plp_variant_count,exact_match_count,allele_discordance_count,no_gnomad_record_count,non_overlap_count,exact_match_fraction,non_overlap_fraction,technical_detectability_prior,technical_detectability_index
+SNV,153,39,0,111,111,0.2549019607843137,0.7254901960784313,0.95,0.8109803921568628
+deletion,86,17,0,68,68,0.19767441860465115,0.7906976744186046,0.72,0.6155348837209302
+duplication,35,3,0,32,32,0.08571428571428572,0.9142857142857143,0.45,0.37714285714285717
+Microsatellite,10,3,0,7,7,0.3,0.7,0.6,0.54
+indel,8,0,0,8,8,0.0,1.0,0.6,0.48
+insertion,8,2,0,5,5,0.25,0.625,0.7,0.61

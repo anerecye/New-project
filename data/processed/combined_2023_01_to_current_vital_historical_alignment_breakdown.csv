@@ -1,0 +1,6 @@
+domain,baseline_rows_after_score_merge,changed_classification_or_missing_broad,missing_by_variation_id,mapping_failure_or_variation_id_changed,disappeared_completely_or_no_current_GRCh38_key
+arrhythmia,1669,113,4,0,4
+cardiomyopathy,300,22,5,2,3
+epilepsy,300,12,2,1,1
+hearing_loss,300,8,4,2,2
+random_clinvar_plp,500,19,3,0,3

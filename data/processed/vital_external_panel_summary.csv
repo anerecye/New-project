@@ -1,0 +1,6 @@
+output_prefix,domain,domain_type,variant_count,frequency_observed_count,no_frequency_evidence_count,naive_af_gt_1e_5_flags,ac_supported_frequency_flags,vital_red_count,score_ge_50_count,score_ge_60_count,score_ge_70_count,score_ge_80_count,max_vital_score,p95_vital_score,median_observed_vital_score
+vital_domain_cardiomyopathy,cardiomyopathy,external_disease_panel,300,64,236,23.0,2.0,1,5,3,1,1,80.7771705115229,51.876333486654595,3.0
+vital_domain_epilepsy,epilepsy,external_disease_panel,300,20,280,5.0,0.0,0,1,0,0,0,59.887421788082094,41.97548493452132,0.0
+vital_domain_hearing_loss,hearing_loss,external_disease_panel,300,120,180,76.0,16.0,0,25,10,3,0,77.36442818069008,61.84498591648623,33.77818773251275
+vital_random_clinvar_plp,random_clinvar_plp,random_clinvar_sample,500,167,333,94.0,20.0,0,28,16,7,3,85.07598054911868,64.78628810737467,28.601686129923515
+control,BRCA_MMR_APC_control,negative_control,2000,173,1827,5.0,2.0,0,1,0,0,0,57.8040825558337,6.0,0.0

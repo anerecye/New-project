@@ -1,0 +1,7 @@
+domain,target,calibration_mode,best_threshold_by_enrichment,best_threshold_flagged_count,best_threshold_flagged_event_count,best_threshold_enrichment_vs_overall,threshold_70_flagged_count,threshold_70_flagged_event_count,threshold_70_enrichment_vs_overall,threshold_70_matches_best,calibration_note
+combined_or_single_table,broad_PLP_to_non_PLP_or_missing,red_gate_compatible,80,1,1,14.769911504424778,2,1,7.384955752212389,False,Exploratory historical threshold calibration; sparse red sets make maxima unstable.
+combined_or_single_table,broad_PLP_to_non_PLP_or_missing,score_only,80,5,2,5.907964601769912,8,2,3.6924778761061945,False,Exploratory historical threshold calibration; sparse red sets make maxima unstable.
+combined_or_single_table,expanded_PLP_to_non_PLP_or_review_change,red_gate_compatible,40,4,4,3.854503464203233,2,2,3.854503464203233,False,Exploratory historical threshold calibration; sparse red sets make maxima unstable.
+combined_or_single_table,expanded_PLP_to_non_PLP_or_review_change,score_only,80,5,4,3.0836027713625866,8,5,2.409064665127021,False,Exploratory historical threshold calibration; sparse red sets make maxima unstable.
+combined_or_single_table,strict_PLP_to_BLB_or_VUS,red_gate_compatible,80,1,0,0.0,2,0,0.0,False,Exploratory historical threshold calibration; sparse red sets make maxima unstable.
+combined_or_single_table,strict_PLP_to_BLB_or_VUS,score_only,85,3,0,0.0,8,0,0.0,False,Exploratory historical threshold calibration; sparse red sets make maxima unstable.

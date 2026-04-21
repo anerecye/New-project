@@ -1,0 +1,10 @@
+group,label,variant_count,query_ok_count,query_error_count,exome_ac_positive,genome_ac_positive,genome_only_ac_positive,exome_only_ac_positive,both_ac_positive,neither_ac_positive,max_exome_af,max_genome_af,genome_af_gt_1e_5,genome_af_gt_1e_4
+overall,all_exact_matches,187,0,187,150,0,0,150,0,37,6.909611337782849e-05,,0,0
+variant_type,SNV,102,0,102,76,0,0,76,0,26,1.241918902695654e-05,,0,0
+variant_type,deletion,58,0,58,50,0,0,50,0,8,1.9265171322416404e-05,,0,0
+variant_type,duplication,25,0,25,22,0,0,22,0,3,6.909611337782849e-05,,0,0
+variant_type,insertion,2,0,2,2,0,0,2,0,0,6.859021053079221e-07,,0,0
+functional_class,LOF,158,0,158,127,0,0,127,0,31,6.909611337782849e-05,,0,0
+functional_class,missense,16,0,16,14,0,0,14,0,2,4.791088028713675e-06,,0,0
+functional_class,other_or_unresolved,1,0,1,1,0,0,1,0,0,6.84109638147048e-07,,0,0
+functional_class,splice_or_intronic,12,0,12,8,0,0,8,0,4,5.499529102820571e-06,,0,0

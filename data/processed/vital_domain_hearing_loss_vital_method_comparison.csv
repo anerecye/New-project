@@ -1,0 +1,7 @@
+method,true_positives,false_positives,false_negatives,true_negatives,precision,recall,specificity,false_positive_rate,false_negative_rate,benchmark_positive_definition,benchmark_negative_definition
+global_AF_gt_1e-5,2,17,0,44,0.10526315789473684,1.0,0.7213114754098361,0.2786885245901639,0.0,weak_review_and_AC_supported_frequency_signal,review_score_ge_2_current_PLP_proxy
+global_AF_gt_1e-4,0,0,2,61,,0.0,1.0,0.0,1.0,weak_review_and_AC_supported_frequency_signal,review_score_ge_2_current_PLP_proxy
+popmax_or_global_AF_gt_1e-5,2,43,0,18,0.044444444444444446,1.0,0.29508196721311475,0.7049180327868853,0.0,weak_review_and_AC_supported_frequency_signal,review_score_ge_2_current_PLP_proxy
+popmax_or_global_AF_gt_1e-4,0,13,2,48,0.0,0.0,0.7868852459016393,0.21311475409836064,1.0,weak_review_and_AC_supported_frequency_signal,review_score_ge_2_current_PLP_proxy
+AF_gt_1e-5_and_AC_ge_20,2,14,0,47,0.125,1.0,0.7704918032786885,0.22950819672131148,0.0,weak_review_and_AC_supported_frequency_signal,review_score_ge_2_current_PLP_proxy
+VITAL_red,0,0,2,61,,0.0,1.0,0.0,1.0,weak_review_and_AC_supported_frequency_signal,review_score_ge_2_current_PLP_proxy

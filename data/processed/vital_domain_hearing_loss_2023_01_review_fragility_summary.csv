@@ -1,0 +1,5 @@
+review_strength,variant_count,frequency_flag_count,ac_supported_frequency_count,vital_red_count,median_vital_score,max_vital_score,variant_fraction,ac_supported_fraction_within_review_strength,vital_red_fraction_within_review_strength,share_of_ac_supported_frequency_variants,share_of_vital_red_variants
+multiple_submitters_no_conflicts,74,43,16,0,41.206160814997624,83.0302044485495,0.24666666666666667,0.21621621621621623,0.0,0.8,
+single_submitter,188,33,2,0,3.0,69.41689468344299,0.6266666666666667,0.010638297872340425,0.0,0.1,
+expert_panel,4,3,2,0,64.02366998773164,81.55721876345521,0.013333333333333334,0.5,0.0,0.1,
+weak_or_no_assertion,34,5,0,0,3.0,65.63062767975032,0.11333333333333333,0.0,0.0,0.0,

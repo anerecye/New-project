@@ -1,0 +1,17 @@
+gene,functional_class,variant_count,fraction_within_gene
+APC,LOF,482,0.964
+APC,splice_or_intronic,11,0.022
+APC,other_or_unresolved,4,0.008
+APC,missense,3,0.006
+BRCA1,LOF,449,0.898
+BRCA1,missense,27,0.054
+BRCA1,splice_or_intronic,21,0.042
+BRCA1,other_or_unresolved,3,0.006
+BRCA2,LOF,465,0.93
+BRCA2,splice_or_intronic,16,0.032
+BRCA2,other_or_unresolved,11,0.022
+BRCA2,missense,8,0.016
+MLH1,LOF,385,0.77
+MLH1,missense,63,0.126
+MLH1,splice_or_intronic,45,0.09
+MLH1,other_or_unresolved,7,0.014

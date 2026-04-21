@@ -471,6 +471,26 @@ false positives; cutoffs of 75 and above trade recall down to 0.33. This gives
 reviewers an explicit sensitivity/specificity dial rather than a hidden
 threshold.
 
+Why use `70` rather than `80`? The default red gate is a clinical review-capacity
+threshold, not the enrichment-maximizing historical cutoff. In the current
+operational sweep, `65` and `70` remove proxy false-positive re-evaluation calls
+while preserving the full red-core recall; `75` and `80` create a smaller but
+less sensitive queue. In the historical broad-endpoint calibration, `80` showed
+higher enrichment, but that was based on a sparse `1/1` red event and was not
+used to refit the model. Treat `70` as the immediate-review queue and `80` as an
+optional ultra-high-priority subqueue for labs with tighter review bandwidth.
+
+Inheritance is intentionally not treated as an automatic score modifier in the
+current implementation. VITAL flags frequency tension in ClinVar assertions;
+the next review step must interpret that tension under dominant, recessive,
+semidominant, low-penetrance, founder, or carrier-state mechanisms. A frequency
+that is implausible for a fully penetrant dominant heterozygous disorder may be
+compatible with a recessive carrier allele. Deployment should therefore
+stratify red/orange calls by disease mechanism before any classification
+change: dominant/high-penetrance records can move directly to expert review,
+while recessive heterozygous LOF or founder alleles require zygosity,
+phenotype, segregation, and mechanism review first.
+
 The continuum output removes binary thinking from the descriptive analysis.
 Across 20-point VITAL bands, higher bands concentrate frequency-function
 discordance. The 0-20 band has no popmax `AF > 1e-4` signals and no
@@ -642,6 +662,10 @@ Three examples show how the table becomes a clinical review story:
   although naive `AF > 1e-5` criteria flag 115 arrhythmia P/LP variants, VITAL
   prioritizes only 3, including this one, where high AC and fragile review
   support make the frequency contradiction actionable.
+  The likely classification outcome may indeed be downgrade, VUS, or a
+  context-specific/non-Mendelian assertion, but VITAL itself does not assign
+  benign status. The haplotype, historical literature, drug-response/functional
+  context, penetrance, and phenotype specificity still require expert review.
 - `TRDN` `VCV001325231` (`c.1050del`, `p.Glu351fs`) is a loss-of-function
   deletion with `VITAL=74.3`. It has `global_AF=2.77e-5` and `global_AC=40`,
   enough to pass the AC-supported frequency screen, while the AMR popmax is
@@ -937,6 +961,13 @@ events (`7.38x`). In the pooled combined historical table, threshold 70 has
 maximum occurs at threshold 80 with 3 flags and 2 events (`11.74x`). This is a
 sparse calibration stress test, not a refit.
 
+The clinical logic for retaining `70` is workload-oriented. VITAL is designed to
+compress a naive alert set into a reviewable queue, not necessarily into the
+single most enriched record. A threshold of `80` can be reported as an
+ultra-high-priority subqueue, but using it as the default would discard
+plausible review signals such as TRDN and threshold-adjacent KCNH2 depending on
+the weight profile.
+
 Related outputs:
 
 - `data/processed/arrhythmia_2023_01_to_current_vital_historical_threshold_calibration_field_mapping_inconsistent.csv`
@@ -999,10 +1030,11 @@ Future functional-context extensions are natural and likely useful, but should
 remain explainable. The current score uses HGVS-derived consequence classes and
 a gene-level frequency-constraint proxy; it does not yet use MAVE scores,
 transcript-aware LOF/NMD prediction, curated domain/hotspot annotations,
-missense constraint, or disease-specific mechanism labels. Adding those axes
-could improve specificity, especially for distinguishing high-frequency
-variants in noncritical regions from high-frequency variants in active sites or
-critical domains.
+missense constraint, exon criticality, transcript-specific expression, or
+disease-specific mechanism labels. Adding those axes could improve specificity,
+especially for distinguishing high-frequency variants in noncritical regions,
+nonessential exons, or weakly expressed transcripts from high-frequency variants
+in active sites, critical domains, or well-established disease transcripts.
 
 TRDN counts depend on which pipeline/table is used. The legacy reviewer-QC
 table reports 6/23 AF-covered TRDN variants above `1e-5` (26.1%,

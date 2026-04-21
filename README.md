@@ -90,6 +90,37 @@ python src/arrhythmia_variant_pipeline.py --skip-clinvar --skip-gnomad --skip-co
 Use `--strict-cache-metadata` to fail instead of warning if a cache was produced
 with a different gene list, dataset, or cache mode.
 
+### Reproducibility and API Independence
+
+The current manuscript is tied to an explicit data freeze: April 21, 2026 for
+the current ClinVar/gnomAD analysis, gnomAD `v4.1.1` for exome and genome
+frequency queries, and the archived January 2023 ClinVar `variant_summary`
+snapshot for historical validation. External APIs are used for data acquisition,
+but the repository is not dependent on those APIs remaining unchanged for
+downstream reproducibility.
+
+Core intermediate files are cached under `data/processed/` and accompanied by
+`.meta.json` metadata where applicable. The cache metadata records the gene
+list, gnomAD dataset, cache type, thresholds, and related settings used to
+produce the ClinVar, gnomAD, and coverage caches. Repeated runs can therefore
+reuse committed tables instead of re-querying NCBI Entrez, gnomAD GraphQL, or
+UCSC:
+
+```bash
+python src/arrhythmia_variant_pipeline.py --skip-clinvar --skip-gnomad --skip-coverage
+python src/advanced_variant_analyses.py --no-fetch-population-af --no-fetch-exome-genome-af
+python src/score_vital_from_variant_summary.py
+python src/validate_vital_reclassification.py
+```
+
+The practical split is: API mode creates the frozen cache; cached/offline mode
+rebuilds VITAL scores, historical analyses, figures, supplementary tables, and
+the manuscript from machine-readable intermediate files. This protects the
+analysis from future API schema changes or temporary service outages. A
+containerized environment (Docker) is planned for full reproducibility of Python
+package versions and command-line dependencies in addition to the cached data
+freeze.
+
 Large ClinVar genes can produce interrupted XML downloads. The API runner uses
 `--clinvar-batch-size 50` by default and will retry and split failed ClinVar
 batches before skipping any individual VariationID.

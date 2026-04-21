@@ -30,6 +30,8 @@ Records were collapsed to unique variant-level entries using a composite GRCh38 
 
 The primary data freeze was April 21, 2026. Throughout the manuscript, "current" refers to this April 2026 ClinVar and gnomAD analysis snapshot. ClinVar assertions can change after data freeze; therefore, all red-priority variants should be rechecked against the live ClinVar record before publication, clinical reporting, or any patient-facing decision.
 
+To reduce dependence on changing external APIs, the April 21, 2026 freeze is preserved as cached intermediate files in the project repository. ClinVar-derived variant tables, gnomAD exact-match tables, population AF tables, exome-genome comparison files, VITAL score tables, historical 2023-to-2026 prediction tables, and external-domain stress-test outputs are all written as machine-readable CSV/TSV files under `data/processed/` and `supplementary_tables/`. The API pipeline also writes `.meta.json` cache metadata for core ClinVar, gnomAD, and coverage caches, recording the gene list, dataset, cache type, and pipeline settings used to produce each cache.
+
 ### gnomAD matching and frequency evidence states
 
 Each variant was queried against gnomAD v4.1.1 exomes through the gnomAD GraphQL API. Exact matching required concordance of chromosome, position, reference allele, and alternate allele. Exact matches with usable exome AF values were treated as frequency-observed records. Variants without usable exact AF were not imputed as AF=0. Instead, all variants were carried forward under explicit frequency evidence states:
@@ -41,6 +43,8 @@ Each variant was queried against gnomAD v4.1.1 exomes through the gnomAD GraphQL
 - `gnomad_query_error_no_frequency_evidence`: transient query failure, kept outside frequency scoring.
 
 This design prevents silent conversion of missing frequency evidence into false rarity. Variants without observed AF retain missing AF fields and are assigned a gray no-frequency-evidence VITAL band.
+
+The analysis can be reproduced in two modes. The full online mode re-queries NCBI Entrez, gnomAD GraphQL, and UCSC APIs using the frozen dataset versions. The offline/cached mode reuses committed intermediate files and therefore does not depend on future API schema stability or live database availability. For example, the ClinVar/gnomAD matching stage can be rerun from cache with `--skip-clinvar --skip-gnomad --skip-coverage`, while downstream VITAL, historical, external-domain, calibration, and manuscript-generation scripts consume the cached CSV/TSV outputs directly. We treat the online API run as data acquisition and the cached rerun as the reproducibility path. A containerized execution environment (Docker) is planned for full end-to-end reproducibility of package versions and command-line dependencies.
 
 ### Ancestry-specific frequency analysis
 
@@ -382,7 +386,7 @@ Clinically cataloged P/LP arrhythmia variants are strongly concentrated at ultra
 
 ## Data availability
 
-Analyses were conducted in April 2026 using gnomAD v4.1.1 exome and genome data queried through the gnomAD GraphQL API. ClinVar data were retrieved through the NCBI Entrez API and the ClinVar bulk variant summary file, including the January 2023 archived snapshot for historical enrichment analysis. UCSC genome sequence and annotation APIs were used for GC and repeat-context analyses. Pipeline source code, cached intermediate files, figures, and machine-readable outputs are available in the project repository.
+Analyses were conducted under an April 21, 2026 data freeze using gnomAD v4.1.1 exome and genome data queried through the gnomAD GraphQL API. ClinVar data were retrieved through the NCBI Entrez API and the ClinVar bulk variant summary file; the historical analysis used the archived January 2023 ClinVar variant_summary snapshot. UCSC genome sequence and annotation APIs were used for GC and repeat-context analyses. Pipeline source code, cached intermediate files, cache metadata, figures, and machine-readable outputs are available in the project repository. The committed intermediate outputs allow downstream analyses and manuscript tables to be regenerated without re-querying external APIs. A Docker/containerized environment is planned as the next reproducibility layer so that package versions and system dependencies can be fixed in addition to the data freeze.
 
 Key output files include:
 

@@ -1,0 +1,13 @@
+validation_stratum,vital_band,variant_count,variant_fraction_within_stratum
+fully_random_remaining,blue_low_support_signal,124,0.124
+fully_random_remaining,gray_no_frequency_evidence,691,0.691
+fully_random_remaining,green_frequency_consistent,136,0.136
+fully_random_remaining,orange_high_tension,9,0.009
+fully_random_remaining,red_reclassification_priority,9,0.009
+fully_random_remaining,yellow_watchlist,31,0.031
+top100_gene_enriched,blue_low_support_signal,171,0.0855
+top100_gene_enriched,gray_no_frequency_evidence,1577,0.7885
+top100_gene_enriched,green_frequency_consistent,217,0.1085
+top100_gene_enriched,orange_high_tension,11,0.0055
+top100_gene_enriched,red_reclassification_priority,4,0.002
+top100_gene_enriched,yellow_watchlist,20,0.01

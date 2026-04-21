@@ -1,0 +1,21 @@
+metric,value,numerator,denominator,percent,note
+clinvar_plp_variants_in_vital_table,3000.0,3000,3000,100.0,"All P/LP variants carried through VITAL, including explicit no-frequency-evidence rows."
+exact_af_covered_clinvar_plp_variants,668.0,668,3000,22.266666666666666,Variants with observed exact gnomAD AF used for continuous VITAL scoring.
+no_gnomad_frequency_evidence_variants,2255.0,2255,3000,75.16666666666667,No AF imputation is applied; these variants retain NaN frequency fields and gray VITAL band.
+allele_discordance_no_exact_af_variants,0.0,0,3000,0.0,ClinVar/gnomAD allele mismatch rows kept outside frequency scoring.
+gnomad_query_error_no_frequency_evidence_variants,77.0,77,3000,2.566666666666667,Transient gnomAD query failures are flagged separately and kept outside frequency scoring.
+standard_popmax_or_global_af_gt_1e_5_flags,332.0,332,3000,11.066666666666666,Naive frequency-only ACMG-style contradiction screen.
+standard_popmax_or_global_af_gt_1e_4_flags,59.0,59,3000,1.9666666666666666,High-frequency subset of the naive screen.
+global_af_gt_1e_5_flags,92.0,92,3000,3.066666666666667,Flags found by global AF alone.
+popmax_af_gt_1e_5_flags,331.0,331,3000,11.033333333333333,Flags found when population maximum AF is considered.
+global_af_gt_1e_4_flags,13.0,13,3000,0.43333333333333335,High-frequency flags found by global AF alone.
+popmax_af_gt_1e_4_flags,58.0,58,3000,1.9333333333333333,High-frequency flags found when population maximum AF is considered.
+ac_supported_frequency_flags,71.0,71,3000,2.3666666666666667,Frequency signal has AC >= 20 in global or popmax source.
+vital_red_reclassification_predictions,3.0,3,3000,0.1,"VITAL >= 70, weak review, and AC-supported frequency signal."
+alert_reduction_vs_standard_frequency_screen_percent,99.09638554216868,3,332,99.09638554216868,Reduction in action-priority calls versus a naive AF > 1e-5 frequency screen.
+vital_band_blue_low_support_signal,268.0,268,3000,8.933333333333334,VITAL score band count.
+vital_band_gray_no_frequency_evidence,2332.0,2332,3000,77.73333333333333,VITAL score band count.
+vital_band_green_frequency_consistent,336.0,336,3000,11.2,VITAL score band count.
+vital_band_orange_high_tension,16.0,16,3000,0.5333333333333333,VITAL score band count.
+vital_band_red_reclassification_priority,3.0,3,3000,0.1,VITAL score band count.
+vital_band_yellow_watchlist,45.0,45,3000,1.5,VITAL score band count.

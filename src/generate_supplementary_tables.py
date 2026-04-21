@@ -354,6 +354,74 @@ def load_prefixed_table(prefix: str, name: str) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
+def load_optional_table(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        return pd.DataFrame()
+    return pd.read_csv(path)
+
+
+def make_s14_cross_disease_summary() -> pd.DataFrame:
+    frames: list[pd.DataFrame] = []
+    for label, path in [
+        (
+            "current_2026_independent_cross_disease",
+            DATA_DIR / "vital_cross_disease_3000_cross_disease_validation_summary.csv",
+        ),
+        (
+            "baseline_2023_independent_cross_disease",
+            DATA_DIR / "vital_cross_disease_3000_2023_01_cross_disease_validation_summary.csv",
+        ),
+        (
+            "historical_2023_to_2026_validation_metrics",
+            DATA_DIR / "vital_cross_disease_3000_2023_01_to_current_vital_historical_validation.csv",
+        ),
+        (
+            "historical_2023_to_2026_enrichment",
+            DATA_DIR / "vital_cross_disease_3000_2023_01_to_current_vital_historical_enrichment.csv",
+        ),
+    ]:
+        table = load_optional_table(path)
+        if table.empty:
+            continue
+        table.insert(0, "analysis", label)
+        table.insert(1, "source_file", path.name)
+        frames.append(table)
+    return pd.concat(frames, ignore_index=True, sort=False) if frames else pd.DataFrame()
+
+
+def make_s15_cross_disease_outliers() -> pd.DataFrame:
+    frames: list[pd.DataFrame] = []
+    for label, path in [
+        (
+            "current_2026_high_score_or_red",
+            DATA_DIR / "vital_cross_disease_3000_cross_disease_outliers.csv",
+        ),
+        (
+            "baseline_2023_high_score_or_red",
+            DATA_DIR / "vital_cross_disease_3000_2023_01_cross_disease_outliers.csv",
+        ),
+    ]:
+        table = load_optional_table(path)
+        if table.empty:
+            continue
+        table.insert(0, "analysis", label)
+        table.insert(1, "source_file", path.name)
+        frames.append(table)
+
+    historical = load_optional_table(
+        DATA_DIR / "vital_cross_disease_3000_2023_01_to_current_vital_historical_predictions.csv"
+    )
+    if not historical.empty and "vital_red_flag" in historical.columns:
+        red = historical[
+            historical["vital_red_flag"].fillna(False).astype(str).str.lower().isin({"true", "1", "yes"})
+        ].copy()
+        red.insert(0, "analysis", "historical_2023_red_followup")
+        red.insert(1, "source_file", "vital_cross_disease_3000_2023_01_to_current_vital_historical_predictions.csv")
+        frames.append(red)
+
+    return pd.concat(frames, ignore_index=True, sort=False) if frames else pd.DataFrame()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Generate machine-readable supplementary tables S2, S5, and VITAL supplements."
@@ -378,6 +446,8 @@ def main() -> None:
     s10 = load_prefixed_table(prefix, "vital_acmg_disagreement.csv")
     s11 = load_prefixed_table(prefix, "vital_top_suspicious.csv")
     s12 = load_prefixed_table(prefix, "vital_absence_detectability_bias.csv")
+    s14 = make_s14_cross_disease_summary()
+    s15 = make_s15_cross_disease_outliers()
 
     save_table(s2, supplementary_path("Supplementary_Table_S2_reclassification_candidates.tsv"), sep="\t")
     save_table(s5, supplementary_path("Supplementary_Table_S5_gene_non_overlap_summary.tsv"), sep="\t")
@@ -388,6 +458,10 @@ def main() -> None:
     save_table(s10, supplementary_path("Supplementary_Table_S10_ACMG_VITAL_disagreement.tsv"), sep="\t")
     save_table(s11, supplementary_path("Supplementary_Table_S11_top_suspicious_variants.tsv"), sep="\t")
     save_table(s12, supplementary_path("Supplementary_Table_S12_absence_detectability_bias.tsv"), sep="\t")
+    if not s14.empty:
+        save_table(s14, supplementary_path("Supplementary_Table_S14_cross_disease_3000_validation_summary.tsv"), sep="\t")
+    if not s15.empty:
+        save_table(s15, supplementary_path("Supplementary_Table_S15_cross_disease_3000_outliers.tsv"), sep="\t")
     save_table(s5, data_path(prefix, "gene_non_overlap_summary.csv"))
 
 

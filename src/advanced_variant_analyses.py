@@ -580,8 +580,11 @@ def load_or_fetch_population_af(
     ].copy()
     existing = pd.DataFrame()
     if output_path.exists() and not force:
-        existing = pd.read_csv(output_path)
-        log.info("Loaded existing population AF cache: %s", output_path)
+        try:
+            existing = pd.read_csv(output_path)
+            log.info("Loaded existing population AF cache: %s", output_path)
+        except pd.errors.EmptyDataError:
+            log.warning("Ignoring empty population AF cache: %s", output_path)
 
     has_population_columns = any(f"{population}_af" in existing.columns for population in POPULATIONS)
     if not has_population_columns:
@@ -701,8 +704,11 @@ def load_or_fetch_exome_genome_af(
     exact = annotated[annotated["match_category"] == "exact_match"].copy()
     existing = pd.DataFrame()
     if output_path.exists() and not force:
-        existing = pd.read_csv(output_path)
-        log.info("Loaded existing exome/genome AF cache: %s", output_path)
+        try:
+            existing = pd.read_csv(output_path)
+            log.info("Loaded existing exome/genome AF cache: %s", output_path)
+        except pd.errors.EmptyDataError:
+            log.warning("Ignoring empty exome/genome AF cache: %s", output_path)
 
     records: list[dict[str, object]] = []
     if fetch:

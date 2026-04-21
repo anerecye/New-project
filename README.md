@@ -388,6 +388,16 @@ The model writes:
   `figures/vital_external_panel_score_distribution.png`: small external-domain
   stress tests for cardiomyopathy, epilepsy, hearing-loss genes, random ClinVar
   P/LP variants, and the BRCA/MMR/APC descriptive comparator cache.
+- `data/processed/vital_cross_disease_3000_cross_disease_validation_summary.csv`,
+  `data/processed/vital_cross_disease_3000_cross_disease_band_distribution.csv`,
+  `data/processed/vital_cross_disease_3000_cross_disease_outliers.csv`, and
+  `figures/vital_cross_disease_3000_score_distribution.png`: independent
+  3,000-variant current cross-disease portability validation outside arrhythmia
+  and previous external-panel genes.
+- `data/processed/vital_cross_disease_3000_2023_01_to_current_vital_historical_validation.csv`,
+  `data/processed/vital_cross_disease_3000_2023_01_to_current_vital_historical_enrichment.csv`,
+  and `figures/vital_cross_disease_3000_2023_01_to_current_vital_historical_curves.png`:
+  independent 3,000-variant 2023-to-current historical cross-disease validation.
 - `figures/vital_clinical_workflow.png`: clinician-facing workflow schematic
   showing how ClinVar P/LP assertions move through VITAL risk prioritization,
   into a short review queue, and then back to human expert ACMG/AMP
@@ -486,8 +496,70 @@ are significantly more absence-prone than SNVs (`p=2.36e-7` for deletions,
 `p=1.16e-5` for duplications). The practical implication is direct: absence
 from gnomAD is not equivalent to rarity for structurally complex variants.
 
-As an orthogonal stress-test, the same VITAL machinery was run on three small
-non-arrhythmia disease panels and one random ClinVar P/LP sample:
+### Independent Cross-Disease Portability Validation
+
+The main external validation layer now uses 3,000 random ClinVar P/LP variants
+outside the arrhythmia development genes and outside the previously used
+cardiomyopathy, epilepsy, and hearing-loss panel genes. The design is fixed:
+2,000 variants are sampled from the top 100 genes by number of ClinVar P/LP
+submissions after exclusions, and 1,000 variants are sampled from the remaining
+eligible ClinVar P/LP pool.
+
+```bash
+python src/run_vital_cross_disease_validation.py \
+  --output-prefix vital_cross_disease_3000 \
+  --top-gene-sample-size 2000 \
+  --random-sample-size 1000 \
+  --random-seed 20260421
+```
+
+Sanity checks are explicit: the current 3,000-variant sample has 0 arrhythmia
+gene leaks, 0 overlaps with previous external-panel genes, and 0 duplicate
+variant IDs or variant keys. In this independent current sample, VITAL behaves
+as a conservative review-priority framework rather than a broad AF filter:
+
+| sample | N | exact AF rows | naive AF flags | AC-supported flags | VITAL red | red-rate 95% CI | compression vs naive |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| current cross-disease | 3,000 | 668 | 332 | 71 | 3 | 0.034%-0.294% | 110.7x |
+| 2023 baseline cross-disease | 3,000 | 732 | 379 | 87 | 13 | 0.253%-0.740% | 29.2x |
+
+The historical version uses the same sampling design on the January 2023 ClinVar
+snapshot and evaluates outcomes against the April 21, 2026 snapshot:
+
+```bash
+python src/run_vital_cross_disease_validation.py \
+  --historical-only \
+  --historical-variant-summary data/raw/variant_summary_2023-01.txt.gz \
+  --followup-variant-summary data/variant_summary.txt.gz \
+  --historical-output-prefix vital_cross_disease_3000_2023_01 \
+  --top-gene-sample-size 2000 \
+  --random-sample-size 1000 \
+  --random-seed 20260421
+```
+
+Against strict P/LP-to-B/LB-or-VUS reclassification, the historical red set has
+low recall (`1/23`, 4.3%) but high specificity (`99.6%`). Against the expanded
+instability endpoint (non-P/LP, clinical-significance change, or review-status
+change), 11/13 red calls are events (`84.6%`, Wilson 95% CI `57.8%-95.7%`) with
+`99.9%` specificity. This is the correct framing: VITAL red is high-specificity
+and low-recall. It reduces false-positive re-evaluation burden and enriches an
+extreme-priority monitoring subset, but it is not a stand-alone prediction model.
+
+Key outputs:
+
+- `data/processed/vital_cross_disease_3000_cross_disease_validation_summary.csv`
+- `data/processed/vital_cross_disease_3000_cross_disease_outliers.csv`
+- `data/processed/vital_cross_disease_3000_sample_sanity_checks.csv`
+- `data/processed/vital_cross_disease_3000_2023_01_to_current_vital_historical_validation.csv`
+- `data/processed/vital_cross_disease_3000_2023_01_to_current_vital_historical_enrichment.csv`
+- `supplementary_tables/Supplementary_Table_S14_cross_disease_3000_validation_summary.tsv`
+- `supplementary_tables/Supplementary_Table_S15_cross_disease_3000_outliers.tsv`
+- `figures/vital_cross_disease_3000_score_distribution.png`
+- `figures/vital_cross_disease_3000_2023_01_to_current_vital_historical_curves.png`
+
+As an orthogonal smaller stress-test, the same VITAL machinery was also run on
+three targeted non-arrhythmia disease panels and one smaller random ClinVar P/LP
+sample:
 
 ```bash
 python src/run_vital_external_panels.py \

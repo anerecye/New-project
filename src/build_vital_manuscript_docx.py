@@ -37,6 +37,10 @@ FIGURE_INSERTIONS = {
     "### External disease panels and ratio compression": [
         ("vital_external_panel_score_distribution.png", "External-domain VITAL score distributions and negative-control behavior."),
     ],
+    "### Independent cross-disease validation on 3,000 ClinVar P/LP variants": [
+        ("vital_cross_disease_3000_score_distribution.png", "Independent cross-disease VITAL score distribution across 3,000 current ClinVar P/LP variants."),
+        ("vital_cross_disease_3000_2023_01_to_current_vital_historical_curves.png", "Independent 3,000-variant 2023-to-current historical validation curves."),
+    ],
     "### KCNH2 diagnostic dissection": [
         ("arrhythmia_kcnh2_non_overlap_diagnostics.png", "KCNH2 non-overlap diagnostic analysis."),
         ("arrhythmia_kcnh2_non_overlap_duplication_sizes.png", "KCNH2 duplication size and non-overlap summary."),
@@ -242,6 +246,40 @@ APPENDIX_TABLES = [
             "submitter_conflict_status",
             "clinvar_publications_or_mentions",
             "why_suspicious_but_not_resolved",
+        ],
+    ),
+    (
+        "Appendix Table A14. Independent 3,000-variant current cross-disease validation",
+        BASE_DIR / "data" / "processed" / "vital_cross_disease_3000_cross_disease_validation_summary.csv",
+        [
+            "scope",
+            "metric",
+            "count",
+            "denominator",
+            "rate",
+            "rate_ci_low",
+            "rate_ci_high",
+            "expected_per_10000",
+            "expected_per_10000_ci_low",
+            "expected_per_10000_ci_high",
+        ],
+    ),
+    (
+        "Appendix Table A15. Independent 2023-to-current cross-disease historical enrichment",
+        BASE_DIR / "data" / "processed" / "vital_cross_disease_3000_2023_01_to_current_vital_historical_enrichment.csv",
+        [
+            "scope",
+            "target",
+            "baseline_variant_count",
+            "event_count",
+            "overall_event_rate",
+            "vital_red_count",
+            "vital_red_event_count",
+            "vital_red_event_rate",
+            "red_enrichment_vs_overall",
+            "red_enrichment_vs_nonred",
+            "red_enrichment_vs_nonred_ci_low",
+            "red_enrichment_vs_nonred_ci_high",
         ],
     ),
 ]

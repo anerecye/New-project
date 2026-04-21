@@ -248,6 +248,26 @@ def score_snapshot(
     )
     if snapshot.empty:
         raise ValueError(f"No P/LP GRCh38 variants found in {variant_summary_path}.")
+    return score_preloaded_snapshot(
+        snapshot=snapshot,
+        output_prefix=output_prefix,
+        dataset=dataset,
+        pause=pause,
+        fetch_gnomad=fetch_gnomad,
+        force_gnomad=force_gnomad,
+    )
+
+
+def score_preloaded_snapshot(
+    snapshot: pd.DataFrame,
+    output_prefix: str,
+    dataset: str,
+    pause: float,
+    fetch_gnomad: bool,
+    force_gnomad: bool,
+) -> dict[str, Path]:
+    if snapshot.empty:
+        raise ValueError("Cannot score an empty ClinVar snapshot.")
     save_table(snapshot, data_path(output_prefix, "clinvar_variants.csv"))
     annotated = ava.prepare_annotations(snapshot)
     annotated = attach_gnomad_exact_matches(

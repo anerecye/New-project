@@ -269,6 +269,17 @@ implementation detail. These weights should not be assumed to transfer
 unchanged to other disease areas without local calibration or explicit
 sensitivity reporting.
 
+Minimal local calibration protocol:
+
+1. Freeze the target gene list, disease mechanism, and intended clinical use.
+2. Run the primary VITAL profile plus prespecified alternative weight profiles.
+3. Report red-queue size, retained/gained/lost red variants, and proxy
+   false-positive burden under each profile.
+4. Choose the operational threshold based on review capacity and acceptable
+   workload before outcome testing.
+5. Lock and version the weights, AC gate, and threshold before prospective or
+   release-to-release monitoring.
+
 Conceptually, VITAL is a **variant pathogenicity tension continuum**, not only
 a red flag. It positions each ClinVar P/LP assertion in a space of discordance
 between population frequency, AC support, ancestry enrichment, review quality,
@@ -549,6 +560,11 @@ change, or review-status change), 11/13 red calls are events (`84.6%`, Wilson
 VITAL red is high-specificity and low-recall. It reduces false-positive
 re-evaluation burden and enriches an extreme-priority monitoring subset, but it
 is not a stand-alone prediction model and should not be sold as one.
+
+The expanded endpoint is intentionally soft. It can count review-status or
+aggregate clinical-significance text changes even when the variant remains
+P/LP. Use it as a ClinVar curation-activity endpoint, not as evidence that VITAL
+predicts clinically meaningful downgrades.
 
 Key outputs:
 
@@ -903,6 +919,16 @@ not cross the gate through review-score drift within the same VCV record; it
 entered the current red set as a later allele-specific assertion with sufficient
 AC support, consistent with its current `borderline` weight-stability label.
 
+Release-to-release red-queue composition is visible but not yet estimable as a
+stable rate. The January 2023 arrhythmia red set was KCNE1 `VCV001202620` plus
+TRDN `VCV001325231`; the April 2026 arrhythmia red set is SCN5A `VCV000440850`,
+TRDN `VCV001325231`, and KCNH2 `VCV004535537`. Exact-VCV overlap is therefore
+1 retained record (`TRDN`) with Jaccard overlap `1/4`. This does not undermine
+the framework if each release still creates a short review queue, but it means
+VITAL should be monitored as a release-specific queue rather than a static list.
+Future runs should report retained, gained, and lost red calls at every
+ClinVar/gnomAD update.
+
 Calibration also shows why threshold optimization is not overclaimed. For the
 arrhythmia broad endpoint, the best enrichment occurs at threshold 80
 (`1/1` broad event, `14.77x`), while the prespecified threshold 70 has `1/2`
@@ -968,6 +994,15 @@ annotations, biological depletion, ClinVar ascertainment, or a mixture of
 these. The defensible clinical claim is narrower: absence of a KCNH2
 duplication from gnomAD should not be treated as strong rarity evidence without
 orthogonal validation. The mechanism remains an open question.
+
+Future functional-context extensions are natural and likely useful, but should
+remain explainable. The current score uses HGVS-derived consequence classes and
+a gene-level frequency-constraint proxy; it does not yet use MAVE scores,
+transcript-aware LOF/NMD prediction, curated domain/hotspot annotations,
+missense constraint, or disease-specific mechanism labels. Adding those axes
+could improve specificity, especially for distinguishing high-frequency
+variants in noncritical regions from high-frequency variants in active sites or
+critical domains.
 
 TRDN counts depend on which pipeline/table is used. The legacy reviewer-QC
 table reports 6/23 AF-covered TRDN variants above `1e-5` (26.1%,

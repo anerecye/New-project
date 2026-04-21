@@ -402,6 +402,9 @@ The model writes:
   showing how ClinVar P/LP assertions move through VITAL risk prioritization,
   into a short review queue, and then back to human expert ACMG/AMP
   decision-making.
+- `figures/vital_gray_zone_workflow.png`: clinician-facing workflow schematic
+  for no-frequency-evidence gray variants, including expedited-review,
+  representation-QC, orthogonal-validation, and deferred-queue branches.
 - `figures/arrhythmia_vital_score_model.png`: score-versus-frequency view of
   the model bands.
 
@@ -538,12 +541,14 @@ python src/run_vital_cross_disease_validation.py \
 ```
 
 Against strict P/LP-to-B/LB-or-VUS reclassification, the historical red set has
-low recall (`1/23`, 4.3%) but high specificity (`99.6%`). Against the expanded
-instability endpoint (non-P/LP, clinical-significance change, or review-status
-change), 11/13 red calls are events (`84.6%`, Wilson 95% CI `57.8%-95.7%`) with
-`99.9%` specificity. This is the correct framing: VITAL red is high-specificity
-and low-recall. It reduces false-positive re-evaluation burden and enriches an
-extreme-priority monitoring subset, but it is not a stand-alone prediction model.
+low recall (`1/23`, 4.3%) but high specificity (`99.6%`). By conventional
+prediction standards, this is poor sensitivity for strict future downgrades.
+Against the expanded instability endpoint (non-P/LP, clinical-significance
+change, or review-status change), 11/13 red calls are events (`84.6%`, Wilson
+95% CI `57.8%-95.7%`) with `99.9%` specificity. This is the correct framing:
+VITAL red is high-specificity and low-recall. It reduces false-positive
+re-evaluation burden and enriches an extreme-priority monitoring subset, but it
+is not a stand-alone prediction model and should not be sold as one.
 
 Key outputs:
 
@@ -646,6 +651,18 @@ Three examples show how the table becomes a clinical review story:
   `borderline` red call, retained under 2/5 alternative profiles, not an
   anchor case.
 
+Single-variant clinical output should be concise enough for a reviewer to use
+without reading the whole model paper. For example, SCN5A `VCV000440850` can be
+rendered as:
+
+| field | value |
+|---|---|
+| human summary | VITAL red: high AFR popmax frequency, high allele-count support, weak ClinVar review; urgent expert review recommended, not automatic benign classification. |
+| ClinVar assertion | Pathogenic; no assertion criteria provided; single submission. |
+| frequency evidence | global `AF=1.46e-4`, global `AC=214`; AFR popmax `AF=5.68e-3`, popmax `AC=190`. |
+| component breakdown | AF pressure `45.0/45`; AC reliability `20.0/20`; popmax enrichment `7.9/10`; variant-type tension `0.0/6`; technical detectability `6.5/8`; gene constraint `6.6/10`; review fragility `10.0/10`. |
+| workflow interpretation | Enters immediate re-review because the frequency contradiction is AC-supported and the public assertion is review-fragile. Final classification still requires phenotype, inheritance, segregation, functional literature, haplotype/drug-response context, and laboratory policy. |
+
 ### Live Manual Review Snapshot
 
 The three red-priority variants were rechecked against live ClinVar pages on
@@ -684,14 +701,27 @@ Gray is not green. In the current arrhythmia run, 1,397 variants sit in the
 variants are carried forward because absence can mean true rarity, incomplete
 coverage, allele-representation mismatch, or poor detectability.
 
-A practical gray queue should triage by variant type and clinical context:
-SNVs can be reviewed differently from indels/duplications; high-importance or
-dominant constrained genes should move earlier in the queue; indels and
-duplications should receive normalization, repeat-context, and mappability
-checks; patient-facing decisions should trigger orthogonal validation such as
-Sanger/PCR, long-read sequencing, MLPA, or array-based methods where relevant.
-Variants without immediate action should remain in a deferred review queue for
-periodic re-query as ClinVar and gnomAD releases change.
+A practical gray queue should triage by variant type and clinical context, with
+explicit operational triggers:
+
+- split SNVs/MNVs from indels, duplications, and complex alleles before
+  interpreting absence;
+- move to expedited review if the variant is predicted LOF/canonical splice in
+  a dominant or high-actionability gene, if established haploinsufficiency or
+  `LOEUF < 0.5` is available, if the allele sits in a curated critical
+  domain/hotspot with phenotype match, or if a weak/single-submitter assertion
+  is likely to affect patient-facing decisions;
+- route indels, duplications, and complex alleles through representation QC:
+  left-normalization, transcript/HGVS consistency, repeat context, local
+  mappability/GC review, and breakpoint plausibility;
+- require orthogonal validation when the result could change patient-facing
+  care, using Sanger/PCR, long-read sequencing, MLPA, array-based methods, or
+  laboratory-specific evidence review where relevant;
+- keep variants without immediate clinical actionability in a deferred gray
+  queue for periodic re-query as ClinVar, gnomAD, and local coverage releases
+  change.
+
+![VITAL gray-zone workflow](figures/vital_gray_zone_workflow.png)
 
 Review fragility is reported as an explicit result rather than hidden inside
 the score. In the current cache, AC-supported frequency signals are mostly
@@ -714,9 +744,13 @@ python src/build_vital_manuscript_docx.py
 The key files for a lab workflow are `*_vital_scores.csv`,
 `*_vital_component_breakdown.csv`, and `*_vital_predictions.csv`. Red variants
 go to immediate expert review, orange/yellow variants can be reviewed in batch,
-and gray variants enter the no-frequency-evidence workflow above. The same
-tables could be wrapped in a small web tool showing component breakdowns with
-links to ClinVar, gnomAD, PubMed, and local laboratory evidence.
+and gray variants enter the no-frequency-evidence workflow above. The current
+implementation is most comfortable for laboratories with bioinformatics support.
+For routine use by individual clinical geneticists, the same tables should be
+wrapped in a single-variant web interface or plugin-style integration for
+existing interpretation environments such as Franklin or Alamut, showing the
+one-line summary, component breakdown, ClinVar/gnomAD/PubMed links, and local
+laboratory evidence fields.
 
 For historical enrichment analysis across ClinVar releases, generate a VITAL score table
 from an older ClinVar snapshot, then compare that baseline snapshot with a
@@ -765,8 +799,9 @@ not capture most future ClinVar downgrades. Because only two baseline variants
 were red, the result should be treated as preliminary and uncertainty should be
 shown prominently.
 
-The enrichment framing is the key interpretation: VITAL red is not broad, but
-it is enriched in this sparse snapshot. For the broader historical endpoint, the overall downgrade or
+The enrichment framing is the key interpretation: VITAL red is not broad and is
+not a sensitive predictor of strict future downgrades, but it is enriched in
+this sparse snapshot. For the broader historical endpoint, the overall downgrade or
 destabilization rate is 113/1,669 (6.8%), while the VITAL-red rate is 1/2
 (50.0%), a 7.38-fold enrichment over baseline. Restricting to the 455
 frequency-observed baseline variants gives 38/455 (8.4%) overall versus 1/2

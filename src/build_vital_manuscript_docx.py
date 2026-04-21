@@ -31,6 +31,9 @@ FIGURE_INSERTIONS = {
     "### Review fragility is an explicit result": [
         ("arrhythmia_review_fragility.png", "ClinVar review fragility among frequency-supported signals."),
     ],
+    "### Handling no-frequency-evidence variants": [
+        ("vital_gray_zone_workflow.png", "Workflow for no-frequency-evidence gray variants."),
+    ],
     "### Historical ClinVar validation: VITAL is narrow but enriched": [
         ("arrhythmia_2023_01_to_current_vital_historical_curves.png", "Historical 2023-to-current predictive validation curves."),
     ],

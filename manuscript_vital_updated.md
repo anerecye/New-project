@@ -449,7 +449,7 @@ python src/generate_supplementary_tables.py --output-prefix arrhythmia
 python src/build_vital_manuscript_docx.py
 ```
 
-For archived or laboratory-specific ClinVar-like snapshots, `score_vital_from_variant_summary.py` supports batch scoring from a `variant_summary` file with gene filters, sampling, and cached gnomAD reuse. The core outputs are `*_vital_scores.csv`, `*_vital_component_breakdown.csv`, and `*_vital_predictions.csv`. In a clinical workflow, the red queue should trigger immediate expert review, orange/yellow variants can be monitored or reviewed by batch, and gray variants should enter the no-frequency-evidence workflow described above. The present implementation is best suited to laboratories with bioinformatics support. Routine single-variant use would be better served by a lightweight web interface or plugin-style integration into existing interpretation environments such as Franklin or Alamut, showing the one-line human summary, component breakdown, ClinVar/gnomAD/PubMed links, and local laboratory evidence fields.
+For archived or laboratory-specific ClinVar-like snapshots, `score_vital_from_variant_summary.py` supports batch scoring from a `variant_summary` file with gene filters, sampling, and cached gnomAD reuse. The core outputs are `*_vital_scores.csv`, `*_vital_component_breakdown.csv`, and `*_vital_predictions.csv`. In a clinical workflow, the red queue should trigger immediate expert review, orange/yellow variants can be monitored or reviewed by batch, and gray variants should enter the no-frequency-evidence workflow described above. The present implementation is best suited to laboratories with bioinformatics support. To make the framework immediately inspectable, we also provide a lightweight Google Colab demonstration that scores a single cached VCV record, a small CSV batch, or a demo top-suspicious table in approximately two minutes without calling ClinVar or gnomAD APIs. This Colab is a reproducibility and usability aid, not a clinical deployment environment. Routine single-variant use would be better served by a lightweight web interface or plugin-style integration into existing interpretation environments such as Franklin or Alamut, showing the one-line human summary, component breakdown, ClinVar/gnomAD/PubMed links, and local laboratory evidence fields.
 
 ## Conclusion
 
@@ -457,7 +457,7 @@ Clinically cataloged P/LP arrhythmia variants are strongly concentrated at ultra
 
 ## Data availability
 
-Analyses were conducted under an April 21, 2026 data freeze using gnomAD v4.1.1 exome and genome data queried through the gnomAD GraphQL API. ClinVar data were retrieved through the NCBI Entrez API and the ClinVar bulk variant summary file; the historical analysis used the archived January 2023 ClinVar variant_summary snapshot. UCSC genome sequence and annotation APIs were used for GC and repeat-context analyses. Pipeline source code, cached intermediate files, cache metadata, figures, and machine-readable outputs are available in the project repository. The committed intermediate outputs allow downstream analyses and manuscript tables to be regenerated without re-querying external APIs. A Docker/containerized environment is planned as the next reproducibility layer so that package versions and system dependencies can be fixed in addition to the data freeze.
+Analyses were conducted under an April 21, 2026 data freeze using gnomAD v4.1.1 exome and genome data queried through the gnomAD GraphQL API. ClinVar data were retrieved through the NCBI Entrez API and the ClinVar bulk variant summary file; the historical analysis used the archived January 2023 ClinVar variant_summary snapshot. UCSC genome sequence and annotation APIs were used for GC and repeat-context analyses. Pipeline source code, cached intermediate files, cache metadata, figures, and machine-readable outputs are available in the project repository. The committed intermediate outputs allow downstream analyses and manuscript tables to be regenerated without re-querying external APIs. A Colab notebook is provided for rapid inspection of cached VITAL outputs using one VCV ID or a small CSV input. A Docker/containerized environment is planned as the next reproducibility layer so that package versions and system dependencies can be fixed in addition to the data freeze.
 
 Key output files include:
 
@@ -498,6 +498,10 @@ Key output files include:
 - `data/processed/vital_cross_disease_3000_sample_sanity_checks.csv`: arrhythmia leakage, previous-panel overlap, and duplicate checks for the current 3,000-variant validation sample.
 - `data/processed/vital_cross_disease_3000_2023_01_to_current_vital_historical_validation.csv`: independent 3,000-variant historical cross-disease validation against strict, broad, and expanded endpoints.
 - `data/processed/vital_cross_disease_3000_2023_01_to_current_vital_historical_enrichment.csv`: independent historical enrichment table with Wilson and Haldane-corrected intervals.
+- `run_vital.py`: lightweight cached VITAL demo runner for a single VCV ID or CSV batch input.
+- `notebooks/vital_demo_colab.ipynb`: Google Colab demonstration for trying VITAL on cached examples without API calls.
+- `data/examples/sample_variants.csv`: three-variant sample CSV for the Colab batch mode.
+- `data/processed/vital_top_suspicious.csv`: short demo table of top VITAL-priority cached examples.
 - `figures/vital_clinical_workflow.png`: clinician-facing workflow schematic linking ClinVar input, VITAL risk prioritization, review queue, and expert decision-making.
 - `figures/vital_gray_zone_workflow.png`: no-frequency-evidence workflow schematic for gray variants.
 - `figures/vital_external_panel_score_distribution.png`: external score distribution figure.

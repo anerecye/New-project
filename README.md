@@ -9,11 +9,27 @@ ClinVar pathogenic and likely pathogenic variants are strongly shifted toward ra
 ## Repository Structure
 
 - `src/`: analysis and data-preparation scripts
+- `notebooks/`: quick Colab demo notebook
 - `data/processed/`: small processed CSV/TSV outputs used by the analysis
+- `data/examples/`: tiny demo CSVs for the VITAL quick runner
 - `figures/`: PNG figures generated from processed outputs
 - `requirements.txt`: Python dependencies
 
 Large raw inputs such as full ClinVar downloads, gnomAD VCFs, VCF indexes, local environments, and generated cache files are intentionally excluded.
+
+## Try VITAL in 2 Minutes
+
+Open the quick demo notebook:
+
+[VITAL demo: score ClinVar variants in 2 minutes](https://colab.research.google.com/github/anerecye/New-project/blob/main/notebooks/vital_demo_colab.ipynb)
+
+The notebook has three paths:
+
+- single VCV: edit one line and run `python run_vital.py --vcv VCV000440850`;
+- CSV batch: run `python run_vital.py --input data/examples/sample_variants.csv`;
+- demo table: browse `data/processed/vital_top_suspicious.csv`.
+
+The quick demo uses cached score tables and makes no ClinVar or gnomAD API calls.
 
 ## How to Run
 

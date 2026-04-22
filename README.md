@@ -4,7 +4,7 @@ This project compares allele frequencies from ClinVar arrhythmia-associated vari
 
 ## Key Result
 
-Frequency tension is common but hidden by global-AF-only workflows, and severe annotation does not protect against it. In the arrhythmia audit, 92/262 AF-observed LOF/splice ClinVar P/LP assertions (35.1%) have popmax/global AF >1e-5, similar to missense assertions (19/66, 28.8%). This persists after excluding canonical recessive arrhythmia genes. VITAL compresses 115 naive AF alerts into 3 urgent, explainable red-priority re-review cases, while expert-panel reviewed P/LP assertions in the 3,000-variant external comparator produce 0 red-priority calls despite visible frequency tension in some curated records.
+Up to 35% of AF-observed ClinVar P/LP LOF/splice arrhythmia assertions show population-frequency contradiction under ancestry-aware analysis. This is the punchline: severe annotation does not protect against frequency tension, and global-AF-only ACMG-style workflows miss most ancestry-aware alerts. In the arrhythmia audit, 92/262 LOF/splice assertions (35.1%) have popmax/global AF >1e-5, similar to missense assertions (19/66, 28.8%); global AF alone detects only 13 signals, while popmax/global screening detects 115, meaning 102/115 alerts are hidden by global-AF-only review. VITAL compresses those 115 naive AF alerts into 3 urgent, explainable red-priority re-review cases, while expert-panel reviewed P/LP assertions in the 3,000-variant external comparator produce 0 red-priority calls despite visible frequency tension in some curated records.
 
 ## Repository Structure
 
@@ -73,7 +73,7 @@ Outputs:
 
 ## Severe-Annotation Discordance and Expert Comparator
 
-The repository includes one focused biological-claim audit: severe HGVS consequences are not sufficient to override population-frequency contradictions. This is not a claim that LOF variants are usually benign. It is a claim that frameshift, stop-gained, splice, and other severe-looking ClinVar P/LP assertions still need AC, popmax, inheritance, penetrance, transcript/NMD, phenotype, and review-context checks when population frequency is discordant.
+The repository includes one focused biological-claim audit: severe HGVS consequences are not sufficient to override population-frequency contradictions. This is not a claim that LOF variants are usually benign. It is a claim that frameshift, stop-gained, splice, and other severe-looking ClinVar P/LP assertions can create a misinterpretation hazard when reviewers treat annotation severity as stronger than ancestry-aware population evidence. These records still need AC, popmax, inheritance, penetrance, transcript/NMD, phenotype, and review-context checks when population frequency is discordant.
 
 ```bash
 python src/run_vital_external_truth_claim.py
@@ -83,6 +83,7 @@ Headline outputs:
 
 - 92/262 AF-observed LOF/splice arrhythmia assertions (35.1%) have popmax/global AF >1e-5.
 - The pattern persists after excluding CASQ2/TRDN: 57/197 severe annotations (28.9%) remain discordant across 8 genes.
+- Global-AF-only review misses 102/115 (88.7%) ancestry-aware frequency alerts detected by popmax/global screening.
 - Frameshift, stop-gained, and canonical-splice subclasses all show naive frequency discordance.
 - In the external 3,000-variant comparator, 204 expert-panel P/LP assertions produce 39 naive AF flags, 13 AC-supported flags, and 0 VITAL red-priority calls.
 

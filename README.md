@@ -99,6 +99,22 @@ Generated files:
 - `figures/vital_external_truth_biological_claim.png`
 - `supplementary_tables/Supplementary_Table_S22_external_truth_biological_claim.tsv`
 
+## Real Reclassification and Curated Truth Audit
+
+VITAL is not sold as a broad reclassification predictor, so the repository now separates real clinical classification impact from workflow-burden metrics. In the independent 3,000-variant historical set, 23 baseline P/LP records moved to VUS/B/LB by April 2026. VITAL-red captured one real strict reclassification: `CFAP91` `VCV000812096`, which moved to VUS and had popmax AF `3.50e-4`, qualifying AC `152`, weak/no assertion support, and VITAL `76.5`.
+
+The external curated truth stress-test is intentionally uncomfortable but useful. One strict future downgrade had current expert-panel review status: `RYR1` `VCV001214001`, which moved to VUS. VITAL did not flag it because max AF was only `8.99e-7` and there was no AC-supported frequency tension. That is the boundary condition: VITAL catches frequency-assertion hazards, not all curated downgrades.
+
+```bash
+python src/run_vital_real_reclassification_audit.py
+```
+
+Generated files:
+
+- `data/processed/vital_real_reclassification_clinical_impact_audit.csv`
+- `data/processed/vital_real_reclassification_case_examples.csv`
+- `supplementary_tables/Supplementary_Table_S23_real_reclassification_truth_audit.tsv`
+
 ## How to Run
 
 Create an environment and install dependencies:
@@ -508,6 +524,11 @@ The model writes:
   `data/processed/vital_cross_disease_3000_2023_01_to_current_vital_historical_enrichment.csv`,
   and `figures/vital_cross_disease_3000_2023_01_to_current_vital_historical_curves.png`:
   independent 3,000-variant 2023-to-current historical cross-disease validation.
+- `data/processed/vital_real_reclassification_clinical_impact_audit.csv`,
+  `data/processed/vital_real_reclassification_case_examples.csv`, and
+  `supplementary_tables/Supplementary_Table_S23_real_reclassification_truth_audit.tsv`:
+  real strict P/LP-to-VUS/B/LB reclassification audit and expert-panel curated
+  truth stress-test.
 - `figures/vital_clinical_workflow.png`: clinician-facing workflow schematic
   showing how ClinVar P/LP assertions move through VITAL risk prioritization,
   into a short review queue, and then back to human expert ACMG/AMP

@@ -84,6 +84,7 @@ Headline outputs:
 - 92/262 AF-observed LOF/splice arrhythmia assertions (35.1%) have popmax/global AF >1e-5.
 - The pattern persists after excluding CASQ2/TRDN: 57/197 severe annotations (28.9%) remain discordant across 8 genes.
 - Global-AF-only review misses 102/115 (88.7%) ancestry-aware frequency alerts detected by popmax/global screening.
+- Mechanism triage prevents overclaiming: 35/92 severe-discordant assertions are in CASQ2/TRDN carrier-compatible contexts, while only 1/57 non-recessive severe-discordant assertions is AC-supported.
 - Frameshift, stop-gained, and canonical-splice subclasses all show naive frequency discordance.
 - In the external 3,000-variant comparator, 204 expert-panel P/LP assertions produce 39 naive AF flags, 13 AC-supported flags, and 0 VITAL red-priority calls.
 
@@ -91,6 +92,7 @@ Generated files:
 
 - `data/processed/vital_severe_annotation_frequency_discordance_summary.csv`
 - `data/processed/vital_severe_annotation_gene_spread.csv`
+- `data/processed/vital_severe_annotation_mechanism_triage.csv`
 - `data/processed/vital_expert_panel_truth_validation.csv`
 - `data/processed/vital_expert_panel_high_tension_examples.csv`
 - `data/processed/vital_external_truth_claim_tests.csv`
@@ -469,6 +471,7 @@ The model writes:
   VITAL continuum.
 - `data/processed/vital_severe_annotation_frequency_discordance_summary.csv`,
   `data/processed/vital_severe_annotation_gene_spread.csv`,
+  `data/processed/vital_severe_annotation_mechanism_triage.csv`,
   `data/processed/vital_expert_panel_truth_validation.csv`, and
   `supplementary_tables/Supplementary_Table_S22_external_truth_biological_claim.tsv`:
   severe-annotation frequency-discordance audit and expert-panel comparator.

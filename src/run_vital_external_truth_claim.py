@@ -114,7 +114,7 @@ def summarize_expert_panel_truth(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd
     return pd.DataFrame(rows), top_expert.loc[:, [c for c in top_cols if c in top_expert.columns]]
 
 
-def severe_annotation_summary(scores: pd.DataFrame, lof_summary: pd.DataFrame, context: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def prepare_observed_scores(scores: pd.DataFrame, context: pd.DataFrame) -> pd.DataFrame:
     observed = scores[scores["frequency_evidence_status"].eq("frequency_observed")].copy()
     context_cols = ["gene", "gnomad_lof_oe_ci_upper"]
     observed = observed.merge(context.loc[:, context_cols], on="gene", how="left")
@@ -132,6 +132,11 @@ def severe_annotation_summary(scores: pd.DataFrame, lof_summary: pd.DataFrame, c
     observed["constrained_loeuf_lt_0_6"] = pd.to_numeric(
         observed["gnomad_lof_oe_ci_upper"], errors="coerce"
     ).lt(0.6)
+    return observed
+
+
+def severe_annotation_summary(scores: pd.DataFrame, lof_summary: pd.DataFrame, context: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    observed = prepare_observed_scores(scores, context)
 
     rows = []
     for label, sub in [
@@ -218,6 +223,70 @@ def severe_annotation_summary(scores: pd.DataFrame, lof_summary: pd.DataFrame, c
         .reset_index()
     )
     return combined, gene_spread
+
+
+def mechanism_triage_summary(scores: pd.DataFrame, context: pd.DataFrame) -> pd.DataFrame:
+    observed = prepare_observed_scores(scores, context)
+    severe_discordant = observed[observed["severe_annotation"] & observed["naive_af_flag"]].copy()
+    non_recessive = ~severe_discordant["canonical_recessive_or_biallelic_gene"]
+    ac_supported = severe_discordant["ac_supported_frequency"]
+    constrained = severe_discordant["constrained_loeuf_lt_0_5"]
+
+    categories = [
+        (
+            "carrier-compatible recessive/biallelic architecture",
+            severe_discordant["canonical_recessive_or_biallelic_gene"],
+            "Frequency can be compatible with heterozygous carrier state; not evidence of misclassification by itself.",
+        ),
+        (
+            "non-recessive AC-supported high-penetrance tension",
+            non_recessive & ac_supported,
+            "Highest-priority mechanism adjudication: population frequency has allele-count support outside canonical recessive genes.",
+        ),
+        (
+            "non-recessive constrained-gene low-AC surveillance",
+            non_recessive & ~ac_supported & constrained,
+            "Biologically uncomfortable direction in constrained genes, but AC support is insufficient for urgent action.",
+        ),
+        (
+            "non-recessive other low-AC or architecture-unresolved surveillance",
+            non_recessive & ~ac_supported & ~constrained,
+            "Frequency tension remains visible, but current public data support monitoring or routine mechanism review rather than urgent downgrade.",
+        ),
+    ]
+
+    rows = []
+    total = len(severe_discordant)
+    for label, mask, interpretation in categories:
+        sub = severe_discordant[mask]
+        rows.append(
+            {
+                "mechanism_triage_class": label,
+                "n": len(sub),
+                "percent_of_severe_discordant": pct(len(sub), total),
+                "genes": "|".join(sorted(sub["gene"].dropna().astype(str).unique())),
+                "ac_supported_count": int(sub["ac_supported_frequency"].sum()),
+                "red_priority_count": int(sub["red_priority"].sum()),
+                "median_vital_score": float(sub["vital_score"].median()) if len(sub) else np.nan,
+                "max_vital_score": float(sub["vital_score"].max()) if len(sub) else np.nan,
+                "interpretation": interpretation,
+            }
+        )
+
+    rows.append(
+        {
+            "mechanism_triage_class": "all severe-annotation frequency-discordant assertions",
+            "n": total,
+            "percent_of_severe_discordant": 100.0 if total else np.nan,
+            "genes": "|".join(sorted(severe_discordant["gene"].dropna().astype(str).unique())),
+            "ac_supported_count": int(severe_discordant["ac_supported_frequency"].sum()),
+            "red_priority_count": int(severe_discordant["red_priority"].sum()),
+            "median_vital_score": float(severe_discordant["vital_score"].median()) if total else np.nan,
+            "max_vital_score": float(severe_discordant["vital_score"].max()) if total else np.nan,
+            "interpretation": "This is the tension universe, not an error-rate estimate.",
+        }
+    )
+    return pd.DataFrame(rows)
 
 
 def fisher_claim_tests(severe_summary: pd.DataFrame, truth_summary: pd.DataFrame, scores: pd.DataFrame) -> pd.DataFrame:
@@ -383,11 +452,13 @@ def main() -> None:
     SUPPLEMENTARY_DIR.mkdir(parents=True, exist_ok=True)
 
     severe, gene_spread = severe_annotation_summary(arrhythmia, lof_summary, context)
+    mechanism_triage = mechanism_triage_summary(arrhythmia, context)
     truth, top_expert = summarize_expert_panel_truth(cross)
     tests = fisher_claim_tests(severe, truth, arrhythmia)
 
     severe.to_csv(DATA_DIR / "vital_severe_annotation_frequency_discordance_summary.csv", index=False)
     gene_spread.to_csv(DATA_DIR / "vital_severe_annotation_gene_spread.csv", index=False)
+    mechanism_triage.to_csv(DATA_DIR / "vital_severe_annotation_mechanism_triage.csv", index=False)
     truth.to_csv(DATA_DIR / "vital_expert_panel_truth_validation.csv", index=False)
     top_expert.to_csv(DATA_DIR / "vital_expert_panel_high_tension_examples.csv", index=False)
     tests.to_csv(DATA_DIR / "vital_external_truth_claim_tests.csv", index=False)
@@ -396,6 +467,7 @@ def main() -> None:
         [
             severe.assign(table_section="severe_annotation_frequency_discordance"),
             gene_spread.assign(table_section="severe_annotation_gene_spread"),
+            mechanism_triage.assign(table_section="severe_annotation_mechanism_triage"),
             truth.assign(table_section="expert_panel_truth_validation"),
             top_expert.assign(table_section="expert_panel_high_tension_examples"),
             tests.assign(table_section="statistical_tests"),

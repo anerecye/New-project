@@ -33,9 +33,9 @@ The notebook has three paths:
 
 The quick demo uses cached score tables and makes no ClinVar or gnomAD API calls.
 
-## Semi-Empirical Calibration Audit
+## Weight-Consistency Audit
 
-The primary VITAL score remains expert-specified, but the repository includes a restricted semi-empirical calibration audit so reviewers can see whether the component weights behave sensibly in data. The audit is intentionally restricted to frequency-positive historical records, because unrestricted calibration conflates general ClinVar churn with frequency-assertion discordance.
+The primary VITAL score remains expert-specified by design. The repository includes a restricted weight-consistency audit so reviewers can see whether the component structure behaves sensibly in data, without turning VITAL into a fitted prediction model. The audit is intentionally restricted to frequency-positive historical records, because unrestricted calibration conflates general ClinVar churn with frequency-assertion discordance.
 
 ```bash
 python src/run_vital_score_calibration.py
@@ -49,7 +49,7 @@ Key outputs:
 - `figures/vital_cross_disease_3000_restricted_calibration_models.png`
 - `supplementary_tables/Supplementary_Table_S21_VITAL_empirical_weight_calibration.tsv`
 
-The three-model comparison separates review-only features, frequency-tension features, and the combined model. This is a calibration and feature-dominance audit, not a replacement for the prespecified VITAL score.
+The three diagnostic probes separate review-only features, frequency-tension features, and the combined feature set. This is a calibration and feature-dominance audit, not an architecture search and not a replacement for the prespecified VITAL score.
 
 ## Biological Contrast Layer
 

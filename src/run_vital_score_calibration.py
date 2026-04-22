@@ -408,7 +408,7 @@ def empirical_logistic_calibration(df: pd.DataFrame, calibration_scope: str) -> 
     coefficients["expert_max_points"] = [45, 20, 10, 7, 8, 10, 10]
     coefficients["expert_weight_fraction"] = coefficients["expert_max_points"] / coefficients["expert_max_points"].sum()
     coefficients["calibration_note"] = (
-        "Component weights are semi-empirical support analysis only; primary VITAL weights remain prespecified"
+        "Component weights are design-prespecified; this audit checks consistency and does not refit VITAL"
     )
 
     overlap = pd.DataFrame(
@@ -720,7 +720,7 @@ def plot_empirical_weight_calibration(coefficients: pd.DataFrame, grid: pd.DataF
     axes[1].set_title("Top grid-search profiles", weight="bold")
     axes[1].grid(axis="x", alpha=0.25)
 
-    fig.suptitle("Semi-empirical VITAL weight calibration audit", weight="bold")
+    fig.suptitle("VITAL weight-consistency audit", weight="bold")
     fig.tight_layout()
     path = FIGURE_DIR / "vital_cross_disease_3000_empirical_weight_calibration.png"
     fig.savefig(path, dpi=220)
@@ -774,7 +774,7 @@ def plot_restricted_calibration_models(
     axes[2].grid(axis="y", alpha=0.25)
     axes[2].legend(frameon=False, fontsize=8)
 
-    fig.suptitle("Restricted semi-empirical calibration within frequency-positive variants", weight="bold")
+    fig.suptitle("Restricted VITAL weight-consistency audit within frequency-positive variants", weight="bold")
     fig.tight_layout()
     path = FIGURE_DIR / "vital_cross_disease_3000_restricted_calibration_models.png"
     fig.savefig(path, dpi=220)

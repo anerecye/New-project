@@ -1,0 +1,5 @@
+result,n,denominator,percent,interpretation
+frequency_tension_common_but_hidden,115,334,34.4311377245509,Popmax/global AF >1e-5 tension is common among AF-observed ClinVar P/LP variants; global-only workflows hide much of this signal.
+biologically_interpretable_high_tension_core,6,334,1.7964071856287425,"VITAL >=60 compresses the broad frequency-tension space into a small set of variants where frequency must be interpreted against mechanism, LOEUF, expression, and domain context."
+red_case_study_queue,3,334,0.8982035928143712,"VITAL red is a case-study queue, not an appendix: each red variant has a distinct biological explanation for why AF tension does or does not undermine a P/LP assertion."
+red_cases_with_real_lof_constraint_and_heart_expression,3,3,100.0,"All red cases are shown with real gnomAD LOEUF and HPA heart-expression context, turning metadata flags into biological contrast statements."

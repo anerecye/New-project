@@ -4,7 +4,7 @@ This project compares allele frequencies from ClinVar arrhythmia-associated vari
 
 ## Key Result
 
-ClinVar pathogenic and likely pathogenic variants are strongly shifted toward rare allele frequencies relative to the queried gnomAD population variation. The main figure shows that clinical databases preferentially capture variants below common rare-disease frequency thresholds, consistent with a frequency-constrained bias in clinical variant databases.
+Frequency tension is common but hidden by global-AF-only workflows. In the arrhythmia audit, popmax/global screening identifies 115 ClinVar P/LP assertions above AF >1e-5, while VITAL compresses this to 3 urgent, explainable re-review cases. The current red queue is treated as biological contrast case studies, not an automated benign list: SCN5A shows a high-frequency haplotype/drug-response tension, TRDN shows recessive-carrier compatibility, and KCNH2 remains a borderline constrained-gene splice assertion.
 
 ## Repository Structure
 
@@ -16,6 +16,7 @@ ClinVar pathogenic and likely pathogenic variants are strongly shifted toward ra
 - `requirements.txt`: Python dependencies
 
 Large raw inputs such as full ClinVar downloads, gnomAD VCFs, VCF indexes, local environments, and generated cache files are intentionally excluded.
+Raw external annotation downloads used for the biological contrast layer are also excluded; derived context tables are committed under `data/processed/`.
 
 ## Try VITAL in 2 Minutes
 
@@ -30,6 +31,26 @@ The notebook has three paths:
 - demo table: browse `data/processed/vital_top_suspicious.csv`.
 
 The quick demo uses cached score tables and makes no ClinVar or gnomAD API calls.
+
+## Biological Contrast Layer
+
+VITAL-red variants are summarized as contrast cases rather than as another wide annotation table. The biological layer joins VITAL scores to real gnomAD v4.1 LOEUF constraint values and Human Protein Atlas v23 heart-muscle expression, then adds a compact mechanism interpretation:
+
+```bash
+python src/run_vital_biological_contrast.py
+```
+
+Inputs expected in `data/external/`:
+
+- `gnomad.v4.1.constraint_metrics.tsv` from the gnomAD v4.1 constraint release.
+- `hpa_rna_tissue_consensus.tsv.zip` from Human Protein Atlas v23.
+
+Outputs:
+
+- `data/processed/arrhythmia_gene_biological_context.csv`
+- `data/processed/arrhythmia_vital_biological_contrast_cases.csv`
+- `data/processed/arrhythmia_vital_biological_contrast_summary.csv`
+- `figures/vital_biological_contrast_cases.png`
 
 ## How to Run
 

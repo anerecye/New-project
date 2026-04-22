@@ -29,6 +29,7 @@ Desktop.ini
 # Raw and bulky genomics data
 data/raw/
 data/backup/
+data/external/
 data/variant_summary.txt.gz
 *.vcf
 *.vcf.gz

@@ -285,6 +285,19 @@ APPENDIX_TABLES = [
             "red_enrichment_vs_nonred_ci_high",
         ],
     ),
+    (
+        "Appendix Table A16. VITAL-red biological contrast case studies",
+        BASE_DIR / "data" / "processed" / "arrhythmia_vital_biological_contrast_cases.csv",
+        [
+            "variant",
+            "vital",
+            "af_signal",
+            "loeuf_constraint_argument",
+            "heart_expression",
+            "expected_mechanism",
+            "reality_interpretation",
+        ],
+    ),
 ]
 
 

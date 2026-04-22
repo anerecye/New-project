@@ -1,0 +1,4 @@
+model,review_coefficient_sum,tension_coefficient_sum,tension_to_review_ratio,dominant_group,interpretation_note
+review_only,0.9727363069817996,0.0,0.0,review,Dominance is coefficient magnitude after standardization within frequency-positive variants
+review_plus_tension,1.0974934940673187,1.7518994818574516,1.5962732274292577,tension,Dominance is coefficient magnitude after standardization within frequency-positive variants
+tension_only,0.0,1.0396437342271885,inf,tension,Dominance is coefficient magnitude after standardization within frequency-positive variants

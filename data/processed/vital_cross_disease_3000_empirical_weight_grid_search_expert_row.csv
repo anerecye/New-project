@@ -1,0 +1,3 @@
+calibration_scope,af_pressure_multiplier,ac_reliability_multiplier,review_fragility_multiplier,context_multiplier,roc_auc,average_precision,spearman_vs_expert_score,topN_overlap_with_expert_red,topN_expanded_events,is_expert_weight_profile,rank_by_average_precision,rank_denominator
+all_records,1.0,1.0,1.0,1.0,0.5534305340826827,0.3401839941155535,0.9999999999999998,4,8,True,279,625
+frequency_positive_records,1.0,1.0,1.0,1.0,0.5260722088076348,0.44919060761764856,1.0,4,8,True,281,625

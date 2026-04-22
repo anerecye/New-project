@@ -7,3 +7,4 @@ seaborn>=0.13
 statsmodels>=0.14
 biopython>=1.83
 tqdm>=4.66
+python-docx>=1.1

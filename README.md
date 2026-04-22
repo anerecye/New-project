@@ -14,6 +14,7 @@ Frequency tension is common but hidden by global-AF-only workflows. In the arrhy
 - `data/examples/`: tiny demo CSVs for the VITAL quick runner
 - `figures/`: PNG figures generated from processed outputs
 - `requirements.txt`: Python dependencies
+- `Dockerfile`: minimal reproducible Python environment for cached/demo analyses
 
 Large raw inputs such as full ClinVar downloads, gnomAD VCFs, VCF indexes, local environments, and generated cache files are intentionally excluded.
 Raw external annotation downloads used for the biological contrast layer are also excluded; derived context tables are committed under `data/processed/`.
@@ -31,6 +32,24 @@ The notebook has three paths:
 - demo table: browse `data/processed/vital_top_suspicious.csv`.
 
 The quick demo uses cached score tables and makes no ClinVar or gnomAD API calls.
+
+## Semi-Empirical Calibration Audit
+
+The primary VITAL score remains expert-specified, but the repository includes a restricted semi-empirical calibration audit so reviewers can see whether the component weights behave sensibly in data. The audit is intentionally restricted to frequency-positive historical records, because unrestricted calibration conflates general ClinVar churn with frequency-assertion discordance.
+
+```bash
+python src/run_vital_score_calibration.py
+```
+
+Key outputs:
+
+- `data/processed/vital_cross_disease_3000_restricted_calibration_model_metrics.csv`
+- `data/processed/vital_cross_disease_3000_restricted_calibration_feature_dominance.csv`
+- `data/processed/vital_cross_disease_3000_restricted_calibration_coefficients.csv`
+- `figures/vital_cross_disease_3000_restricted_calibration_models.png`
+- `supplementary_tables/Supplementary_Table_S21_VITAL_empirical_weight_calibration.tsv`
+
+The three-model comparison separates review-only features, frequency-tension features, and the combined model. This is a calibration and feature-dominance audit, not a replacement for the prespecified VITAL score.
 
 ## Biological Contrast Layer
 
@@ -153,10 +172,19 @@ python src/validate_vital_reclassification.py
 The practical split is: API mode creates the frozen cache; cached/offline mode
 rebuilds VITAL scores, historical analyses, figures, supplementary tables, and
 the manuscript from machine-readable intermediate files. This protects the
-analysis from future API schema changes or temporary service outages. A
-containerized environment (Docker) is planned for full reproducibility of Python
-package versions and command-line dependencies in addition to the cached data
-freeze.
+analysis from future API schema changes or temporary service outages. A minimal
+Docker environment is provided to pin the Python runtime and package installation
+for cached/demo analyses:
+
+```bash
+docker build -t vital .
+docker run --rm vital
+docker run --rm vital python run_vital.py --vcv VCV000440850
+docker run --rm vital python src/run_vital_score_calibration.py
+```
+
+Large raw ClinVar/gnomAD downloads remain outside the image by default; mount
+them explicitly if rerunning acquisition-heavy workflows.
 
 Large ClinVar genes can produce interrupted XML downloads. The API runner uses
 `--clinvar-batch-size 50` by default and will retry and split failed ClinVar

@@ -1,0 +1,7 @@
+model,calibration_scope,target,n,event_count,roc_auc,average_precision,brier_score,spearman_vs_expert_score,method_note
+expert_vital_score,all_records,expanded,3000,794,0.5534305340826827,0.3401839941155535,0.24503642748283327,1.0,Expert-specified VITAL score; not fitted to historical endpoint
+component_logistic_oof,all_records,expanded,3000,794,0.5481506813339393,0.3509019107759096,0.18717913903632766,0.5039443145434559,5-fold out-of-fold non-negative logistic regression using VITAL component scores
+component_logistic_full_fit_for_ranking_audit,all_records,expanded,3000,794,0.5570538672866079,0.3659185149334162,0.18713134817535507,0.8755127304750052,Full-data fit used only to compare component weighting and top-N queue overlap
+expert_vital_score,frequency_positive_records,expanded,379,156,0.5260722088076348,0.44919060761764856,0.26056565289841643,1.0,Expert-specified VITAL score; not fitted to historical endpoint
+component_logistic_oof,frequency_positive_records,expanded,379,156,0.7475853742669886,0.6314139753831414,0.19810961383547393,0.17756457087649655,5-fold out-of-fold non-negative logistic regression using VITAL component scores
+component_logistic_full_fit_for_ranking_audit,frequency_positive_records,expanded,379,156,0.7608226974818904,0.6490273072434274,0.1931512409049571,0.16332491958505851,Full-data fit used only to compare component weighting and top-N queue overlap

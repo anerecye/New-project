@@ -1,0 +1,3 @@
+comparison,calibration_scope,n_expert_red,n_top_logistic,overlap_count,overlap_fraction_of_expert_red,expert_red_expanded_events,top_logistic_expanded_events,topN_rule
+expert_red_vs_topN_component_logistic,all_records,13,13,0,0.0,11,6,"Top N by full-data empirical logistic probability, with N equal to expert red queue size"
+expert_red_vs_topN_component_logistic,frequency_positive_records,13,13,4,0.3076923076923077,11,11,"Top N by full-data empirical logistic probability, with N equal to expert red queue size"

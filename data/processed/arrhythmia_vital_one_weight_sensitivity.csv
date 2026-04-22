@@ -1,0 +1,36 @@
+component_varied,primary_weight,weight_multiplier,tested_weight,red_priority_count,red_priority_variants,sensitivity_note
+frequency_pressure_score,45.0,0.5,22.5,1,SCN5A:VCV000440850,one_component_varied_at_a_time_no_outcome_refitting
+frequency_pressure_score,45.0,0.75,33.75,1,SCN5A:VCV000440850,one_component_varied_at_a_time_no_outcome_refitting
+frequency_pressure_score,45.0,1.0,45.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+frequency_pressure_score,45.0,1.25,56.25,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+frequency_pressure_score,45.0,1.5,67.5,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+ac_reliability_score,20.0,0.5,10.0,1,SCN5A:VCV000440850,one_component_varied_at_a_time_no_outcome_refitting
+ac_reliability_score,20.0,0.75,15.0,1,SCN5A:VCV000440850,one_component_varied_at_a_time_no_outcome_refitting
+ac_reliability_score,20.0,1.0,20.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+ac_reliability_score,20.0,1.25,25.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+ac_reliability_score,20.0,1.5,30.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+popmax_enrichment_score,10.0,0.5,5.0,2,SCN5A:VCV000440850; TRDN:VCV001325231,one_component_varied_at_a_time_no_outcome_refitting
+popmax_enrichment_score,10.0,0.75,7.5,2,SCN5A:VCV000440850; TRDN:VCV001325231,one_component_varied_at_a_time_no_outcome_refitting
+popmax_enrichment_score,10.0,1.0,10.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+popmax_enrichment_score,10.0,1.25,12.5,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+popmax_enrichment_score,10.0,1.5,15.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+variant_type_tension_score,6.0,0.5,3.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+variant_type_tension_score,6.0,0.75,4.5,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+variant_type_tension_score,6.0,1.0,6.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+variant_type_tension_score,6.0,1.25,7.5,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+variant_type_tension_score,6.0,1.5,9.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+technical_detectability_score,8.0,0.5,4.0,2,SCN5A:VCV000440850; TRDN:VCV001325231,one_component_varied_at_a_time_no_outcome_refitting
+technical_detectability_score,8.0,0.75,6.0,2,SCN5A:VCV000440850; TRDN:VCV001325231,one_component_varied_at_a_time_no_outcome_refitting
+technical_detectability_score,8.0,1.0,8.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+technical_detectability_score,8.0,1.25,10.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+technical_detectability_score,8.0,1.5,12.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+gene_constraint_score,10.0,0.5,5.0,2,SCN5A:VCV000440850; TRDN:VCV001325231,one_component_varied_at_a_time_no_outcome_refitting
+gene_constraint_score,10.0,0.75,7.5,2,SCN5A:VCV000440850; TRDN:VCV001325231,one_component_varied_at_a_time_no_outcome_refitting
+gene_constraint_score,10.0,1.0,10.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+gene_constraint_score,10.0,1.25,12.5,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+gene_constraint_score,10.0,1.5,15.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+review_fragility_score,10.0,0.5,5.0,2,SCN5A:VCV000440850; TRDN:VCV001325231,one_component_varied_at_a_time_no_outcome_refitting
+review_fragility_score,10.0,0.75,7.5,2,SCN5A:VCV000440850; TRDN:VCV001325231,one_component_varied_at_a_time_no_outcome_refitting
+review_fragility_score,10.0,1.0,10.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+review_fragility_score,10.0,1.25,12.5,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting
+review_fragility_score,10.0,1.5,15.0,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,one_component_varied_at_a_time_no_outcome_refitting

@@ -6,12 +6,18 @@ from pathlib import Path
 try:
     import numpy as np
     import pandas as pd
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import LinearSegmentedColormap
 except ModuleNotFoundError as exc:
-    raise SystemExit("This script requires pandas and numpy.") from exc
+    raise SystemExit("This script requires pandas, numpy, and matplotlib.") from exc
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data" / "processed"
+FIGURE_DIR = BASE_DIR / "figures"
 VITAL_ACTION_THRESHOLD = 70
 
 COMPONENT_COLUMNS = {
@@ -123,6 +129,106 @@ def variant_label(row: pd.Series) -> str:
         if pd.notna(value) and str(value):
             return str(value)
     return ""
+
+
+def compact_variant_signature(table: pd.DataFrame, mask: pd.Series) -> str:
+    if not bool(mask.any()):
+        return "none"
+    parts: list[str] = []
+    for _, row in table.loc[mask].iterrows():
+        gene = str(row.get("gene", "")).strip()
+        clinvar_id = str(row.get("clinvar_id", "")).strip() or str(row.get("variant_label", "")).strip()
+        parts.append(f"{gene}:{clinvar_id}" if gene else clinvar_id)
+    return "; ".join(parts)
+
+
+def make_one_weight_sensitivity(
+    scores: pd.DataFrame,
+    ac_supported: pd.Series,
+    weak_review: pd.Series,
+) -> pd.DataFrame:
+    rows: list[dict[str, object]] = []
+    multipliers = [0.5, 0.75, 1.0, 1.25, 1.5]
+    primary_weights = WEIGHT_PROFILES["primary_expert_weights"]
+    for component, primary_weight in primary_weights.items():
+        for multiplier in multipliers:
+            weights = dict(primary_weights)
+            weights[component] = primary_weight * multiplier
+            alt_score = rescore(scores, weights)
+            red_mask = alt_score.ge(VITAL_ACTION_THRESHOLD) & ac_supported & weak_review
+            rows.append(
+                {
+                    "component_varied": component,
+                    "primary_weight": primary_weight,
+                    "weight_multiplier": multiplier,
+                    "tested_weight": weights[component],
+                    "red_priority_count": int(red_mask.sum()),
+                    "red_priority_variants": compact_variant_signature(scores, red_mask),
+                    "sensitivity_note": "one_component_varied_at_a_time_no_outcome_refitting",
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def plot_one_weight_heatmap(sensitivity: pd.DataFrame, output_path: Path) -> None:
+    if sensitivity.empty:
+        return
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    component_order = list(COMPONENT_COLUMNS.keys())
+    multiplier_order = [0.5, 0.75, 1.0, 1.25, 1.5]
+    pivot = (
+        sensitivity.pivot(index="component_varied", columns="weight_multiplier", values="red_priority_count")
+        .reindex(component_order)
+        .reindex(columns=multiplier_order)
+    )
+    labels = (
+        sensitivity.pivot(index="component_varied", columns="weight_multiplier", values="red_priority_variants")
+        .reindex(component_order)
+        .reindex(columns=multiplier_order)
+    )
+    row_labels = [
+        "AF pressure",
+        "AC reliability",
+        "Popmax enrichment",
+        "Variant type",
+        "Detectability",
+        "Gene context",
+        "Review fragility",
+    ]
+    cmap = LinearSegmentedColormap.from_list("vital_red_count", ["#eef3f7", "#fee8c8", "#fdbb84", "#e34a33"])
+    fig, ax = plt.subplots(figsize=(12.5, 6.2))
+    image = ax.imshow(pivot.to_numpy(dtype=float), cmap=cmap, vmin=0, vmax=max(4, float(np.nanmax(pivot.to_numpy()))))
+    ax.set_xticks(range(len(multiplier_order)))
+    ax.set_xticklabels([f"{m:g}x" for m in multiplier_order], fontsize=10)
+    ax.set_yticks(range(len(row_labels)))
+    ax.set_yticklabels(row_labels, fontsize=10)
+    ax.set_xlabel("Single component weight multiplier", fontsize=11)
+    ax.set_title("VITAL red-priority queue under one-weight-at-a-time sensitivity", fontsize=15, weight="bold")
+    ax.text(
+        0.0,
+        1.08,
+        "Cell text shows red-priority count and retained variant genes. No outcome refitting was performed.",
+        transform=ax.transAxes,
+        fontsize=10,
+        color="#455a64",
+        ha="left",
+    )
+    for i in range(pivot.shape[0]):
+        for j in range(pivot.shape[1]):
+            count = int(pivot.iloc[i, j]) if pd.notna(pivot.iloc[i, j]) else 0
+            variants = str(labels.iloc[i, j])
+            genes: list[str] = []
+            if variants != "none":
+                for item in variants.split("; "):
+                    gene = item.split(":")[0]
+                    genes.append({"SCN5A": "S", "TRDN": "T", "KCNH2": "K", "CACNB2": "C"}.get(gene, gene[:3]))
+            gene_text = "/".join(genes) if genes else "none"
+            ax.text(j, i, f"{count}\n{gene_text}", ha="center", va="center", fontsize=8.4, color="#263238")
+    fig.colorbar(image, ax=ax, fraction=0.025, pad=0.02, label="Red-priority count")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=220)
+    plt.close(fig)
+    print(f"Saved {output_path}")
 
 
 def run_weight_sensitivity(score_table: Path, output_prefix: str) -> None:
@@ -265,6 +371,16 @@ def run_weight_sensitivity(score_table: Path, output_prefix: str) -> None:
     save_table(
         variant_profile_table,
         data_path(output_prefix, "vital_weight_sensitivity_variant_profile_table.csv"),
+    )
+
+    one_weight_sensitivity = make_one_weight_sensitivity(scores, ac_supported, weak_review)
+    save_table(
+        one_weight_sensitivity,
+        data_path(output_prefix, "vital_one_weight_sensitivity.csv"),
+    )
+    plot_one_weight_heatmap(
+        one_weight_sensitivity,
+        FIGURE_DIR / f"{output_prefix}_vital_one_weight_sensitivity_heatmap.png",
     )
 
     supplementary_dir = BASE_DIR / "supplementary_tables"

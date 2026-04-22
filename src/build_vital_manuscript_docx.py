@@ -24,9 +24,9 @@ FIGURE_INSERTIONS = {
     "### Variant type drives absence and detectability bias": [
         ("arrhythmia_vital_absence_not_rarity.png", "Variant-type detectability bias: absence from gnomAD is not equivalent to rarity."),
     ],
-    "### VITAL performance against baseline frequency screens": [
+    "### Workflow-concordance benchmark against baseline frequency screens": [
         ("arrhythmia_vital_score_model.png", "VITAL score distribution and reclassification-priority bands."),
-        ("arrhythmia_vital_validation_curves.png", "Operational ROC and precision-recall validation curves."),
+        ("arrhythmia_vital_validation_curves.png", "Workflow-concordance ROC and PR curves; proxy metrics, not diagnostic accuracy."),
     ],
     "### Review fragility is an explicit result": [
         ("arrhythmia_review_fragility.png", "ClinVar review fragility among frequency-supported signals."),
@@ -34,7 +34,7 @@ FIGURE_INSERTIONS = {
     "### Handling no-frequency-evidence variants": [
         ("vital_gray_zone_workflow.png", "Workflow for no-frequency-evidence gray variants."),
     ],
-    "### Historical ClinVar validation: VITAL is narrow but enriched": [
+    "### Historical ClinVar analysis: preliminary enrichment in a sparse red set": [
         ("arrhythmia_2023_01_to_current_vital_historical_curves.png", "Historical 2023-to-current predictive validation curves."),
     ],
     "### External disease panels and ratio compression": [
@@ -145,7 +145,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A7. VITAL expert-weight sensitivity by red variant",
+        "Appendix Table A7. VITAL expert-weight sensitivity by red-priority variant",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_weight_sensitivity_variant_profile_table.csv",
         [
             "gene",
@@ -155,6 +155,18 @@ APPENDIX_TABLES = [
             "retained_red_under_profile",
             "red_set_change",
             "stability_class",
+        ],
+    ),
+    (
+        "Appendix Table A7b. One-weight-at-a-time VITAL sensitivity",
+        BASE_DIR / "data" / "processed" / "arrhythmia_vital_one_weight_sensitivity.csv",
+        [
+            "component_varied",
+            "weight_multiplier",
+            "tested_weight",
+            "red_priority_count",
+            "red_priority_variants",
+            "sensitivity_note",
         ],
     ),
     (

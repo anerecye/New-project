@@ -4,7 +4,7 @@ This project compares allele frequencies from ClinVar arrhythmia-associated vari
 
 ## Key Result
 
-Frequency tension is common but hidden by global-AF-only workflows. In the arrhythmia audit, popmax/global screening identifies 115 ClinVar P/LP assertions above AF >1e-5, while VITAL compresses this to 3 urgent, explainable re-review cases. The current red queue is treated as biological contrast case studies, not an automated benign list: SCN5A shows a high-frequency haplotype/drug-response tension, TRDN shows recessive-carrier compatibility, and KCNH2 remains a borderline constrained-gene splice assertion.
+Frequency tension is common but hidden by global-AF-only workflows. In the arrhythmia audit, popmax/global screening identifies 115 ClinVar P/LP assertions above AF >1e-5, while VITAL compresses this to 3 urgent, explainable red-priority re-review cases. The current red-priority queue is treated as biological contrast case studies, not an automated benign list: SCN5A shows a high-frequency haplotype/drug-response tension, TRDN shows recessive-carrier compatibility, and KCNH2 remains a borderline constrained-gene splice assertion. The manuscript now includes a laboratory decision tree for red/orange/yellow/gray handling and a one-weight-at-a-time sensitivity heatmap for the red-priority queue.
 
 ## Repository Structure
 

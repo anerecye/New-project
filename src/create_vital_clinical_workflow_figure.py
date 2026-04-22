@@ -14,7 +14,21 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 FIGURE_PATH = BASE_DIR / "figures" / "vital_clinical_workflow.png"
 
 
-def add_box(ax, x, y, w, h, title, body, face, edge="#263238", title_color="#101820"):
+def add_box(
+    ax,
+    x,
+    y,
+    w,
+    h,
+    title,
+    body,
+    face,
+    edge="#263238",
+    title_color="#101820",
+    title_size=12.5,
+    body_size=9.4,
+    wrap=34,
+):
     box = FancyBboxPatch(
         (x, y),
         w,
@@ -31,17 +45,17 @@ def add_box(ax, x, y, w, h, title, body, face, edge="#263238", title_color="#101
         title,
         ha="left",
         va="top",
-        fontsize=13,
+        fontsize=title_size,
         fontweight="bold",
         color=title_color,
     )
     ax.text(
         x + 0.04,
         y + h - 0.30,
-        fill(body, 28),
+        fill(body, wrap),
         ha="left",
         va="top",
-        fontsize=10.2,
+        fontsize=body_size,
         color="#263238",
         linespacing=1.2,
     )
@@ -63,137 +77,179 @@ def add_arrow(ax, start, end, color="#455a64"):
 
 def main() -> None:
     FIGURE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    fig, ax = plt.subplots(figsize=(14, 7.2))
-    ax.set_xlim(0, 14)
-    ax.set_ylim(0, 7.2)
+    fig, ax = plt.subplots(figsize=(15.5, 9.2))
+    ax.set_xlim(0, 15.5)
+    ax.set_ylim(0, 9.2)
     ax.axis("off")
 
     ax.text(
-        0.35,
-        6.82,
-        "VITAL clinical reclassification risk prioritization workflow",
-        fontsize=18,
+        0.4,
+        8.86,
+        "VITAL laboratory decision tree",
+        fontsize=19,
         fontweight="bold",
         ha="left",
         va="top",
         color="#101820",
     )
     ax.text(
-        0.35,
-        6.48,
-        "Designed to reduce false-positive variant re-evaluation burden while preserving human clinical decision-making.",
-        fontsize=11.5,
+        0.4,
+        8.50,
+        "Batch decision support for clinical laboratories with bioinformatics support; final classification remains expert-led.",
+        fontsize=11.2,
         ha="left",
         va="top",
         color="#455a64",
     )
 
-    y = 4.15
-    w = 2.45
-    h = 1.75
     add_box(
         ax,
-        0.35,
-        y,
-        w,
-        h,
-        "ClinVar P/LP",
-        "1,731 arrhythmia assertions carried forward, including no-frequency-evidence variants.",
+        0.4,
+        6.78,
+        2.35,
+        1.18,
+        "1. Batch score",
+        "ClinVar P/LP records plus cached gnomAD AF, popmax, AC, variant type, detectability, gene context, and review status.",
         "#e8f1fb",
+        wrap=29,
     )
     add_box(
         ax,
-        3.15,
-        y,
-        w,
-        h,
-        "Naive AF screen",
-        "115 variants flagged by popmax/global AF >1e-5.",
+        3.25,
+        6.78,
+        2.35,
+        1.18,
+        "2. Assign band",
+        "Red-priority, orange high-tension, yellow watchlist, gray no-frequency evidence, or routine green/blue.",
         "#fff3d6",
+        wrap=30,
     )
     add_box(
         ax,
-        5.95,
-        y,
-        w,
-        h,
-        "VITAL evidence filter",
-        "AF, popmax, AC, variant type, gene constraint, detectability, and review fragility.",
+        6.1,
+        6.78,
+        2.55,
+        1.18,
+        "3. Route action",
+        "Route by band plus inheritance mechanism, phenotype relevance, and local laboratory policy.",
         "#e8f6ef",
+        wrap=31,
     )
     add_box(
         ax,
-        8.75,
-        y,
-        w,
-        h,
-        "Review queue",
-        "3 red-priority variants; 112 naive alerts withheld from urgent review.",
+        9.25,
+        6.78,
+        2.55,
+        1.18,
+        "4. Expert review",
+        "Variant scientist, laboratory director, and disease expert verify ClinVar, gnomAD, literature, phenotype, and mechanism.",
         "#fde7e3",
+        wrap=31,
     )
     add_box(
         ax,
-        11.55,
-        y,
-        2.1,
-        h,
-        "Clinical review",
-        "Expert ACMG/AMP review determines retain P/LP, VUS, B/LB, or validation need.",
+        12.35,
+        6.78,
+        2.75,
+        1.18,
+        "5. Record outcome",
+        "Document retain P/LP, VUS, LB/B, context-specific assertion, validation need, or deferred monitoring.",
         "#f1edf8",
+        wrap=32,
     )
 
-    for sx in [2.8, 5.6, 8.4, 11.2]:
-        add_arrow(ax, (sx, y + h / 2), (sx + 0.32, y + h / 2))
+    for sx in [2.8, 5.65, 8.7, 11.85]:
+        add_arrow(ax, (sx, 7.37), (sx + 0.36, 7.37))
 
     add_box(
         ax,
-        0.35,
-        1.74,
-        3.95,
-        1.55,
-        "Burden reduction",
-        "97.4% fewer urgent action flags than naive AF screening. Operational benchmark: 53 false positives reduced to 0.",
-        "#eef3f7",
+        0.4,
+        4.72,
+        3.4,
+        1.38,
+        "Red-priority",
+        "Urgent re-review, ideally within the next variant-review cycle or 30 days for patient-facing assertions. Confirm live ClinVar/gnomAD, phenotype, inheritance, literature, and local evidence.",
+        "#f8d7da",
+        wrap=39,
     )
     add_box(
         ax,
-        4.75,
-        1.74,
-        4.1,
-        1.55,
-        "Workflow time saved",
-        "At 30-60 min per first-pass review, suppressing 112 naive alerts avoids about 56-112 reviewer-hours per audit.",
-        "#eef3f7",
+        4.15,
+        4.72,
+        3.4,
+        1.38,
+        "Orange high-tension",
+        "Scheduled batch review. Escalate if AC-supported, high-actionability gene, weak review, or phenotype/literature mismatch is present.",
+        "#ffe5cc",
+        wrap=39,
     )
     add_box(
         ax,
-        9.3,
-        1.74,
-        4.35,
-        1.55,
-        "Human decision-making preserved",
-        "VITAL prioritizes records for review; it does not assign benignity or replace expert interpretation.",
+        7.9,
+        4.72,
+        3.4,
+        1.38,
+        "Yellow watchlist",
+        "No urgent action. Re-query at routine ClinVar/gnomAD release updates and review in aggregate if the band, AC, or review status changes.",
+        "#fff4bf",
+        wrap=39,
+    )
+    add_box(
+        ax,
+        11.65,
+        4.72,
+        3.45,
+        1.38,
+        "Gray no-frequency evidence",
+        "Do not treat as AF=0. Perform representation-aware checks; use orthogonal validation if an indel, duplication, or complex allele could affect a patient-facing decision.",
+        "#e6e6e6",
+        wrap=40,
+    )
+
+    add_box(
+        ax,
+        0.4,
+        2.78,
+        4.55,
+        1.12,
+        "Who reviews red-priority calls?",
+        "Primary variant scientist prepares evidence summary; laboratory director signs classification action; disease expert or panel resolves mechanism-sensitive cases.",
         "#eef3f7",
+        wrap=49,
+    )
+    add_box(
+        ax,
+        5.45,
+        2.78,
+        4.55,
+        1.12,
+        "What is documented?",
+        "Component breakdown, live database check date, evidence reviewed, ACMG/ClinGen criteria affected, final disposition, and next recheck date.",
+        "#eef3f7",
+        wrap=49,
+    )
+    add_box(
+        ax,
+        10.55,
+        2.78,
+        4.55,
+        1.12,
+        "What is not automated?",
+        "Pathogenicity, benignity, penetrance, phase, phenotype match, segregation, and functional interpretation remain human-review decisions.",
+        "#eef3f7",
+        wrap=49,
     )
 
     ax.text(
-        0.35,
-        0.82,
-        "Gray no-frequency-evidence variants remain visible and are not treated as AF=0.",
-        fontsize=11,
+        0.4,
+        1.52,
+        "Operational examples from the arrhythmia audit: 115 naive AF alerts -> 3 red-priority calls; 112 urgent triggers withheld from immediate review.",
+        fontsize=10.4,
         ha="left",
         va="center",
         color="#455a64",
     )
-    ax.text(
-        13.65,
-        0.82,
-        "Output: auditable review-priority queue",
-        fontsize=11,
-        ha="right",
-        va="center",
-        color="#455a64",
-    )
+    ax.text(0.4, 1.18, "Output: auditable queue, not automatic reclassification.", fontsize=10.4, ha="left", va="center", color="#455a64")
 
     fig.tight_layout(pad=0.4)
     fig.savefig(FIGURE_PATH, dpi=220)

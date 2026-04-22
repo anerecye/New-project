@@ -147,6 +147,29 @@ Generated files:
 - `supplementary_tables/Supplementary_Table_S26_temporal_robustness_summary.tsv`
 - `supplementary_tables/Supplementary_Table_S27_temporal_ac_threshold_sensitivity.tsv`
 
+## Clinical Decision-Risk Proxy
+
+ClinVar does not expose patient counts, diagnoses changed, or cascade-testing uptake. The repository therefore includes a conservative public-exposure proxy: each P/LP record is a potential decision-risk record, and each submitter contributes one minimum submitter-exposure unit; missing submitter counts are counted as one.
+
+```bash
+python src/run_vital_clinical_decision_risk_proxy.py
+```
+
+Headline outputs:
+
+- Current arrhythmia upper-bound exposure: 115 frequency-discordant P/LP records, representing at least 168 submitter-exposure units.
+- AC-supported active-review exposure: 9 arrhythmia records, representing 15 submitter-exposure units.
+- Urgent VITAL-red exposure: 3 arrhythmia records, all weak-review and AC-supported.
+- Clinical routing split among current arrhythmia red calls: 2 standard-context records with potential monogenic-label risk and 1 `recessive_context_required` TRDN record with carrier-architecture routing risk.
+- Cross-disease 3,000-variant current sample: 332 frequency-discordant P/LP records, representing at least 1,962 submitter-exposure units, compressed to 3 VITAL-red urgent records.
+
+Generated files:
+
+- `data/processed/vital_clinical_decision_risk_proxy_summary.tsv`
+- `data/processed/vital_clinical_decision_risk_proxy_temporal.tsv`
+- `data/processed/vital_clinical_decision_risk_proxy_top_cases.tsv`
+- `supplementary_tables/Supplementary_Table_S28_clinical_decision_risk_proxy.tsv`
+
 ## How to Run
 
 Create an environment and install dependencies:

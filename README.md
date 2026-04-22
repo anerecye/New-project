@@ -115,6 +115,38 @@ Generated files:
 - `data/processed/vital_real_reclassification_case_examples.csv`
 - `supplementary_tables/Supplementary_Table_S23_real_reclassification_truth_audit.tsv`
 
+## Temporal Robustness and AC-Gate Audit
+
+The temporal robustness analysis rescoring arrhythmia P/LP assertions across January 2023, January 2024, and the canonical April 2026 current score table. It uses one cached gnomAD matcher keyed by `variant_key`, so missing frequency evidence is retained as gray/no-frequency evidence rather than silently converted to `AF=0`.
+
+```bash
+python src/run_vital_temporal_robustness.py
+```
+
+If `data/raw/variant_summary_2023-01.txt.gz` or `data/raw/variant_summary_2024-01.txt.gz` is missing, the script downloads the public NCBI ClinVar archives automatically. Use `--no-download` to require local raw files only.
+
+Headline outputs:
+
+- Red-priority queue size stays sparse across releases: 2 in 2023, 2 in 2024, and 3 in the canonical April 2026 current table.
+- Composition is not static: `TRDN` persists across all three snapshots, `KCNE1` is red in 2023/2024 but not current, and `SCN5A` plus `KCNH2` enter the current red queue.
+- AC sensitivity supports `AC>=20` as an operational gate: lower gates add extra calls (`ANK2`, `KCNQ1`, `CACNB2`), while `AC>=50` becomes too restrictive.
+- The inheritance flag explicitly separates `CASQ2/TRDN` as `recessive_context_required`, so carrier-compatible architecture is counted separately from standard dominant-context red calls.
+
+Generated files:
+
+- `data/processed/arrhythmia_temporal_robustness_vital_scored_variants.tsv`
+- `data/processed/arrhythmia_temporal_robustness_snapshot_summary.tsv`
+- `data/processed/arrhythmia_temporal_robustness_ac_threshold_sensitivity.tsv`
+- `data/processed/arrhythmia_temporal_robustness_red_threshold_membership.tsv`
+- `data/processed/arrhythmia_temporal_robustness_red_queue.tsv`
+- `data/processed/arrhythmia_temporal_robustness_red_overlap.tsv`
+- `data/processed/arrhythmia_temporal_robustness_inheritance_summary.tsv`
+- `data/processed/arrhythmia_temporal_robustness_af_flags.tsv`
+- `figures/arrhythmia_temporal_robustness_vital_score_distribution.png`
+- `supplementary_tables/Supplementary_Table_S25_temporal_robustness_scored_variants.tsv`
+- `supplementary_tables/Supplementary_Table_S26_temporal_robustness_summary.tsv`
+- `supplementary_tables/Supplementary_Table_S27_temporal_ac_threshold_sensitivity.tsv`
+
 ## How to Run
 
 Create an environment and install dependencies:

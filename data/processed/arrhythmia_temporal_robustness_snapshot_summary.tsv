@@ -1,0 +1,4 @@
+snapshot	total	frequency_observed	af_flags_popmax_or_global_gt_1e_5	ac_supported_ge_20	red_ac_ge_20	red_standard_context	red_recessive_context_required	median_vital_observed	max_vital
+2023-01	1669	455	188	27	2	1	1	3.0	87.6547482136581
+2024-01	1909	484	196	27	2	1	1	3.0	88.39079902775181
+2026-04-current	1731	334	115	9	3	2	1	3.0	96.07000729211028

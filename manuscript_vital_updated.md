@@ -4,11 +4,11 @@
 
 **Purpose:** Severe variant annotations can coexist with ancestry-aware population-frequency contradiction. We tested whether ClinVar pathogenic/likely pathogenic (P/LP) arrhythmia assertions remain frequency-consistent when evaluated with popmax, allele count (AC), variant representation, and review support rather than global AF alone, and whether discordant assertions reveal systematically misframed biology rather than random noise.
 
-**Methods:** We collapsed ClinVar P/LP records across 20 inherited arrhythmia genes to 1,731 unique variants and cross-referenced them with gnomAD v4.1.1 exome data. Exact allele matches, allele-discordant sites, no-record states, global AF, popmax AF, AC, variant type, and ClinVar review strength were retained. We developed VITAL (Variant Interpretation Tension and Allele Load) as an explainable re-review prioritization framework, not an automated reclassification engine.
+**Methods:** We collapsed ClinVar P/LP records across 20 inherited arrhythmia genes to 1,731 unique variants and cross-referenced them with gnomAD v4.1.1 exome data. Exact allele matches, allele-discordant sites, no-record states, global AF, popmax AF, AC, variant type, and ClinVar review strength were retained. We developed VITAL (Variant Interpretation Tension and Allele Load) as an explainable re-review prioritization framework and defined a compact pathogenicity-label ontology for routing discordant assertions, not an automated reclassification engine.
 
 **Results:** Only 350/1,731 variants (20.2%) had exact gnomAD allele matches, and 334 had usable AF evidence. Global AF alone identified 13 variants above AF >1e-5, whereas popmax/global screening identified 115; global-AF-only review therefore missed 102/115 (88.7%) ancestry-aware frequency alerts. Severe annotation did not protect against this signal: 92/262 AF-observed LOF/splice assertions (35.1%) had popmax/global AF >1e-5, similar to missense assertions (19/66, 28.8%). Mechanism triage showed recurrent label-framing distortion rather than a simple error-rate estimate: carrier-compatible recessive assertions were presented as generic P/LP, context-dependent susceptibility appeared as Mendelian pathogenicity, and severe annotation sometimes substituted for mechanism-specific evidence. VITAL compressed 115 naive AF alerts to 3 red-priority review cases. In an independent 3,000-variant cross-disease historical audit, VITAL-red captured one real P/LP-to-VUS reclassification (CFAP91 VCV000812096), while an expert-panel RYR1 downgrade without frequency tension remained outside scope.
 
-**Conclusion:** Severe annotation alone is not sufficient to override population-frequency contradiction. A subset of public P/LP assertions appears biologically misframed rather than merely uncertain: susceptibility is not equivalent to Mendelian disease, carrier architecture is not equivalent to dominant pathogenicity, and severe annotation is not equivalent to high penetrance. Popmax-aware, AC-aware, representation-aware review prioritization makes these distortions clinically inspectable without automating final classification.
+**Conclusion:** Severe annotation alone is not sufficient to override population-frequency contradiction. A subset of public P/LP assertions appears biologically misframed rather than merely uncertain: susceptibility is not equivalent to Mendelian disease, carrier architecture is not equivalent to dominant pathogenicity, and severe annotation is not equivalent to high penetrance. A label-state ontology makes these distortions clinically actionable as review routes while preserving expert responsibility for final classification.
 
 ## Introduction
 
@@ -18,7 +18,7 @@ Population frequency is one of the strongest checks on high-penetrance Mendelian
 
 Absence from population databases creates a second failure mode. Non-observation is often treated as evidence of rarity, yet exact representation in gnomAD depends on sequence context, variant type, normalization, coverage, alignment, and calling. This is particularly important for indels, duplications, and splice/complex alleles. Frequency-based interpretation therefore fails both when ancestry-aware signals are missed and when absence is overinterpreted for variants that are difficult to represent.
 
-Here, we ask whether ClinVar P/LP arrhythmia assertions remain coherent when evaluated with exact allele matching, popmax, AC, variant type, detectability, and review support. Our premise is not simply that some variants are "too frequent," but that some public pathogenicity labels may be biologically misframed: susceptibility or drug-response haplotypes can be flattened into Mendelian pathogenicity, recessive carrier states can masquerade as dominant disease assertions, and severe annotations can inflate confidence when mechanism-specific evidence is thin. We introduce VITAL as an explainable re-review prioritization framework that identifies these frequency-assertion distortions for expert review without classifying variants as benign or pathogenic.
+Here, we ask whether ClinVar P/LP arrhythmia assertions remain coherent when evaluated with exact allele matching, popmax, AC, variant type, detectability, and review support. Our premise is not simply that some variants are "too frequent," but that some public pathogenicity labels may be biologically misframed: susceptibility or drug-response haplotypes can be flattened into Mendelian pathogenicity, recessive carrier states can masquerade as dominant disease assertions, and severe annotations can inflate confidence when mechanism-specific evidence is thin. We introduce VITAL as an explainable re-review prioritization framework and propose a pathogenicity-label ontology that separates Mendelian pathogenicity, susceptibility, carrier architecture, low penetrance, annotation inflation, and representation uncertainty.
 
 ## Methods
 
@@ -56,7 +56,7 @@ A red-priority call required VITAL >=70, weak review support, and AC-supported f
 
 ### Supporting analyses
 
-We compared global AF, popmax/global AF, AC-supported frequency screening, and VITAL red-priority calls. We assessed variant-type enrichment among non-overlap records, severe-annotation frequency discordance, LOF subtype patterns, and mechanism triage of severe-discordant variants. Mechanism triage was used to separate probable label-framing modes, including carrier-compatible architecture, context-dependent susceptibility, annotation inflation, and unresolved high-penetrance tension. We performed supporting audits in a 3,000-variant cross-disease ClinVar P/LP sample, including historical January 2023 to April 2026 reclassification, expert-panel reviewed assertions, and real strict P/LP-to-VUS/B/LB events. Threshold sensitivity, AC-gate sensitivity, weight sensitivity, KCNH2 diagnostics, and time-series details are provided in supplementary outputs.
+We compared global AF, popmax/global AF, AC-supported frequency screening, and VITAL red-priority calls. We assessed variant-type enrichment among non-overlap records, severe-annotation frequency discordance, LOF subtype patterns, and mechanism triage of severe-discordant variants. Mechanism triage was used to separate probable label-framing modes, including carrier-compatible architecture, context-dependent susceptibility, annotation inflation, and unresolved high-penetrance tension. We then mapped these modes to review-routing classes with explicit entry rules, transition rules, and clinical consequences. We performed supporting audits in a 3,000-variant cross-disease ClinVar P/LP sample, including historical January 2023 to April 2026 reclassification, expert-panel reviewed assertions, and real strict P/LP-to-VUS/B/LB events. Threshold sensitivity, AC-gate sensitivity, weight sensitivity, KCNH2 diagnostics, and time-series details are provided in supplementary outputs.
 
 ## Results
 
@@ -140,9 +140,22 @@ The 3 red-priority arrhythmia variants were not interchangeable AF outliers. The
 
 Manual review of live ClinVar records confirmed that these cases remained weakly supported or single-submitter assertions with unresolved mechanism-specific interpretation questions. VITAL does not declare them benign. It identifies records in which the public label may be too broad for the underlying biology.
 
+### A pathogenicity-label ontology turns tension into review action
+
+We therefore treat frequency discordance as a label-state problem rather than a binary pathogenic/benign problem. The ontology below separates biological mechanism from review action. Its transition rules are not automatic reclassifications; they are routing rules for expert review.
+
+| Label-state class | Entry rule | Transition rule | Clinical consequence |
+|---|---|---|---|
+| High-penetrance Mendelian assertion | Frequency-consistent P/LP with mechanism-specific support | Remain in standard ACMG/ClinGen interpretation | Can support diagnosis, cascade testing, and surveillance if phenotype matches |
+| Susceptibility or context-dependent risk allele | AF incompatible with Mendelian penetrance, conditional phenotype, haplotype, drug trigger, or ancestry enrichment | Move from generic P/LP toward risk-allele or context-qualified assertion | Avoid diagnostic closure and broad cascade testing as a monogenic disease allele |
+| Carrier-compatible recessive assertion | Severe allele in recessive/biallelic architecture with heterozygous AF compatible with carrier state | Reframe as carrier or affected-state-specific assertion; require phase/second allele | Prevent inappropriate dominant-disease counseling or surveillance |
+| Founder or low-penetrance allele | AC-supported high popmax with plausible founder effect or reduced penetrance | Retain only with penetrance and ancestry qualifiers | Tailor counseling to ancestry- and penetrance-aware risk rather than binary P/LP |
+| Annotation-inflated assertion | Severe annotation plus weak review and AC-supported frequency contradiction | Route to urgent expert review; candidate for VUS/LB or mechanism-qualified label | Avoid using the assertion for irreversible clinical decisions until adjudicated |
+| Representation-uncertain gray state | No exact usable AF because of allele discordance, no record, or variant-type detectability limits | Route to orthogonal validation or deferred review rather than rarity inference | Do not treat absence from gnomAD as evidence of rarity by default |
+
 ### Cross-disease and historical audits support scope, not broad prediction
 
-In an independent 3,000-variant cross-disease current ClinVar P/LP sample, naive popmax/global AF screening flagged 332 variants (11.1%; 95% CI 10.0%-12.2%), while VITAL red-priority contained 3 (0.10%; 95% CI 0.034%-0.294%). Among 204 expert-panel reviewed P/LP assertions in that set, 39 had naive AF tension and 13 were AC-supported, but none were VITAL red-priority. Curated high-frequency exceptions therefore remained visible without being converted into urgent downgrade calls.
+In an independent 3,000-variant cross-disease current ClinVar P/LP sample, naive popmax/global AF screening flagged 332 variants (11.1%; 95% CI 10.0%-12.2%), while VITAL red-priority contained 3 (0.10%; 95% CI 0.034%-0.294%). Among 204 expert-panel reviewed P/LP assertions in that set, 39 had naive AF tension and 13 were AC-supported, but none were VITAL red-priority. Curated high-frequency exceptions therefore remained visible without being converted into urgent downgrade calls. Because the ontology is mechanism-based rather than arrhythmia-specific, this cross-disease audit supports the general principle that public P/LP labels need state-aware review rather than a single pathogenicity bucket.
 
 Historical audit from January 2023 to April 2026 confirmed high specificity and low recall. In the 3,000-variant set, 23 records underwent real strict P/LP-to-VUS/B/LB reclassification; VITAL-red captured 1/23, CFAP91 VCV000812096, a weak/no-assertion record with popmax AF=3.50e-4, AC=152, and VITAL=76.5. One expert-panel strict downgrade, RYR1 VCV001214001, had no frequency tension (max AF=8.99e-7; VITAL=0.0) and was correctly outside scope. This is the boundary of the framework: VITAL captures frequency-assertion hazards, not all reclassification mechanisms.
 
@@ -156,7 +169,9 @@ VITAL's contribution is workflow compression with explainability, but its scient
 
 The three red-priority arrhythmia cases illustrate why a single AF threshold is insufficient and why label framing matters clinically. SCN5A VCV000440850 is most consistent with a context-dependent haplotype or susceptibility assertion rather than a straightforward high-penetrance monogenic label. TRDN VCV001325231 shows that a frameshift can be frequency-tolerable under recessive/biallelic architecture. KCNH2 VCV004535537 is the borderline case: biologically uncomfortable in a constrained dominant gene, but still unresolved and weight-sensitive.
 
-Prior ClinVar-gnomAD studies have described rarity patterns and gene constraint. This analysis adds three operational distinctions: exact allele absence is separated from allele discordance and no-record states; popmax plus AC is placed at the center of frequency review; and review burden is treated as a clinical workflow endpoint rather than an incidental byproduct.
+The clinical consequence is not abstract. A susceptibility allele labeled as Mendelian P/LP can promote diagnostic closure, inappropriate cascade testing, and surveillance framed as monogenic disease. A recessive carrier allele interpreted without phase can imply dominant risk where none is established. An annotation-inflated severe variant can drive family testing or management before the mechanism has been adjudicated. VITAL does not measure these downstream outcomes directly, but it identifies the public assertions most capable of creating those decision risks.
+
+Prior ClinVar-gnomAD studies have described rarity patterns and gene constraint. This analysis adds three operational distinctions: exact allele absence is separated from allele discordance and no-record states; popmax plus AC is placed at the center of frequency review; and review burden is treated as a clinical workflow endpoint rather than an incidental byproduct. The proposed label-state ontology extends those distinctions beyond arrhythmia by making pathogenicity a structured state, not a single undifferentiated P/LP bucket.
 
 ## Limitations
 
@@ -164,11 +179,11 @@ First, VITAL weights are expert-specified to preserve interpretability and were 
 
 Second, historical validation is sparse. VITAL-red captured 1/23 strict future P/LP-to-VUS/B/LB events in the 3,000-variant audit, confirming that it is not a sensitive predictor of all future reclassification. Its intended endpoint is high-specificity frequency-assertion prioritization.
 
-Third, the score does not directly model penetrance, phase, zygosity, inheritance, phenotype specificity, segregation, MAVE/functional data, transcript rescue, NMD, or private laboratory evidence. These remain expert review tasks.
+Third, the score and ontology do not directly model penetrance, phase, zygosity, inheritance, phenotype specificity, segregation, MAVE/functional data, transcript rescue, NMD, or private laboratory evidence. These remain expert review tasks.
 
 Fourth, workflow-concordance benchmarking uses proxy labels and is partly circular because weak review and AC-supported frequency evidence help define both the operational positives and the red gate. These metrics should be read as burden diagnostics, not diagnostic accuracy.
 
-Fifth, public ClinVar captures classification-level changes, not patient-level downstream effects. We can identify P/LP-to-VUS/B/LB movement, but not diagnosis reversal, cascade-testing changes, surveillance changes, or therapy changes.
+Fifth, public ClinVar captures classification-level changes, not patient-level downstream effects. We can identify decision-risk pathways such as diagnostic closure or cascade-testing pressure, but not actual diagnosis reversal, surveillance changes, reproductive decisions, or therapy changes.
 
 ## Clinical and research implications
 
@@ -182,7 +197,9 @@ Fifth, public ClinVar captures classification-level changes, not patient-level d
 
 5. Treat frequency-discordant P/LP assertions as possible label-framing problems: susceptibility, carrier state, low penetrance, founder effect, and annotation inflation require different clinical responses.
 
-6. Separate re-review prioritization from final classification. VITAL tells laboratories what to inspect first, not what to believe automatically.
+6. Use the label-state ontology as a transition map: move from generic P/LP to context-qualified assertion, carrier assertion, penetrance-qualified assertion, urgent re-review, or gray representation-uncertain queue as evidence dictates.
+
+7. Separate re-review prioritization from final classification. VITAL tells laboratories what to inspect first, not what to believe automatically.
 
 VITAL is implemented as a reproducible batch-scoring workflow with cached intermediate files and exportable review queues.
 

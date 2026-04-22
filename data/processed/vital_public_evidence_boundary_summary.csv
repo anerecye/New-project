@@ -1,0 +1,9 @@
+public_evidence_question,red_priority_cases_with_evidence,denominator,percent,interpretation
+P/LP public status and disease/condition label,3,3,100.0,The public label is capable of entering diagnostic workflows.
+Weak or single-submitter public review support,3,3,100.0,The record is fragile enough to justify review prioritization.
+Public citation or ClinVar literature mention,2,3,66.66666666666667,"Literature exists for some cases, but this is not patient-level outcome evidence."
+Structured patient-level phenotype linkage sufficient for causality,0,3,0.0,Not available in the public scoring layer.
+Public penetrance estimate,0,3,0.0,Not available in the public scoring layer.
+Public segregation or allelic phase evidence,0,3,0.0,Not available in the public scoring layer.
+Documented cascade-testing or therapy outcome,0,3,0.0,Not available in the public scoring layer.
+Measurable public decision-risk exposure proxy,3,3,100.0,Available as record-level and submitter-exposure counts.

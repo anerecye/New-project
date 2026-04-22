@@ -56,7 +56,7 @@ A red-priority call required VITAL >=70, weak review support, and AC-supported f
 
 ### Supporting analyses
 
-We compared global AF, popmax/global AF, AC-supported frequency screening, and VITAL red-priority calls. We assessed variant-type enrichment among non-overlap records, severe-annotation frequency discordance, LOF subtype patterns, and mechanism triage of severe-discordant variants. Mechanism triage was used to separate probable label-framing modes, including carrier-compatible architecture, context-dependent susceptibility, annotation inflation, and unresolved high-penetrance tension. We then mapped these modes to review-routing classes with explicit entry rules, transition rules, and clinical consequences. Because public ClinVar does not expose patient counts, we quantified clinical decision-risk exposure using record counts and minimum submitter-exposure units, with missing submitter counts treated conservatively as one unit. We performed supporting audits in a 3,000-variant cross-disease ClinVar P/LP sample, including historical January 2023 to April 2026 reclassification, expert-panel reviewed assertions, and real strict P/LP-to-VUS/B/LB events. Threshold sensitivity, AC-gate sensitivity, weight sensitivity, KCNH2 diagnostics, and time-series details are provided in supplementary outputs.
+We compared global AF, popmax/global AF, AC-supported frequency screening, and VITAL red-priority calls. We assessed variant-type enrichment among non-overlap records, severe-annotation frequency discordance, LOF subtype patterns, and mechanism triage of severe-discordant variants. Mechanism triage was used to separate probable label-framing modes, including carrier-compatible architecture, context-dependent susceptibility, annotation inflation, and unresolved high-penetrance tension. We then mapped these modes to review-routing classes with explicit entry rules, transition rules, and clinical consequences. Because public ClinVar does not expose patient counts, we quantified clinical decision-risk exposure using record counts and minimum submitter-exposure units, with missing submitter counts treated conservatively as one unit. For red-priority cases, we also audited the public evidence boundary, recording whether the public scoring layer exposed phenotype linkage, penetrance estimates, segregation/phase, or downstream cascade-testing or therapy outcomes. We performed supporting audits in a 3,000-variant cross-disease ClinVar P/LP sample, including historical January 2023 to April 2026 reclassification, expert-panel reviewed assertions, and real strict P/LP-to-VUS/B/LB events. Threshold sensitivity, AC-gate sensitivity, weight sensitivity, KCNH2 diagnostics, and time-series details are provided in supplementary outputs.
 
 ## Results
 
@@ -147,6 +147,19 @@ SCN5A VCV000440850 is the clearest decision-risk case. The current public state 
 TRDN VCV001325231 illustrates the opposite failure mode. The current public state is a ClinVar Likely pathogenic assertion from a single submitter, with global AC=40, AMR popmax AF=2.18e-4, and VITAL=74.3. If read as a dominant high-penetrance arrhythmia allele, the label can create inappropriate family-risk framing or surveillance escalation. That logic breaks because the strongest established TRDN disease model is recessive or biallelic null architecture; heterozygous carrier frequency can be compatible with pathogenicity only in the affected-state context. The appropriate review action is therefore carrier- and phase-aware adjudication, including search for a second allele, rather than direct use as a disease-explaining dominant result.
 
 KCNH2 VCV004535537 remains a different category. Because KCNH2 is a constrained dominant arrhythmia gene, AC-supported splice-site frequency tension is uncomfortable; because the case is borderline and weight-sensitive, the action is immediate expert review rather than automatic downgrading. Current ClinVar labeling does not distinguish these states.
+
+We then made the evidentiary boundary explicit rather than implied. In the public red-case audit, all 3/3 cases had a public P/LP disease label and weak or single-submitter review support, and 2/3 had public citations or ClinVar literature mentions. However, 0/3 had structured public patient-level phenotype linkage sufficient for causality, 0/3 had public penetrance estimates, 0/3 had public segregation or allelic phase evidence, and 0/3 had documented cascade-testing or therapy outcome data in the scoring layer. The data therefore support public decision-risk exposure and urgent review priority, not a claim of proven misdiagnosis or measured downstream harm.
+
+| Public evidence question | Red-priority cases with evidence | Interpretation |
+|---|---:|---|
+| P/LP public status and disease/condition label | 3/3 | Label can enter diagnostic workflows |
+| Weak or single-submitter review support | 3/3 | Public assertion is fragile enough for priority review |
+| Public citation or ClinVar literature mention | 2/3 | Literature exists for some cases, but not patient-level outcome proof |
+| Structured patient-level phenotype linkage sufficient for causality | 0/3 | Not available in the public scoring layer |
+| Public penetrance estimate | 0/3 | Not available in the public scoring layer |
+| Public segregation or allelic phase evidence | 0/3 | Not available in the public scoring layer |
+| Documented cascade-testing or therapy outcome | 0/3 | Not available in the public scoring layer |
+| Measurable public decision-risk exposure proxy | 3/3 | Available as record-level and submitter-exposure counts |
 
 ### A pathogenicity-label ontology turns tension into review action
 

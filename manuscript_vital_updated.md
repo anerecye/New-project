@@ -6,9 +6,9 @@
 
 **Methods:** We collapsed ClinVar P/LP records across 20 inherited arrhythmia genes to 1,731 unique variants and cross-referenced them with gnomAD v4.1.1 exome data. Exact allele matches, allele-discordant sites, no-record states, global AF, popmax AF, AC, variant type, and ClinVar review strength were retained. We developed VITAL (Variant Interpretation Tension and Allele Load) as an explainable re-review prioritization framework and defined a compact pathogenicity-label ontology for routing discordant assertions, not an automated reclassification engine.
 
-**Results:** Only 350/1,731 variants (20.2%) had exact gnomAD allele matches, and 334 had usable AF evidence. Global AF alone identified 13 variants above AF >1e-5, whereas popmax/global screening identified 115; global-AF-only review therefore missed 102/115 (88.7%) ancestry-aware frequency alerts. Severe annotation did not protect against this signal: 92/262 AF-observed LOF/splice assertions (35.1%) had popmax/global AF >1e-5, similar to missense assertions (19/66, 28.8%). Mechanism triage showed recurrent label-framing distortion rather than a simple error-rate estimate: carrier-compatible recessive assertions were presented as generic P/LP, context-dependent susceptibility appeared as Mendelian pathogenicity, and severe annotation sometimes substituted for mechanism-specific evidence. Because patient-level outcomes are not observable in public ClinVar, we quantified decision-risk exposure: the 115 frequency-discordant arrhythmia records represented at least 168 submitter-exposure units, 9 AC-supported records represented 15 units, and VITAL compressed these to 3 urgent records. In an independent 3,000-variant cross-disease historical audit, VITAL-red captured one real P/LP-to-VUS reclassification (CFAP91 VCV000812096), while an expert-panel RYR1 downgrade without frequency tension remained outside scope.
+**Results:** Only 334/1,731 variants (19.3%) had usable exact AF evidence; the remaining 1,397 (80.7%) formed a non-evaluable representation gap rather than a frequency-consistent background. Within the AF-observed space, global AF alone identified 13 variants above AF >1e-5, whereas popmax/global screening identified 115; global-AF-only review therefore missed 102/115 (88.7%) ancestry-aware frequency alerts. Severe annotation did not protect against this signal: 92/262 AF-observed LOF/splice assertions (35.1%) had popmax/global AF >1e-5, similar to missense assertions (19/66, 28.8%). Mechanism triage showed recurrent label-framing distortion rather than a simple error-rate estimate: carrier-compatible recessive assertions were presented as generic P/LP, context-dependent susceptibility appeared as Mendelian pathogenicity, and severe annotation sometimes substituted for mechanism-specific evidence. Because patient-level outcomes are not observable in public ClinVar, we quantified decision-risk exposure: the 115 frequency-discordant arrhythmia records represented at least 168 submitter-exposure units, 9 AC-supported records represented 15 units, and VITAL compressed these to 3 urgent records. In an independent 3,000-variant cross-disease historical audit, VITAL-red captured one real P/LP-to-VUS reclassification (CFAP91 VCV000812096), while an expert-panel RYR1 downgrade without frequency tension remained outside scope.
 
-**Conclusion:** Severe annotation alone is not sufficient to override population-frequency contradiction. A subset of public P/LP assertions appears biologically misframed rather than merely uncertain: susceptibility is not equivalent to Mendelian disease, carrier architecture is not equivalent to dominant pathogenicity, and severe annotation is not equivalent to high penetrance. A label-state ontology makes these distortions clinically actionable as review routes while preserving expert responsibility for final classification.
+**Conclusion:** Severe annotation alone is not sufficient to override population-frequency contradiction, and exact AF non-evaluability is itself an interpretability failure. A subset of public P/LP assertions appears biologically misframed rather than merely uncertain: susceptibility is not equivalent to Mendelian disease, carrier architecture is not equivalent to dominant pathogenicity, and severe annotation is not equivalent to high penetrance. A label-state ontology makes these distortions clinically actionable as review routes while preserving expert responsibility for final classification.
 
 ## Introduction
 
@@ -56,13 +56,15 @@ A red-priority call required VITAL >=70, weak review support, and AC-supported f
 
 ### Supporting analyses
 
-We compared global AF, popmax/global AF, AC-supported frequency screening, and VITAL red-priority calls. We assessed variant-type enrichment among non-overlap records, severe-annotation frequency discordance, LOF subtype patterns, and mechanism triage of severe-discordant variants. Mechanism triage was used to separate probable label-framing modes, including carrier-compatible architecture, context-dependent susceptibility, annotation inflation, and unresolved high-penetrance tension. We then mapped these modes to review-routing classes with explicit entry rules, transition rules, and clinical consequences. Because public ClinVar does not expose patient counts, we quantified clinical decision-risk exposure using record counts and minimum submitter-exposure units, with missing submitter counts treated conservatively as one unit. For red-priority cases, we also audited the public evidence boundary, recording whether the public scoring layer exposed phenotype linkage, penetrance estimates, segregation/phase, or downstream cascade-testing or therapy outcomes. We performed supporting audits in a 3,000-variant cross-disease ClinVar P/LP sample, including historical January 2023 to April 2026 reclassification, expert-panel reviewed assertions, and real strict P/LP-to-VUS/B/LB events. Threshold sensitivity, AC-gate sensitivity, weight sensitivity, KCNH2 diagnostics, and time-series details are provided in supplementary outputs.
+We compared global AF, popmax/global AF, AC-supported frequency screening, and VITAL red-priority calls. We assessed variant-type enrichment among non-overlap records, severe-annotation frequency discordance, LOF subtype patterns, and mechanism triage of severe-discordant variants. Mechanism triage was used to separate probable label-framing modes, including carrier-compatible architecture, context-dependent susceptibility, annotation inflation, and unresolved high-penetrance tension. We then mapped these modes to review-routing classes with explicit entry rules, transition rules, and clinical consequences. Because public ClinVar does not expose patient counts, we quantified clinical decision-risk exposure using record counts and minimum submitter-exposure units, with missing submitter counts treated conservatively as one unit. For red-priority cases, we also audited the public evidence boundary, recording whether the public scoring layer exposed phenotype linkage, penetrance estimates, segregation/phase, or downstream cascade-testing or therapy outcomes. Finally, we performed a frequency-evaluability audit separating AF-observed assertions from the non-evaluable majority, stratified by gene, variant type, and review strength, with SNV-only sensitivity checks. We performed supporting audits in a 3,000-variant cross-disease ClinVar P/LP sample, including historical January 2023 to April 2026 reclassification, expert-panel reviewed assertions, and real strict P/LP-to-VUS/B/LB events. Threshold sensitivity, AC-gate sensitivity, weight sensitivity, KCNH2 diagnostics, and time-series details are provided in supplementary outputs.
 
 ## Results
 
 ### Frequency evidence is sparse and structured
 
 ClinVar parsing identified 1,731 unique arrhythmia P/LP variants. Of these, 350 (20.2%) had exact allele-level matches in gnomAD exomes, and 334 had usable AF evidence. Among the remaining variants, 645 were allele-discordant at the same position, 736 had no gnomAD record, and 16 exact matches lacked usable AF blocks. Thus, most ClinVar arrhythmia P/LP assertions cannot be evaluated by a simple exact-AF lookup.
+
+This low AF-evaluable fraction is not merely a limitation; it is itself an underrecognized failure mode of frequency-based interpretation. Most public P/LP assertions are not even evaluable by exact population-frequency matching. All frequency-based conclusions below are therefore restricted to the AF-observed subset (n=334). The non-evaluable majority (n=1,397) defines a separate interpretability gap rather than weakening the observed frequency signal.
 
 Table 1 summarizes the evidence states used throughout the analysis.
 
@@ -76,6 +78,15 @@ Table 1 summarizes the evidence states used throughout the analysis.
 
 Among AF-observed variants, most were globally ultra-rare: 321/334 (96.1%) had global AF <=1e-5. This global view was misleading because many globally rare variants were population-enriched by popmax.
 
+The AF-observed subset was not treated as representative of all ClinVar P/LP assertions. A sanity audit showed structured differences between evaluable and non-evaluable spaces: AF-observed variants spanned 14/17 genes but were enriched for SNVs (71.3% vs 52.4% in the non-evaluable majority) and multiple-submitter assertions (32.6% vs 18.3%), whereas non-evaluable variants were enriched for indels/duplications and for KCNH2/SCN5A. This is measured representation bias, not random missingness.
+
+| Analysis space | Variants | Frequency-discordant | Interpretation |
+|---|---:|---:|---|
+| AF-observed evaluable space | 334 (19.3%) | 115/334 (34.4%) | Only space used for frequency-discordance conclusions |
+| Non-evaluable interpretability gap | 1,397 (80.7%) | Not scored | Separate representation gap; not evidence of frequency consistency |
+| SNV-only AF-observed sensitivity | 238 | 79/238 (33.2%) | Popmax tension persists in well-represented SNVs |
+| Non-recessive SNV-only sensitivity | 186 | 55/186 (29.6%) | Signal persists after excluding CASQ2/TRDN |
+
 ### Popmax exposes frequency contradictions missed by global AF
 
 Global AF alone identified only 13 arrhythmia P/LP variants above AF >1e-5. In contrast, popmax/global screening identified 115 variants above the same threshold, including 102 that were globally rare but population-enriched. A global-AF-only ACMG-style screen would therefore miss 102/115 (88.7%) ancestry-aware frequency alerts.
@@ -86,7 +97,7 @@ This is an ACMG/AMP implementation failure in a specific scenario: the criteria 
 
 ### Absence is shaped by variant type
 
-Non-overlap was not random. Indels were enriched among variants without exact usable AF evidence: 47.2% of non-overlap variants were indels compared with 28.9% of exact-matched variants (OR=2.20; BH q=1.08e-9). This supports a second operational hazard: absence from gnomAD is not equivalent to rarity for structurally complex or representation-sensitive variants.
+Failure to match variants at the allele level was not random missingness. It was a structured artifact of representation, normalization, and detectability. Indels were enriched among variants without exact usable AF evidence: 47.2% of non-overlap variants were indels compared with 28.9% of exact-matched variants (OR=2.20; BH q=1.08e-9). This supports a second operational hazard: absence from gnomAD is not equivalent to rarity for structurally complex or representation-sensitive variants.
 
 ![Variant-type detectability bias](figures/arrhythmia_vital_absence_not_rarity.png)
 
@@ -200,7 +211,9 @@ A temporal robustness audit across January 2023, January 2024, and the canonical
 
 The central finding is that severe annotation does not override population evidence, and the deeper problem is pathogenicity-label distortion. Up to 35.1% of AF-observed LOF/splice ClinVar P/LP arrhythmia assertions showed ancestry-aware frequency discordance. That figure is not an error rate: many cases are compatible with recessive carrier architecture or lack AC support for immediate action. The clinical risk is subtler. A severe-looking ClinVar assertion can be mechanistically plausible in one frame and still misleading as a generic high-penetrance P/LP label.
 
-Global-AF-only workflows fail operationally because they hide ancestry-specific signals. In this arrhythmia audit, global AF detected 13 frequency alerts, while popmax/global analysis detected 115. If a laboratory applies BS1/BA1-style reasoning with global AF alone, most ancestry-aware contradictions remain invisible. Similarly, absence from gnomAD cannot be treated uniformly as rarity because indels and duplications are underrepresented by exact allele matching.
+Global-AF-only workflows fail operationally because they hide ancestry-specific signals. In this arrhythmia audit, global AF detected 13 frequency alerts, while popmax/global analysis detected 115. If a laboratory applies BS1/BA1-style reasoning with global AF alone, most ancestry-aware contradictions remain invisible.
+
+A second failure is evaluability itself. Only 334/1,731 arrhythmia P/LP assertions had usable exact AF evidence, and the 1,397 non-evaluable assertions were not random missingness. They were structured by gene, variant type, and review support, with indels and duplications disproportionately represented outside the exact-AF space. This means the system has two separable gaps: hidden ancestry-aware frequency tension among evaluable variants, and representation-driven non-evaluability among the majority. Absence from gnomAD therefore cannot be treated uniformly as rarity.
 
 VITAL's contribution is workflow compression with explainability, but its scientific role is to make this label distortion inspectable. It transforms 115 naive AF alerts into 3 urgent review cases while preserving gray no-frequency-evidence states and component-level explanations. This is not a replacement for ACMG/AMP interpretation, ClinGen specification, functional evidence, phenotype review, or laboratory judgment. It is a way to decide what to inspect first when frequency and clinical assertion are visibly misaligned.
 
@@ -220,9 +233,11 @@ Second, historical validation is sparse. VITAL-red captured 1/23 strict future P
 
 Third, the score and ontology do not directly model penetrance, phase, zygosity, inheritance, phenotype specificity, segregation, MAVE/functional data, transcript rescue, NMD, or private laboratory evidence. These remain expert review tasks.
 
-Fourth, workflow-concordance benchmarking uses proxy labels and is partly circular because weak review and AC-supported frequency evidence help define both the operational positives and the red gate. These metrics should be read as burden diagnostics, not diagnostic accuracy.
+Fourth, the AF-observed subset is not representative of all ClinVar arrhythmia P/LP assertions. Frequency-based conclusions are restricted to that evaluable space by design. The non-evaluable majority should be read as an additional interpretability failure caused by representation, normalization, and detectability limits, not as evidence against the AF-observed signal.
 
-Fifth, public ClinVar captures classification-level changes, not patient-level downstream effects. We can quantify public decision-risk exposure as records and minimum submitter-exposure units, but not actual diagnosis reversal, cascade-testing uptake, surveillance changes, reproductive decisions, or therapy changes.
+Fifth, workflow-concordance benchmarking uses proxy labels and is partly circular because weak review and AC-supported frequency evidence help define both the operational positives and the red gate. These metrics should be read as burden diagnostics, not diagnostic accuracy.
+
+Sixth, public ClinVar captures classification-level changes, not patient-level downstream effects. We can quantify public decision-risk exposure as records and minimum submitter-exposure units, but not actual diagnosis reversal, cascade-testing uptake, surveillance changes, reproductive decisions, or therapy changes.
 
 ## Clinical and research implications
 
@@ -230,7 +245,7 @@ Fifth, public ClinVar captures classification-level changes, not patient-level d
 
 2. Require AC support before escalating frequency contradictions to urgent review.
 
-3. Do not equate absence from gnomAD with rarity, especially for indels, duplications, and complex alleles.
+3. Do not equate non-evaluability or absence from gnomAD with rarity, especially for indels, duplications, and complex alleles.
 
 4. Do not treat severe annotation as self-validating; frameshift, stop-gained, and splice labels do not cancel population-frequency contradiction.
 
@@ -244,4 +259,4 @@ VITAL is implemented as a reproducible batch-scoring workflow with cached interm
 
 ## Data availability
 
-Code, cached intermediate files, figures, and supplementary outputs required to reproduce downstream analyses are available in the project repository. The April 21, 2026 data freeze used ClinVar records retrieved through NCBI Entrez and bulk variant_summary files, gnomAD v4.1.1 exome/genome data queried through the gnomAD GraphQL API, and UCSC annotation resources. Machine-readable supplementary tables include VITAL scores, frequency flags, severe-annotation discordance, mechanism triage, red-priority case summaries, temporal robustness outputs, clinical decision-risk proxy outputs, historical audits, expert-panel comparator outputs, and sensitivity analyses.
+Code, cached intermediate files, figures, and supplementary outputs required to reproduce downstream analyses are available in the project repository. The April 21, 2026 data freeze used ClinVar records retrieved through NCBI Entrez and bulk variant_summary files, gnomAD v4.1.1 exome/genome data queried through the gnomAD GraphQL API, and UCSC annotation resources. Machine-readable supplementary tables include VITAL scores, frequency flags, severe-annotation discordance, mechanism triage, red-priority case summaries, frequency-evaluability gap outputs, temporal robustness outputs, clinical decision-risk proxy outputs, historical audits, expert-panel comparator outputs, and sensitivity analyses.

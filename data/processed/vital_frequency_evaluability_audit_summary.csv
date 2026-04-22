@@ -1,0 +1,6 @@
+audit_layer,variants,percent_of_total_arrhythmia_space,af_observed_variants,non_evaluable_variants,frequency_discordant_variants,frequency_discordant_percent,global_af_gt_1e_5_variants,popmax_only_alerts,ac_supported_frequency_variants,vital_red_variants,interpretation
+full_arrhythmia_clinvar_plp_space,1731,100.0,334,1397,115,34.4311377245509,13,102,9,3,Most public P/LP assertions are not evaluable by exact AF matching; frequency conclusions are restricted to the AF-observed subset.
+af_observed_evaluable_space,334,19.295205083766607,334,0,115,34.4311377245509,13,102,9,3,This is the only space used for frequency-discordance conclusions.
+non_evaluable_interpretability_gap,1397,80.7047949162334,0,1397,0,,0,0,0,0,"This majority is a separate representation and interpretability gap, not evidence of frequency consistency."
+SNV_only_AF_observed_sensitivity,238,,238,0,79,33.19327731092437,9,70,7,2,Popmax frequency tension persists after restricting to exact-observed SNVs.
+non_recessive_SNV_AF_observed_sensitivity,186,,186,0,55,29.56989247311828,3,52,2,2,Popmax tension persists after removing CASQ2/TRDN and restricting to SNVs.

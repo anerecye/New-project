@@ -4,7 +4,7 @@ This project compares allele frequencies from ClinVar arrhythmia-associated vari
 
 ## Key Result
 
-Frequency tension is common but hidden by global-AF-only workflows. In the arrhythmia audit, popmax/global screening identifies 115 ClinVar P/LP assertions above AF >1e-5, while VITAL compresses this to 3 urgent, explainable red-priority re-review cases. The current red-priority queue is treated as biological contrast case studies, not an automated benign list: SCN5A shows a high-frequency haplotype/drug-response tension, TRDN shows recessive-carrier compatibility, and KCNH2 remains a borderline constrained-gene splice assertion. The manuscript now includes a laboratory decision tree for red/orange/yellow/gray handling and a one-weight-at-a-time sensitivity heatmap for the red-priority queue.
+Frequency tension is common but hidden by global-AF-only workflows, and severe annotation does not protect against it. In the arrhythmia audit, 92/262 AF-observed LOF/splice ClinVar P/LP assertions (35.1%) have popmax/global AF >1e-5, similar to missense assertions (19/66, 28.8%). This persists after excluding canonical recessive arrhythmia genes. VITAL compresses 115 naive AF alerts into 3 urgent, explainable red-priority re-review cases, while expert-panel reviewed P/LP assertions in the 3,000-variant external comparator produce 0 red-priority calls despite visible frequency tension in some curated records.
 
 ## Repository Structure
 
@@ -70,6 +70,31 @@ Outputs:
 - `data/processed/arrhythmia_vital_biological_contrast_cases.csv`
 - `data/processed/arrhythmia_vital_biological_contrast_summary.csv`
 - `figures/vital_biological_contrast_cases.png`
+
+## Severe-Annotation Discordance and Expert Comparator
+
+The repository includes one focused biological-claim audit: severe HGVS consequences are not sufficient to override population-frequency contradictions. This is not a claim that LOF variants are usually benign. It is a claim that frameshift, stop-gained, splice, and other severe-looking ClinVar P/LP assertions still need AC, popmax, inheritance, penetrance, transcript/NMD, phenotype, and review-context checks when population frequency is discordant.
+
+```bash
+python src/run_vital_external_truth_claim.py
+```
+
+Headline outputs:
+
+- 92/262 AF-observed LOF/splice arrhythmia assertions (35.1%) have popmax/global AF >1e-5.
+- The pattern persists after excluding CASQ2/TRDN: 57/197 severe annotations (28.9%) remain discordant across 8 genes.
+- Frameshift, stop-gained, and canonical-splice subclasses all show naive frequency discordance.
+- In the external 3,000-variant comparator, 204 expert-panel P/LP assertions produce 39 naive AF flags, 13 AC-supported flags, and 0 VITAL red-priority calls.
+
+Generated files:
+
+- `data/processed/vital_severe_annotation_frequency_discordance_summary.csv`
+- `data/processed/vital_severe_annotation_gene_spread.csv`
+- `data/processed/vital_expert_panel_truth_validation.csv`
+- `data/processed/vital_expert_panel_high_tension_examples.csv`
+- `data/processed/vital_external_truth_claim_tests.csv`
+- `figures/vital_external_truth_biological_claim.png`
+- `supplementary_tables/Supplementary_Table_S22_external_truth_biological_claim.tsv`
 
 ## How to Run
 
@@ -441,6 +466,11 @@ The model writes:
 - `data/processed/arrhythmia_vital_lof_subtype_discordance_summary.csv`:
   frameshift, stop_gained, and canonical_splice discordance summary across the
   VITAL continuum.
+- `data/processed/vital_severe_annotation_frequency_discordance_summary.csv`,
+  `data/processed/vital_severe_annotation_gene_spread.csv`,
+  `data/processed/vital_expert_panel_truth_validation.csv`, and
+  `supplementary_tables/Supplementary_Table_S22_external_truth_biological_claim.tsv`:
+  severe-annotation frequency-discordance audit and expert-panel comparator.
 - `data/processed/vital_red_manual_review_live_check.csv`:
   live ClinVar manual-review snapshot for the three VITAL-red variants,
   including conflicts, submitter status, literature mentions, and unresolved

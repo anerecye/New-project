@@ -1,0 +1,12 @@
+group,n,naive_af_flags,naive_af_flag_percent,ac_supported_frequency_flags,ac_supported_frequency_percent,red_priority_count,red_priority_percent,discordant_gene_count,discordant_genes,claim
+all_frequency_observed_arrhythmia,334,115.0,34.4311377245509,9.0,2.694610778443114,3.0,0.8982035928143712,12.0,ANK2|CACNA1C|CACNB2|CASQ2|HCN4|KCNE1|KCNH2|KCNJ2|KCNQ1|RYR2|SCN5A|TRDN,
+severe_LOF_or_splice_annotation,262,92.0,35.11450381679389,7.0,2.6717557251908395,2.0,0.7633587786259542,10.0,ANK2|CACNA1C|CACNB2|CASQ2|KCNE1|KCNH2|KCNJ2|KCNQ1|SCN5A|TRDN,Severe HGVS consequence is not sufficient evidence of high-penetrance pathogenicity when population frequency is discordant; this is the severe-annotation frequency-discordance pattern.
+severe_excluding_CASQ2_TRDN,197,57.0,28.934010152284262,1.0,0.5076142131979695,1.0,0.5076142131979695,8.0,ANK2|CACNA1C|CACNB2|KCNE1|KCNH2|KCNJ2|KCNQ1|SCN5A,
+severe_in_constrained_genes_LOEUF_lt_0_5,76,24.0,31.57894736842105,0.0,0.0,0.0,0.0,3.0,ANK2|CACNA1C|SCN5A,
+severe_in_constrained_genes_LOEUF_lt_0_6,142,34.0,23.943661971830984,1.0,0.704225352112676,1.0,0.704225352112676,4.0,ANK2|CACNA1C|KCNH2|SCN5A,
+missense_annotation,66,19.0,28.78787878787879,1.0,1.5151515151515151,0.0,0.0,9.0,ANK2|CACNA1C|CASQ2|HCN4|KCNE1|KCNH2|KCNJ2|KCNQ1|RYR2,
+non_severe_or_missense_other,72,23.0,31.944444444444443,2.0,2.7777777777777777,1.0,1.3888888888888888,10.0,ANK2|CACNA1C|CASQ2|HCN4|KCNE1|KCNH2|KCNJ2|KCNQ1|RYR2|SCN5A,
+lof_subtype:frameshift,82,29.0,35.36585365853659,1.0,1.2195121951219512,1.0,1.2195121951219512,,,LOF subtype-specific severe-annotation frequency discordance audit
+lof_subtype:stop_gained,108,33.0,30.55555555555556,3.0,2.7777777777777777,0.0,0.0,,,LOF subtype-specific severe-annotation frequency discordance audit
+lof_subtype:canonical_splice,60,23.0,38.333333333333336,2.0,3.333333333333333,1.0,1.6666666666666667,,,LOF subtype-specific severe-annotation frequency discordance audit
+lof_subtype:other_LOF,0,,,,,,,,,LOF subtype-specific severe-annotation frequency discordance audit

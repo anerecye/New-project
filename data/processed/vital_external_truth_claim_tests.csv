@@ -1,0 +1,6 @@
+test,odds_ratio,p_value,table,interpretation
+severe_annotation_vs_naive_frequency_tension,1.1529411764705881,0.6756164090989962,"[[92, 170], [23, 49]]",Tests whether severe LOF/splice annotations are overrepresented among AF-positive tension records.
+severe_annotation_vs_missense_frequency_tension,1.3386996904024768,0.3836625883291115,"[[92, 170], [19, 47]]",Tests the key claim that severe annotations are not cleaner than missense with respect to AF tension.
+severe_annotation_excluding_CASQ2_TRDN,0.9567857142857142,0.8775827597386003,"[[57, 140], [20, 47]]",Controls the obvious recessive/biallelic explanation by excluding CASQ2 and TRDN.
+severe_annotation_in_LOEUF_lt_0_5_genes,1.3426573426573427,0.5359855190271079,"[[24, 52], [11, 32]]",Controls the constraint objection by focusing on genes with LOEUF upper CI <0.5.
+expert_panel_truth_vs_red_priority,0.0,1.0,"[[0, 204], [3, 2793]]",Tests whether expert-panel curated P/LP assertions are protected from red-priority calls.

@@ -17,38 +17,11 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 MANUSCRIPT_MD = BASE_DIR / "manuscript_vital_updated.md"
 OUTPUT_DOCX = BASE_DIR / "manuscript_vital_with_figures_tables.docx"
 
-FIGURE_INSERTIONS = {
-    "### Popmax reveals frequency contradictions missed by global AF": [
-        ("arrhythmia_population_af_outliers.png", "Population-specific frequency outliers among arrhythmia ClinVar P/LP variants."),
-    ],
-    "### Variant type drives absence and detectability bias": [
-        ("arrhythmia_vital_absence_not_rarity.png", "Variant-type detectability bias: absence from gnomAD is not equivalent to rarity."),
-    ],
-    "### Workflow-concordance benchmark against baseline frequency screens": [
-        ("arrhythmia_vital_score_model.png", "VITAL score distribution and reclassification-priority bands."),
-        ("arrhythmia_vital_validation_curves.png", "Workflow-concordance ROC and PR curves; proxy metrics, not diagnostic accuracy."),
-    ],
-    "### Review fragility is an explicit result": [
-        ("arrhythmia_review_fragility.png", "ClinVar review fragility among frequency-supported signals."),
-    ],
-    "### Handling no-frequency-evidence variants": [
-        ("vital_gray_zone_workflow.png", "Workflow for no-frequency-evidence gray variants."),
-    ],
-    "### Historical ClinVar analysis: preliminary enrichment in a sparse red set": [
-        ("arrhythmia_2023_01_to_current_vital_historical_curves.png", "Historical 2023-to-current predictive validation curves."),
-    ],
-    "### External disease panels and ratio compression": [
-        ("vital_external_panel_score_distribution.png", "External-domain VITAL score distributions and negative-control behavior."),
-    ],
-    "### Independent cross-disease validation on 3,000 ClinVar P/LP variants": [
-        ("vital_cross_disease_3000_score_distribution.png", "Independent cross-disease VITAL score distribution across 3,000 current ClinVar P/LP variants."),
-        ("vital_cross_disease_3000_2023_01_to_current_vital_historical_curves.png", "Independent 3,000-variant 2023-to-current historical validation curves."),
-    ],
-    "### KCNH2 diagnostic dissection": [
-        ("arrhythmia_kcnh2_non_overlap_diagnostics.png", "KCNH2 non-overlap diagnostic analysis."),
-        ("arrhythmia_kcnh2_non_overlap_duplication_sizes.png", "KCNH2 duplication size and non-overlap summary."),
-    ],
-}
+# Main-text figures are inserted explicitly with Markdown image tags in
+# manuscript_vital_updated.md. Older long-form appendix figure insertions remain
+# reproducible from repository outputs but are no longer injected into the main
+# Word manuscript.
+FIGURE_INSERTIONS = {}
 
 APPENDIX_TABLES = [
     (
@@ -545,7 +518,6 @@ def build_document() -> None:
         paragraph = document.add_paragraph()
         add_runs_with_basic_markdown(paragraph, " ".join(paragraph_lines))
 
-    add_appendix_tables(document)
     document.save(OUTPUT_DOCX)
     print(f"Saved {OUTPUT_DOCX}")
 

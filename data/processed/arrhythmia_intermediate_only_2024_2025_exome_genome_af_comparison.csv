@@ -1,0 +1,34 @@
+variant_key,variant_id,gene,clinvar_id,variation_id,title,review_status,variant_type,functional_class,exome_genome_query_status,exome_af,exome_ac,exome_an,genome_af,genome_ac,genome_an
+1:115701344:A:G,1-115701344-A-G,CASQ2,VCV001035127,1035127,NM_001232.4(CASQ2):c.1097T>C (p.Leu366Pro),"criteria provided, multiple submitters, no conflicts",SNV,missense,ok,2.0530705038098145e-06,3.0,1461226.0,1.9718161741508045e-05,3.0,152144.0
+12:2634381:G:A,12-2634381-G-A,CACNA1C,VCV001334322,1334322,NM_000719.7(CACNA1C):c.3912+1G>A,"criteria provided, single submitter",SNV,LOF,ok,0.0,0.0,1394572.0,,,
+21:34449409:C:T,21-34449409-C-T,KCNE1,VCV000013477,13477,NM_000219.6(KCNE1):c.226G>A (p.Asp76Asn),"criteria provided, multiple submitters, no conflicts",SNV,missense,ok,0.00012833358496781367,187.0,1457140.0,5.647404311793192e-05,8.0,141658.0
+1:237639096:G:A,1-237639096-G-A,RYR2,VCV001904758,1904758,NM_001035.3(RYR2):c.7010G>A (p.Gly2337Glu),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+11:2572882:C:G,11-2572882-C-G,KCNQ1,VCV001950175,1950175,NM_000218.3(KCNQ1):c.817C>G (p.Leu273Val),"criteria provided, single submitter",SNV,missense,ok,,,,1.3136116438536111e-05,2.0,152252.0
+6:123382149:T:C,6-123382149-T-C,TRDN,VCV001969028,1969028,NM_006073.4(TRDN):c.1136-2A>G,"criteria provided, single submitter",SNV,LOF,ok,1.4824544108207313e-06,2.0,1349114.0,1.3168810988055889e-05,2.0,151874.0
+11:2587607:C:T,11-2587607-C-T,KCNQ1,VCV002030049,2030049,NM_000218.3(KCNQ1):c.1166C>T (p.Ser389Phe),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+1:237441383:G:A,1-237441383-G-A,RYR2,VCV002037310,2037310,NM_001035.3(RYR2):c.1070G>A (p.Gly357Asp),"criteria provided, single submitter",SNV,missense,ok,3.4210537119116985e-06,5.0,1461538.0,,,
+11:2585299:C:T,11-2585299-C-T,KCNQ1,VCV002124553,2124553,NM_000218.3(KCNQ1):c.1120C>T (p.Leu374Phe),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+6:123516139:A:AT,6-123516139-A-AT,TRDN,VCV002150160,2150160,NM_006073.4(TRDN):c.550+1_550+2insA,"criteria provided, multiple submitters, no conflicts",insertion,splice_or_intronic,no_gnomad_record,,,,,,
+1:237831564:A:G,1-237831564-A-G,RYR2,VCV002183214,2183214,NM_001035.3(RYR2):c.14807A>G (p.Gln4936Arg),"criteria provided, single submitter",SNV,missense,ok,7.190975038687446e-07,1.0,1390632.0,,,
+17:70175637:G:A,17-70175637-G-A,KCNJ2,VCV002502416,2502416,NM_000891.3(KCNJ2):c.598G>A (p.Val200Met),"criteria provided, single submitter",SNV,missense,ok,6.840459952527208e-07,1.0,1461890.0,,,
+3:38581322:T:G,3-38581322-T-G,SCN5A,VCV002574008,2574008,NM_000335.5(SCN5A):c.2837A>C (p.Asn946Thr),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+7:92093316:GGT:G,7-92093316-GGT-G,AKAP9,VCV002574014,2574014,NM_005751.5(AKAP9):c.9578+4_9578+5del,"criteria provided, single submitter",Microsatellite,splice_or_intronic,ok,6.842837806952597e-07,1.0,1461382.0,,,
+12:2115478:C:T,12-2115478-C-T,CACNA1C,VCV002582171,2582171,NM_000719.7(CACNA1C):c.304C>T (p.Arg102Ter),"criteria provided, single submitter",SNV,LOF,no_gnomad_record,,,,,,
+3:38556448:T:G,3-38556448-T-G,SCN5A,VCV002584499,2584499,NM_000335.5(SCN5A):c.4427A>C (p.Lys1476Thr),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+12:2605715:A:G,12-2605715-A-G,CACNA1C,VCV002664800,2664800,NM_000719.7(CACNA1C):c.3085A>G (p.Ile1029Val),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+3:38581017:G:A,3-38581017-G-A,SCN5A,VCV002718204,2718204,NM_000335.5(SCN5A):c.3142C>T (p.Pro1048Ser),"criteria provided, single submitter",SNV,missense,ok,6.841564419486418e-07,1.0,1461654.0,,,
+6:123337671:T:C,6-123337671-T-C,TRDN,VCV002879952,2879952,NM_006073.4(TRDN):c.1370-2A>G,"criteria provided, single submitter",SNV,LOF,ok,0.0,0.0,1307040.0,,,
+6:123331878:C:T,6-123331878-C-T,TRDN,VCV002909704,2909704,NM_006073.4(TRDN):c.1471+1G>A,"criteria provided, multiple submitters, no conflicts",SNV,LOF,ok,7.213851749575465e-06,10.0,1386222.0,,,
+6:123393665:GC:G,6-123393665-GC-G,TRDN,VCV003075857,3075857,NM_006073.4(TRDN):c.1063del (p.Ala355fs),"criteria provided, single submitter",deletion,LOF,ok,1.3752755708425076e-06,2.0,1454254.0,,,
+7:150974894:T:A,7-150974894-T-A,KCNH2,VCV003236802,3236802,NM_000238.4(KCNH2):c.124A>T (p.Ile42Phe),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+12:2664835:G:A,12-2664835-G-A,CACNA1C,VCV003252167,3252167,NM_000719.7(CACNA1C):c.4243G>A (p.Gly1415Arg),"criteria provided, single submitter",SNV,missense,ok,0.0,0.0,1441592.0,,,
+7:150974857:T:G,7-150974857-T-G,KCNH2,VCV003338719,3338719,NM_000238.4(KCNH2):c.161A>C (p.Tyr54Ser),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+3:38581049:C:A,3-38581049-C-A,SCN5A,VCV003371829,3371829,NM_000335.5(SCN5A):c.3110G>T (p.Gly1037Val),"criteria provided, single submitter",SNV,missense,ok,2.736614534159791e-06,4.0,1461660.0,1.3132148813510355e-05,2.0,152298.0
+1:237778711:T:C,1-237778711-T-C,RYR2,VCV003374735,3374735,NM_001035.3(RYR2):c.11821T>C (p.Trp3941Arg),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+6:123278331:CT:C,6-123278331-CT-C,TRDN,VCV003382228,3382228,NM_006073.4(TRDN):c.1553del (p.Lys518fs),"criteria provided, single submitter",deletion,LOF,ok,1.4869914489244678e-05,17.0,1143248.0,,,
+6:123438944:C:A,6-123438944-C-A,TRDN,VCV003382391,3382391,NM_006073.4(TRDN):c.991G>T (p.Glu331Ter),"criteria provided, single submitter",SNV,LOF,ok,0.0,0.0,1405754.0,,,
+11:2571363:G:A,11-2571363-G-A,KCNQ1,VCV000053081,53081,NM_000218.3(KCNQ1):c.643G>A (p.Val215Met),"criteria provided, multiple submitters, no conflicts",SNV,missense,ok,9.583632251386888e-06,14.0,1460824.0,1.3148552344386883e-05,2.0,152108.0
+11:2847803:G:T,11-2847803-G-T,KCNQ1,VCV000067060,67060,NM_000218.3(KCNQ1):c.1831G>T (p.Asp611Tyr),"criteria provided, single submitter",SNV,missense,ok,8.45609945500439e-06,12.0,1419094.0,,,
+7:150974764:G:A,7-150974764-G-A,KCNH2,VCV000067411,67411,NM_000238.4(KCNH2):c.254C>T (p.Ala85Val),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+17:70175614:C:T,17-70175614-C-T,KCNJ2,VCV000067582,67582,NM_000891.3(KCNJ2):c.575C>T (p.Thr192Ile),"criteria provided, single submitter",SNV,missense,no_gnomad_record,,,,,,
+3:38551477:C:T,3-38551477-C-T,SCN5A,VCV000067939,67939,NM_000335.5(SCN5A):c.4892G>A (p.Arg1631His),"criteria provided, multiple submitters, no conflicts",SNV,missense,ok,8.209068558036063e-06,12.0,1461798.0,6.576091960069969e-06,1.0,152066.0

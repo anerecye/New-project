@@ -1,0 +1,5 @@
+priority_group,current_missing_category,n_variants
+VITAL_red,current_present,1
+VITAL_red,mapping_failure_or_id_mismatch,1
+VITAL_red,not_present_at_2023_baseline,1
+orange_high_tension,not_present_at_2023_baseline,1

@@ -1,0 +1,11 @@
+gene,clinvar_plp_variant_count,exact_af_covered_count,popmax_gt_1e_5_count,popmax_gt_1e_4_count,global_gt_1e_5_count,global_gt_1e_4_count,popmax_gt_1e_5_fraction,popmax_gt_1e_4_fraction,gene_frequency_constraint_proxy,gene_frequency_constraint_label
+CACNA1C,4,2,0,0,0,0,0.0,0.0,0.8333333333333334,frequency_constrained
+AKAP9,1,1,0,0,0,0,0.0,0.0,0.75,frequency_constrained
+KCNJ2,2,1,0,0,0,0,0.0,0.0,0.75,frequency_constrained
+TRDN,7,6,2,1,1,0,0.3333333333333333,0.16666666666666666,0.6428571428571429,intermediate
+RYR2,4,2,1,1,0,0,0.5,0.5,0.5,intermediate
+KCNH2,3,0,0,0,0,0,,,0.5,intermediate
+CASQ2,1,1,1,0,0,0,1.0,0.0,0.25,permissive_or_founder_prone
+KCNE1,1,1,1,1,1,1,1.0,1.0,0.25,permissive_or_founder_prone
+KCNQ1,5,2,2,2,0,0,1.0,1.0,0.16666666666666666,permissive_or_founder_prone
+SCN5A,5,3,3,0,0,0,1.0,0.0,0.125,permissive_or_founder_prone

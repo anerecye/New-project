@@ -1,0 +1,4 @@
+target,n,event_count,event_rate,isotonic_brier_oof,platt_brier_oof,uncalibrated_brier_oof,isotonic_ece_oof,platt_ece_oof,calibration_method
+strict,3000,23,0.007666666666666666,0.007670063050860485,0.007613574775336618,0.007607888888888887,0.004845131553252675,1.8616043930210976e-05,5-fold out-of-fold isotonic PAVA and Platt logistic scaling on VITAL score only
+broad,3000,119,0.03966666666666667,0.03925665302731424,0.03805939307786961,0.038093222222222216,0.03239767179355691,0.0008333978849051128,5-fold out-of-fold isotonic PAVA and Platt logistic scaling on VITAL score only
+expanded,3000,794,0.26466666666666666,0.24115713593060986,0.19180622363134975,0.19461822222222225,0.21238271506857684,0.00814271885232387,5-fold out-of-fold isotonic PAVA and Platt logistic scaling on VITAL score only

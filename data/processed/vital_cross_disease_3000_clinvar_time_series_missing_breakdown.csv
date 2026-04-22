@@ -1,0 +1,9 @@
+priority_group,current_missing_category,n_variants
+VITAL_red,current_present,13
+gray_no_frequency,current_present,2232
+gray_no_frequency,disappeared_after_2023,34
+gray_no_frequency,disappeared_after_prior_presence,2
+green_low_tension,current_present,646
+green_low_tension,disappeared_after_2023,2
+orange_high_tension,current_present,20
+yellow_watch,current_present,51

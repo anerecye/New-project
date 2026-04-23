@@ -211,6 +211,35 @@ Key outputs:
 
 The guideline-tension audit is deliberately conservative: it does not claim disagreement with ClinGen expert panels. Instead, it records that the red-priority cases lack expert-panel/practice-guideline review in the public record, while ClinVar/ClinGen terminology already supports state-aware labels such as low-penetrance and risk-allele categories.
 
+## Frequency Constraint and Maximum Credible AF
+
+The frequency-constraint layer formalizes the "too common for high-penetrance Mendelian disease" argument using maximum credible allele frequency, disease-prevalence logic, Bayesian ACMG-style odds, recessive carrier logic, and allele-count reliability. In these outputs, `allelic_contribution_fraction` means the fraction of disease attributable to a variant, while gnomAD `AC` remains allele count.
+
+```bash
+python src/run_vital_frequency_constraint_analysis.py
+```
+
+Key outputs:
+
+- `data/processed/vital_max_credible_af_analysis.csv`
+- `data/processed/vital_prevalence_constraint_analysis.csv`
+- `data/processed/vital_bayesian_acmg_frequency_tension.csv`
+- `data/processed/vital_recessive_carrier_logic.csv`
+- `data/processed/vital_allele_count_reliability.csv`
+- `supplementary_tables/Supplementary_Table_S42_max_credible_af.tsv`
+- `supplementary_tables/Supplementary_Table_S43_prevalence_constraint.tsv`
+- `supplementary_tables/Supplementary_Table_S44_bayesian_acmg_frequency_tension.tsv`
+- `supplementary_tables/Supplementary_Table_S45_recessive_carrier_logic.tsv`
+- `supplementary_tables/Supplementary_Table_S46_allele_count_reliability.tsv`
+
+Headline outputs:
+
+- Under a strict dominant high-penetrance scenario, SCN5A `VCV000440850` exceeds maximum credible AF by 113.5-fold.
+- Under an SCN5A Brugada-like Mendelian read with penetrance relaxed to 20%, SCN5A still exceeds the model ceiling by 45.4-fold.
+- KCNH2 `VCV004535537` exceeds a high-penetrance LQTS-like ceiling by 2.6-fold but falls below a generous low-penetrance ceiling, reinforcing its borderline status.
+- TRDN `VCV001325231` is incompatible with a dominant misread but compatible with carrier-state logic: popmax carrier frequency is approximately `4.36e-4`, while homozygote frequency is approximately `4.76e-8`.
+- Allele-count reliability is graded: SCN5A AC=214 has approximate 95% relative margin 13.4%, TRDN AC=40 has 31.0%, and KCNH2 AC=24 has 40.0%.
+
 ## How to Run
 
 Create an environment and install dependencies:

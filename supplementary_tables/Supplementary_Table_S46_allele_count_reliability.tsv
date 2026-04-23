@@ -1,0 +1,4 @@
+gene	clinvar_id	gnomad_qualifying_allele_count	poisson_relative_standard_error_approx	approx_95pct_relative_margin	global_af	global_an	binomial_global_af_standard_error	interpretation
+SCN5A	VCV000440850	214.0	0.06835859270246633	0.133982841696834	0.0001464876505434	1460874.0	1.0012956171642675e-05	Allele-count reliability is reported as a graded measurement; AC>=20 is an operational floor, not a biological discontinuity.
+TRDN	VCV001325231	40.0	0.15811388300841897	0.3099032106965012	2.774748677138568e-05	1441572.0	4.3872020089669675e-06	Allele-count reliability is reported as a graded measurement; AC>=20 is an operational floor, not a biological discontinuity.
+KCNH2	VCV004535537	24.0	0.20412414523193154	0.4000833246545858	4.367018818211924e-05	549574.0	8.913945191585604e-06	Allele-count reliability is reported as a graded measurement; AC>=20 is an operational floor, not a biological discontinuity.

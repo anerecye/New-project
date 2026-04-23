@@ -193,6 +193,7 @@ The point of this filter is not to redefine pathogenicity. It is to show what re
 The representation audit now includes a separate reconciliation layer that asks a deliberately annoying question: how much of the apparent ClinVar-to-gnomAD gap is just formatting, and how much is real infrastructure friction? The current answer is: not much is rescued by lightweight reconciliation.
 
 ```bash
+python src/run_vital_bcftools_reference_normalization.py
 python src/run_vital_match_reconciliation.py
 ```
 
@@ -212,8 +213,19 @@ What is and is not being claimed:
 
 Equivalent recovery is intentionally modest: 5 local-window indel equivalents and 2 decomposed substitution equivalents. That is the point. The representation gap is not mainly a cosmetic exact-key problem.
 
+Reference-normalization audit:
+
+- all `1,731` arrhythmia variants were additionally normalized against a local GRCh38 primary-assembly FASTA using `bcftools norm`
+- coordinate/allele changes introduced by reference-based normalization: `0 / 1,731`
+- multiallelic-decomposition audit with `bcftools norm -f GRCh38.fa -m -both`: no additional exact/equivalent recoveries
+
+That negative result matters: the residual gap is not explained by missed left-alignment or trivial trimming.
+
 Outputs:
 
+- `data/processed/vital_bcftools_reference_normalization.csv`
+- `data/processed/vital_bcftools_decomposed_components.csv`
+- `data/processed/vital_bcftools_reference_normalization_summary.json`
 - `data/processed/vital_tiered_match_reconciliation_detail.csv`
 - `data/processed/vital_tiered_match_reconciliation_summary.csv`
 - `data/processed/vital_tiered_match_reconciliation_layers.csv`
@@ -221,7 +233,7 @@ Outputs:
 - `supplementary_tables/Supplementary_Table_S48_tiered_match_reconciliation_summary.tsv`
 - `supplementary_tables/Supplementary_Table_S49_tiered_match_reconciliation_layers.tsv`
 
-Implementation note: this audit uses trim-normalization, local indel-payload equivalence, unphased decomposition-aware matching, and a second slow pass to eliminate transient API failures. Full `bcftools norm -f GRCh38.fa -m -both` left-alignment against a local reference FASTA is not claimed in the current runtime.
+Implementation note: this audit now includes a real local-reference normalization pass via `bcftools norm` against `data/external/reference/Homo_sapiens.GRCh38.dna.primary_assembly.fa`. The downstream reconciliation counts remain modest because the reference-based pass changed no arrhythmia variant representations.
 
 ## Clinical Decision-Risk Proxy
 

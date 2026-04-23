@@ -1,0 +1,8 @@
+{
+  "reference_fasta": "C:\\Users\\User\\OneDrive\\\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b\\New project\\data\\external\\reference\\Homo_sapiens.GRCh38.dna.primary_assembly.fa",
+  "reference_archive": "C:\\Users\\User\\OneDrive\\\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b\\New project\\data\\external\\reference\\Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz",
+  "total_variants": 1731,
+  "reference_normalized_variants": 0,
+  "decomposed_rows": 1731,
+  "decomposed_variants": 1731
+}

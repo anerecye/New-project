@@ -350,6 +350,34 @@ APPENDIX_TABLES = [
             "score_policy",
         ],
     ),
+    (
+        "Appendix Table A23. Clinical decision projection for VITAL-red variants",
+        BASE_DIR / "data" / "processed" / "vital_red_clinical_decision_projection.csv",
+        [
+            "gene",
+            "clinvar_id",
+            "current_public_label",
+            "frequency_signal",
+            "state_aware_frame",
+            "if_generic_PLP_read_as_Mendelian_diagnosis",
+            "if_state_aware_read_diagnosis",
+            "one_label_two_incompatible_pathways",
+            "clinical_projection_boundary",
+        ],
+    ),
+    (
+        "Appendix Table A24. ClinVar/ClinGen guideline-tension audit",
+        BASE_DIR / "data" / "processed" / "vital_guideline_tension_audit.csv",
+        [
+            "gene",
+            "clinvar_id",
+            "current_public_label",
+            "expert_panel_or_practice_guideline_review_present",
+            "clinvar_state_terms_relevant",
+            "guideline_tension",
+            "why_this_is_not_a_ClinGen_disagreement_claim",
+        ],
+    ),
 ]
 
 

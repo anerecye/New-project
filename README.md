@@ -194,6 +194,23 @@ Generated files:
 - `data/processed/vital_clinical_decision_risk_proxy_top_cases.tsv`
 - `supplementary_tables/Supplementary_Table_S28_clinical_decision_risk_proxy.tsv`
 
+## Clinical Decision Projection
+
+The decision-projection layer asks what happens if each VITAL-red public P/LP label is read as an unqualified high-penetrance Mendelian assertion, then contrasts that with the state-aware reading implied by the frequency and mechanism evidence. This is not patient-outcome evidence and does not claim actual misdiagnosis, cascade testing, ICD placement, or management change.
+
+```bash
+python src/run_vital_clinical_decision_projection.py
+```
+
+Key outputs:
+
+- `data/processed/vital_red_clinical_decision_projection.csv`
+- `data/processed/vital_guideline_tension_audit.csv`
+- `supplementary_tables/Supplementary_Table_S40_clinical_decision_projection.tsv`
+- `supplementary_tables/Supplementary_Table_S41_guideline_tension_audit.tsv`
+
+The guideline-tension audit is deliberately conservative: it does not claim disagreement with ClinGen expert panels. Instead, it records that the red-priority cases lack expert-panel/practice-guideline review in the public record, while ClinVar/ClinGen terminology already supports state-aware labels such as low-penetrance and risk-allele categories.
+
 ## How to Run
 
 Create an environment and install dependencies:

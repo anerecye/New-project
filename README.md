@@ -213,6 +213,18 @@ What is and is not being claimed:
 
 Equivalent recovery is intentionally modest: 5 local-window indel equivalents and 2 decomposed substitution equivalents. That is the point. The representation gap is not mainly a cosmetic exact-key problem.
 
+The Tier 2 context-only space is also now split into subcategories rather than left as a black box:
+
+- same-locus allele discordance: `638 / 1,326` (`48.1%`)
+- no same-locus record, regional-only context: `688 / 1,326` (`51.9%`)
+
+Variant-class composition shows why this matters:
+
+- indels/duplications/insertions make up `640 / 1,326` Tier 2 variants (`48.3%`) versus `106 / 357` Tier 1 exact/equivalent variants (`29.7%`)
+- duplications alone make up `170 / 1,326` Tier 2 variants (`12.8%`) versus `22 / 357` Tier 1 variants (`6.2%`)
+
+That is the quick visual argument that Tier 2 is structured representation friction, not random residue.
+
 Reference-normalization audit:
 
 - all `1,731` arrhythmia variants were additionally normalized against a local GRCh38 primary-assembly FASTA using `bcftools norm`
@@ -229,9 +241,13 @@ Outputs:
 - `data/processed/vital_tiered_match_reconciliation_detail.csv`
 - `data/processed/vital_tiered_match_reconciliation_summary.csv`
 - `data/processed/vital_tiered_match_reconciliation_layers.csv`
+- `data/processed/vital_tier2_subcategory_summary.csv`
+- `data/processed/vital_tier2_vs_tier1_variant_class_summary.csv`
 - `supplementary_tables/Supplementary_Table_S47_tiered_match_reconciliation_detail.tsv`
 - `supplementary_tables/Supplementary_Table_S48_tiered_match_reconciliation_summary.tsv`
 - `supplementary_tables/Supplementary_Table_S49_tiered_match_reconciliation_layers.tsv`
+- `supplementary_tables/Supplementary_Table_S54_tier2_subcategory_summary.tsv`
+- `supplementary_tables/Supplementary_Table_S55_tier2_vs_tier1_variant_class_summary.tsv`
 
 Implementation note: this audit now includes a real local-reference normalization pass via `bcftools norm` against `data/external/reference/Homo_sapiens.GRCh38.dna.primary_assembly.fa`. The downstream reconciliation counts remain modest because the reference-based pass changed no arrhythmia variant representations.
 

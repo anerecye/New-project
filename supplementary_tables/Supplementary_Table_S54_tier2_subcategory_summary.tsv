@@ -1,0 +1,3 @@
+tier2_subcategory	reconciliation_tier	percent_of_tier2	interpretation	n_variants	indel_dup_ins_n	indel_dup_ins_percent	duplication_n	duplication_percent	snv_n	snv_percent
+allele_discordance_at_locus	tier3_locus_observed_no_exact_af	48.114630467571644	Same locus observed in gnomAD with a different allele; locus-level context is present, but no allele-resolved AF exists for the queried variant.	638	397	62.225705329153605	114	17.86833855799373	238	37.30407523510972
+no_same_locus_record_regional_only	tier3_regional_context_only	51.885369532428356	No same-locus or equivalent allele recovered; only nearby regional variation is visible in the local window.	688	243	35.31976744186046	56	8.13953488372093	444	64.53488372093024

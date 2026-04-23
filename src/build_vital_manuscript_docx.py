@@ -519,6 +519,37 @@ APPENDIX_TABLES = [
             "af_gt_1e_4_n",
         ],
     ),
+    (
+        "Appendix Table A36. Tier 2 subcategories within the locus/regional context space",
+        BASE_DIR / "data" / "processed" / "vital_tier2_subcategory_summary.csv",
+        [
+            "tier2_subcategory",
+            "n_variants",
+            "percent_of_tier2",
+            "indel_dup_ins_n",
+            "indel_dup_ins_percent",
+            "duplication_n",
+            "duplication_percent",
+            "snv_n",
+            "snv_percent",
+            "interpretation",
+        ],
+    ),
+    (
+        "Appendix Table A37. Tier 2 versus Tier 1 variant-class comparison",
+        BASE_DIR / "data" / "processed" / "vital_tier2_vs_tier1_variant_class_summary.csv",
+        [
+            "comparison_group",
+            "n_variants",
+            "indel_dup_ins_n",
+            "indel_dup_ins_percent",
+            "duplication_n",
+            "duplication_percent",
+            "indel_dup_ins_or_vs_tier1",
+            "duplication_or_vs_tier1",
+            "interpretation",
+        ],
+    ),
 ]
 
 

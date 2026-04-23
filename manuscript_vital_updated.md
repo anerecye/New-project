@@ -196,6 +196,16 @@ The practical consequence of label-state collapse is that one public P/LP label 
 
 This is a decision projection, not a claim that misdiagnosis or cascade testing occurred. Its point is narrower: a generic P/LP label can travel into diagnostic and family-management workflows while failing to preserve the biological state needed to choose the correct pathway. No red-priority case is asserted here to conflict with a ClinGen expert-panel classification; the tension is semantic and operational. ClinVar/ClinGen terminology already recognizes risk-allele and low-penetrance categories, and ClinVar review status distinguishes single-submitter/no-criteria records from expert-panel or practice-guideline assertions. The problem is that the exported public label can still be read as a single undifferentiated Mendelian P/LP assertion.
 
+**Box 1. Clinical consequence of label-state collapse**
+
+This illustrative scenario is a decision projection, not an observed patient case. A 25-year-old individual undergoes incidental genetic testing following evaluation for nonspecific palpitations. No definitive clinical diagnosis is established. A variant in SCN5A (VCV000440850) is reported as pathogenic in ClinVar.
+
+Under a standard Mendelian interpretation of the P/LP label, the variant is considered causative for Brugada syndrome, supporting diagnostic closure, cascade family testing, and consideration of preventive interventions.
+
+In contrast, population-aware interpretation reveals an AFR popmax allele frequency of 5.68e-3 (AC=190), incompatible with a high-penetrance Mendelian model. Under this interpretation, the variant is reframed as a susceptibility or low-penetrance allele, diagnostic closure is avoided, and management remains phenotype-driven.
+
+These two interpretations produce mutually incompatible clinical pathways from the same underlying evidence, reflecting a failure of the P/LP label to encode biological state.
+
 ### Logical incompatibility audit proves label-state insufficiency
 
 If the public P/LP label is interpreted as unqualified high-penetrance Mendelian pathogenicity, the label becomes logically incompatible with observed population reality unless the biological state is changed or qualified. This creates a triangle of contradiction: ClinVar asserts P/LP, gnomAD observes AC-supported frequency, and the disease mechanism requires a different state.

@@ -87,6 +87,18 @@ The AF-observed subset was not treated as representative of all ClinVar P/LP ass
 | SNV-only AF-observed sensitivity | 238 | 79/238 (33.2%) | Popmax tension persists in well-represented SNVs |
 | Non-recessive SNV-only sensitivity | 186 | 55/186 (29.6%) | Signal persists after excluding CASQ2/TRDN |
 
+The 1,397 non-evaluable variants were routed as a practical gray queue rather than left as an undifferentiated blind spot.
+
+| Non-evaluable category | Recommended next step | Interpretation guardrail |
+|---|---|---|
+| Indel/duplication with no gnomAD record | Genome-level query plus orthogonal validation when clinically material | Do not interpret absence as rarity |
+| Allele-discordant SNV/MNV | Normalize, left-align, verify allele, and requery | Same-site observation is not exact-allele AF |
+| Exact match without usable AF block | Retain gray status and recheck in future freeze | Do not convert missing AF to AF=0 |
+| No-record SNV in constrained gene | Deferred review with phenotype, segregation, and mechanism context | Absence alone supports neither consistency nor contradiction |
+| Complex allele or haplotype | Resolve representation, phase, and haplotype literature | Do not transfer single-site AF assumptions to multi-allelic assertions |
+
+The full routing table is provided as Supplementary Table S33.
+
 ### Popmax exposes frequency contradictions missed by global AF
 
 Global AF alone identified only 13 arrhythmia P/LP variants above AF >1e-5. In contrast, popmax/global screening identified 115 variants above the same threshold, including 102 that were globally rare but population-enriched. A global-AF-only ACMG-style screen would therefore miss 102/115 (88.7%) ancestry-aware frequency alerts.
@@ -107,7 +119,7 @@ Exome-vs-genome sensitivity did not rescue this problem for duplications. Among 
 
 The main biological result is not simply that severe annotation can coexist with frequency tension. It is that frequency-discordant severe assertions reveal recurring distortion in how pathogenicity is labeled. Among 334 AF-observed arrhythmia variants, 115 (34.4%) had popmax/global AF >1e-5. Among LOF/splice assertions, 92/262 (35.1%) were frequency-discordant, similar to missense assertions (19/66, 28.8%; Fisher OR=1.34, p=0.384). Frameshift, stop-gained, and canonical splice variants all showed naive frequency discordance.
 
-This result does not mean that 35.1% of LOF/splice assertions are wrong. It means that the P/LP label often lacks the biological frame needed to interpret the assertion safely. Mechanism triage showed that 35/92 severe-discordant assertions were in CASQ2 or TRDN, where recessive/biallelic disease architecture can make heterozygous carrier frequency biologically compatible. After excluding CASQ2/TRDN, 57/197 severe annotations (28.9%) remained discordant across 8 genes, but only 1/57 non-recessive severe-discordant assertions was AC-supported.
+This is not an error-rate estimate; it is a label-state signal. The P/LP label often lacks the biological frame needed to interpret the assertion safely. Mechanism triage showed that 35/92 severe-discordant assertions were in CASQ2 or TRDN, where recessive/biallelic disease architecture can make heterozygous carrier frequency biologically compatible. After excluding CASQ2/TRDN, 57/197 severe annotations (28.9%) remained discordant across 8 genes, but only 1/57 non-recessive severe-discordant assertions was AC-supported.
 
 ![Severe annotation frequency discordance](figures/vital_external_truth_biological_claim.png)
 
@@ -135,21 +147,36 @@ Table 2 compares the operational layers.
 | AC-supported frequency signal | 9 | Reduces one-allele noise |
 | VITAL red-priority | 3 | Short urgent expert-review queue |
 
-Workflow-concordance benchmarking supported the selected red gate but was not treated as diagnostic accuracy. The proxy positives were weak-review, AC-supported frequency signals; VITAL red captured the 3 operational positives at cutoffs 65-70 while avoiding proxy false-positive urgent review triggers. Sensitivity details are provided in supplementary tables.
+An internal consistency audit supported the selected red gate but was not treated as diagnostic accuracy. The proxy positives were weak-review, AC-supported frequency signals; VITAL red captured the 3 operational positives at cutoffs 65-70 while avoiding proxy false-positive urgent review triggers.
+
+Weight sensitivity was evaluated without outcome refitting. Across five alternative weight profiles, the red queue ranged from 1-3 variants and no new red variants appeared. SCN5A remained red in all five profiles, TRDN remained red in four of five, and KCNH2 remained red in two of five. One-weight-at-a-time perturbation showed the same pattern: SCN5A is an anchor signal, TRDN is near-stable but inheritance-routed, and KCNH2 is conditional/borderline.
+
+| Weight profile | Red count | Red variants retained |
+|---|---:|---|
+| Primary expert weights | 3 | SCN5A, TRDN, KCNH2 |
+| Balanced equal components | 1 | SCN5A |
+| Frequency dominant | 2 | SCN5A, TRDN |
+| Review-fragility dominant | 3 | SCN5A, TRDN, KCNH2 |
+| Technical-detectability dominant | 3 | SCN5A, TRDN, KCNH2 |
+| Reduced AF pressure | 2 | SCN5A, TRDN |
+
+Weight-profile sensitivity revealed heterogeneous confidence within the red-priority queue. SCN5A VCV000440850 was retained in all five alternative profiles, consistent with its extreme population frequency (AFR popmax AF=5.68e-3) dominating the score regardless of component weighting. TRDN VCV001325231 was retained in four of five profiles and lost only under the balanced equal-components profile, while one-weight perturbations showed additional sensitivity when frequency or AC support was downweighted. KCNH2 VCV004535537 was retained in only two of five profiles and was lost under reduced-AF, equal-weight, and frequency-dominant configurations, confirming that its red assignment is threshold-sensitive rather than robust. This gradient of stability reflects a real biological gradient: SCN5A represents a clear susceptibility-versus-Mendelian contradiction, TRDN represents a carrier-architecture framing problem with substantial AC support, and KCNH2 represents a borderline annotation-inflation case where the label-state concern is genuine but the evidence boundary is less definitive. The three cases are therefore not interchangeable urgent review calls. SCN5A and TRDN warrant immediate state-aware re-review; KCNH2 warrants flagging for expert adjudication with explicit acknowledgment that its red assignment is weight-dependent.
 
 ### Red-priority cases show distinct pathogenicity-label distortion modes
 
 The 3 red-priority arrhythmia variants were not interchangeable AF outliers. They represented three different ways in which biology can be compressed into an overly broad P/LP label: a high-frequency haplotype/susceptibility assertion, a recessive-carrier-compatible LOF assertion, and a borderline constrained-gene splice assertion.
 
-| Variant | AF/AC signal | Review support | VITAL | Misframed-biology mode |
-|---|---|---|---:|---|
-| SCN5A VCV000440850, c.[3919C>T;694G>A] | AFR popmax AF=5.68e-3; AC=190 | No assertion criteria | 96.1 | Susceptibility/haplotype inflated into Mendelian P/LP |
-| TRDN VCV001325231, c.1050del | Global AC=40; AMR popmax AF=2.18e-4 | Single submitter | 74.3 | Carrier architecture framed without affected-state context |
-| KCNH2 VCV004535537, c.2398+2T>G | Global AC=24; ASJ popmax AF=1.32e-4 | Single submitter | 70.3 | Borderline severe-annotation inflation under weak evidence |
+| Variant | AF/AC signal | Review support | VITAL | Confidence in red assignment | Misframed-biology mode |
+|---|---|---|---:|---|---|
+| SCN5A VCV000440850, c.[3919C>T;694G>A] | AFR popmax AF=5.68e-3; AC=190 | No assertion criteria | 96.1 | High / anchor | Susceptibility/haplotype inflated into Mendelian P/LP |
+| TRDN VCV001325231, c.1050del | Global AC=40; AMR popmax AF=2.18e-4 | Single submitter | 74.3 | High for review; inheritance-routed | Carrier architecture framed without affected-state context |
+| KCNH2 VCV004535537, c.2398+2T>G | Global AC=24; ASJ popmax AF=1.32e-4 | Single submitter | 70.3 | Conditional / borderline | Borderline severe-annotation inflation under weak evidence |
+
+KCNH2 VCV004535537 is therefore best read as a conditional or amber-like priority: its inclusion reflects the need for expert inspection at the decision boundary, not the same stability of red assignment seen for SCN5A.
 
 ![Biological contrast of red-priority cases](figures/vital_biological_contrast_cases.png)
 
-Manual review of live ClinVar records confirmed that these cases remained weakly supported or single-submitter assertions with unresolved mechanism-specific interpretation questions. VITAL does not declare them benign. It identifies records in which the public label may be too broad for the underlying biology.
+Manual review of live ClinVar records confirmed that these cases remained weakly supported or single-submitter assertions with unresolved mechanism-specific interpretation questions. These records require state review rather than passive acceptance as generic P/LP.
 
 ### Logical incompatibility audit proves label-state insufficiency
 
@@ -175,6 +202,8 @@ We therefore treat frequency discordance as a label-state problem rather than a 
 | Founder or low-penetrance allele | AC-supported high popmax with plausible founder effect or reduced penetrance | Retain only with penetrance and ancestry qualifiers | Tailor counseling to ancestry- and penetrance-aware risk rather than binary P/LP |
 | Annotation-inflated assertion | Severe annotation plus weak review and AC-supported frequency contradiction | Route to urgent expert review; candidate for VUS/LB or mechanism-qualified label | Avoid using the assertion for irreversible clinical decisions until adjudicated |
 | Representation-uncertain gray state | No exact usable AF because of allele discordance, no record, or variant-type detectability limits | Route to orthogonal validation or deferred review rather than rarity inference | Do not treat absence from gnomAD as evidence of rarity by default |
+
+Supplementary Table S32 operationalizes this ontology with a trigger, required evidence, and output format for each state class. For example, a susceptibility transition requires AC-supported AF incompatibility plus context supporting modifier or haplotype biology, and the output should be a risk-allele or context-qualified assertion rather than generic monogenic P/LP.
 
 ### Clinical decision-risk exposure is small but concrete
 
@@ -220,13 +249,13 @@ Prior ClinVar-gnomAD studies have described rarity patterns and gene constraint.
 
 First, VITAL weights are expert-specified to preserve interpretability and were not trained as an optimized prediction model. Sensitivity analyses showed stable prioritization around the red gate, but disease-specific deployment should recalibrate thresholds and weights against local disease architecture.
 
-Second, historical validation is sparse. VITAL-red captured 1/23 strict future P/LP-to-VUS/B/LB events in the 3,000-variant audit, confirming that it is not a sensitive predictor of all future reclassification. Its intended endpoint is high-specificity frequency-assertion prioritization.
+Second, historical validation is sparse. VITAL-red captured 1/23 strict future P/LP-to-VUS/B/LB events in the 3,000-variant audit, confirming that it is not a sensitive predictor of all future reclassification. Its intended endpoint is high-specificity frequency-assertion prioritization. Independent validation against larger ClinGen, LOVD, or expert-panel downgrade sets remains a first-order limitation.
 
 Third, the score and ontology do not directly model penetrance, phase, zygosity, inheritance, phenotype specificity, segregation, MAVE/functional data, transcript rescue, NMD, or private laboratory evidence. These remain expert review tasks.
 
 Fourth, the AF-observed subset is not representative of all ClinVar arrhythmia P/LP assertions. Frequency-based conclusions are restricted to that evaluable space by design. The non-evaluable majority should be read as an additional interpretability failure caused by representation, normalization, and detectability limits, not as evidence against the AF-observed signal.
 
-Fifth, workflow-concordance benchmarking uses proxy labels and is partly circular because weak review and AC-supported frequency evidence help define both the operational positives and the red gate. These metrics should be read as burden diagnostics, not diagnostic accuracy.
+Fifth, the internal consistency audit uses proxy labels and is partly circular because weak review and AC-supported frequency evidence help define both the operational positives and the red gate. These metrics should be read as burden diagnostics, not diagnostic accuracy.
 
 Sixth, public ClinVar captures classification-level changes, not patient-level downstream effects. We can quantify public decision-risk exposure as records and minimum submitter-exposure units, but not actual diagnosis reversal, cascade-testing uptake, surveillance changes, reproductive decisions, or therapy changes.
 
@@ -250,4 +279,4 @@ VITAL is implemented as a reproducible batch-scoring workflow with cached interm
 
 ## Data availability
 
-Code, cached intermediate files, figures, and supplementary outputs required to reproduce downstream analyses are available in the project repository. The April 21, 2026 data freeze used ClinVar records retrieved through NCBI Entrez and bulk variant_summary files, gnomAD v4.1.1 exome/genome data queried through the gnomAD GraphQL API, and UCSC annotation resources. Machine-readable supplementary tables include VITAL scores, frequency flags, severe-annotation discordance, mechanism triage, red-priority case summaries, logical incompatibility audit outputs, frequency-evaluability gap outputs, temporal robustness outputs, clinical decision-risk proxy outputs, historical audits, expert-panel comparator outputs, and sensitivity analyses.
+Code, cached intermediate files, figures, and supplementary outputs required to reproduce downstream analyses are available in the project repository. The April 21, 2026 data freeze used ClinVar records retrieved through NCBI Entrez and bulk variant_summary files, gnomAD v4.1.1 exome/genome data queried through the gnomAD GraphQL API, and UCSC annotation resources. Machine-readable supplementary tables include VITAL scores, frequency flags, severe-annotation discordance, mechanism triage, red-priority case summaries, logical incompatibility audit outputs, frequency-evaluability gap outputs, operational label-state transition outputs, non-evaluable routing outputs, temporal robustness outputs, clinical decision-risk proxy outputs, historical audits, expert-panel comparator outputs, and sensitivity analyses.

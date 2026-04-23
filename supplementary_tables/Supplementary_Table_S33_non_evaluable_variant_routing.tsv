@@ -1,0 +1,6 @@
+non_evaluable_variant_type	recommended_next_step	interpretation_guardrail
+Indel or duplication with no gnomAD record	Genome-level query plus orthogonal validation when clinically material.	Do not interpret absence as rarity; treat as representation-sensitive.
+Allele-discordant SNV or MNV	Normalize, left-align, verify transcript/genomic allele, and requery exact allele.	Same-site observation is not exact-allele frequency evidence.
+Exact match without usable AF block	Retain gray status and recheck in future gnomAD/ClinVar freeze.	Do not convert missing AF to AF=0.
+No record SNV in constrained gene	Deferred review with phenotype, segregation, and mechanism context.	Absence supports neither frequency consistency nor contradiction by itself.
+Complex allele or haplotype	Resolve allele representation, phase, and haplotype-specific literature before frequency interpretation.	Do not transfer single-site frequency assumptions to multi-allelic/haplotype assertions.

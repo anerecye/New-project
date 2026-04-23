@@ -1,0 +1,7 @@
+field_name,required_for,allowed_values,action_if_unavailable
+gnomAD_exome_present,all gray indel/duplication or exact-match-without-AF cases,yes/no/unknown,retain gray state; do not impute AF=0
+gnomAD_genome_present,all gray indel/duplication or structural/complex alleles,yes/no/unknown,request genome-level requery or defer to future freeze
+coverage_sufficient,red or gray calls where absence/low AF is clinically material,yes/no/unknown/not_applicable,route to detectability review before using absence as rarity evidence
+mapping_quality_concern,"indels, duplications, repeats, homopolymers, and complex alleles",yes/no/unknown,treat as representation-sensitive; consider orthogonal validation
+variant_representation_ambiguity,"allele-discordant, same-site, multiallelic, and haplotype assertions",yes/no/unknown,normalize/left-align/phase before frequency interpretation
+detectability_assessment_complete,gray-to-actionable routing,yes/no,variant cannot leave gray state on frequency evidence alone

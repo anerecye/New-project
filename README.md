@@ -147,6 +147,30 @@ Generated files:
 - `supplementary_tables/Supplementary_Table_S26_temporal_robustness_summary.tsv`
 - `supplementary_tables/Supplementary_Table_S27_temporal_ac_threshold_sensitivity.tsv`
 
+## Validation Readiness and AC Reliability
+
+The independent-validation package turns the main weakness of the current analysis into a pre-specified external review task. It does not claim that expert validation has already been completed. Instead, it fixes the endpoint, builds a blinded review form, keeps a separate VITAL key for analysis, and reports AC reliability as strata rather than a single magic cutoff.
+
+```bash
+python src/run_vital_validation_readiness.py
+```
+
+Key outputs:
+
+- `data/processed/vital_independent_validation_protocol.csv`
+- `data/processed/vital_blinded_expert_review_form.csv`
+- `data/processed/vital_blinded_expert_pilot_key.csv`
+- `data/processed/vital_ac_reliability_strata.csv`
+- `data/processed/vital_ac_threshold_sensitivity_extended.csv`
+- `data/processed/vital_detectability_required_fields.csv`
+- `data/processed/vital_temporal_red_tracking_summary.csv`
+- `supplementary_tables/Supplementary_Table_S34_blinded_expert_pilot_key.tsv`
+- `supplementary_tables/Supplementary_Table_S35_blinded_expert_review_form.tsv`
+- `supplementary_tables/Supplementary_Table_S36_ac_reliability_strata.tsv`
+- `supplementary_tables/Supplementary_Table_S37_detectability_required_fields.tsv`
+
+The blinded pilot contains 23 variants: 3 red-priority cases, 10 gray no-frequency-evidence cases, and 10 non-red controls. The endpoint is expert consensus on `requires re-review` versus `does not require re-review`; planned metrics are sensitivity, specificity, PPV for red/gray routing, Cohen/Fleiss kappa, and discordance adjudication.
+
 ## Clinical Decision-Risk Proxy
 
 ClinVar does not expose patient counts, diagnoses changed, or cascade-testing uptake. The repository therefore includes a conservative public-exposure proxy: each P/LP record is a potential decision-risk record, and each submitter contributes one minimum submitter-exposure unit; missing submitter counts are counted as one.

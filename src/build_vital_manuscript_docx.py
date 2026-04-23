@@ -283,6 +283,73 @@ APPENDIX_TABLES = [
             "reality_interpretation",
         ],
     ),
+    (
+        "Appendix Table A17. Pre-specified blinded expert validation protocol",
+        BASE_DIR / "data" / "processed" / "vital_independent_validation_protocol.csv",
+        [
+            "protocol_element",
+            "pre_specified_value",
+            "rationale",
+        ],
+    ),
+    (
+        "Appendix Table A18. AC reliability strata for frequency-flagged variants",
+        BASE_DIR / "data" / "processed" / "vital_ac_reliability_strata.csv",
+        [
+            "ac_reliability_stratum",
+            "frequency_flagged_variants",
+            "vital_red_variants",
+            "red_variant_ids",
+            "interpretation",
+        ],
+    ),
+    (
+        "Appendix Table A19. Extended AC threshold sensitivity",
+        BASE_DIR / "data" / "processed" / "vital_ac_threshold_sensitivity_extended.csv",
+        [
+            "ac_threshold",
+            "red_queue_count",
+            "red_queue_variants",
+            "composition_note",
+        ],
+    ),
+    (
+        "Appendix Table A20. Required detectability fields before gray-to-actionable routing",
+        BASE_DIR / "data" / "processed" / "vital_detectability_required_fields.csv",
+        [
+            "field_name",
+            "required_for",
+            "allowed_values",
+            "action_if_unavailable",
+        ],
+    ),
+    (
+        "Appendix Table A21. Temporal red-priority tracking fields",
+        BASE_DIR / "data" / "processed" / "vital_temporal_red_tracking_summary.csv",
+        [
+            "snapshot",
+            "gene",
+            "clinvar_id",
+            "vital_score",
+            "is_red",
+            "global_ac",
+            "popmax_ac",
+            "qualifying_frequency_ac",
+            "review_status",
+            "inheritance_flag",
+            "exit_reason_if_removed_from_red_queue",
+        ],
+    ),
+    (
+        "Appendix Table A22. Contextual overlay modules excluded from the core VITAL score",
+        BASE_DIR / "data" / "processed" / "vital_contextual_overlay_modules.csv",
+        [
+            "overlay",
+            "examples",
+            "role",
+            "score_policy",
+        ],
+    ),
 ]
 
 

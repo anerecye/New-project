@@ -1,0 +1,6 @@
+ac_reliability_stratum,frequency_flagged_variants,vital_red_variants,red_variant_ids,interpretation
+AC <10 or unavailable,100,0,,Low reliability; do not use as urgent actionability evidence without additional support.
+AC 10-19,6,0,,Intermediate-low reliability; useful for watchlist but not default red gate.
+AC 20-49,6,2,TRDN:VCV001325231; KCNH2:VCV004535537,Default actionability floor; enough to avoid one-allele noise but still near-boundary.
+AC 50-199,2,0,,Stronger frequency reliability; supports higher confidence in frequency tension.
+AC >=200,1,1,SCN5A:VCV000440850,Very strong frequency reliability; frequency signal should dominate review prioritization.

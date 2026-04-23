@@ -1,0 +1,6 @@
+ac_threshold,red_queue_count,red_queue_variants,composition_note
+AC >= 10,4,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537; CACNB2:VCV003774534,Lower than default; admits lower-AC borderline calls such as CACNB2 when present.
+AC >= 20,3,SCN5A:VCV000440850; TRDN:VCV001325231; KCNH2:VCV004535537,"Default compromise gate retaining SCN5A, TRDN, and borderline KCNH2."
+AC >= 50,1,SCN5A:VCV000440850,High-reliability gate retains only SCN5A and drops TRDN/KCNH2 near-boundary AC cases.
+AC >= 100,1,SCN5A:VCV000440850,High-reliability gate retains only SCN5A and drops TRDN/KCNH2 near-boundary AC cases.
+AC >= 200,1,SCN5A:VCV000440850,High-reliability gate retains only SCN5A and drops TRDN/KCNH2 near-boundary AC cases.

@@ -488,6 +488,37 @@ APPENDIX_TABLES = [
             "vital_red_flag",
         ],
     ),
+    (
+        "Appendix Table A34. Clinical action context summary for arrhythmia frequency-tension variants",
+        BASE_DIR / "data" / "processed" / "vital_clinical_action_context_summary.csv",
+        [
+            "clinical_context",
+            "n_frequency_tension",
+            "percent_of_tension",
+            "ci95_low_percent",
+            "ci95_high_percent",
+            "ac_supported_n",
+            "weak_review_n",
+            "red_n",
+            "popmax_only_n",
+        ],
+    ),
+    (
+        "Appendix Table A35. Operational regime distribution for arrhythmia frequency-tension variants",
+        BASE_DIR / "data" / "processed" / "vital_frequency_tension_regime_distribution.csv",
+        [
+            "regime",
+            "n",
+            "percent_of_tension",
+            "ci95_low_percent",
+            "ci95_high_percent",
+            "ac_ge_20_n",
+            "weak_review_n",
+            "red_n",
+            "popmax_only_n",
+            "af_gt_1e_4_n",
+        ],
+    ),
 ]
 
 

@@ -275,6 +275,29 @@ Key outputs:
 
 The guideline-tension audit is deliberately conservative: it does not claim disagreement with ClinGen expert panels. Instead, it records that the red-priority cases lack expert-panel/practice-guideline review in the public record, while ClinVar/ClinGen terminology already supports state-aware labels such as low-penetrance and risk-allele categories.
 
+## Clinical Action Contexts and Regime Distribution
+
+This layer turns the 115-variant frequency-tension set into two manuscript-ready summaries: where those variants sit in real clinical-action contexts, and how they partition into operational label-state regimes.
+
+```bash
+python src/run_vital_clinical_action_contexts.py
+```
+
+Headline outputs:
+
+- `103 / 115` tension variants (`89.6%`, 95% CI `82.6-93.9`) fall in an action-linked arrhythmia core where a public P/LP label can plausibly influence cascade testing or management.
+- `60 / 115` lie in drug-restriction contexts and `59 / 115` in device or intensive-surveillance contexts.
+- The action-linked core is not purely low-confidence noise: within those `103` variants, `51` have weak review structure, `9` are AC-supported, and all `3` VITAL-red cases are contained inside this clinical-action subset.
+- Operational regime split: `1` hard dominant incompatibility candidate (`SCN5A`), `76` boundary/monitoring tensions, and `38` recessive/carrier-compatible tensions in `CASQ2` or `TRDN`.
+- AC-supported signals are unevenly distributed across regimes: `1` in the hard dominant class, `1` in the standard-context boundary class, and `7` in the recessive/carrier-compatible class.
+
+Generated files:
+
+- `data/processed/vital_clinical_action_context_summary.csv`
+- `data/processed/vital_frequency_tension_regime_distribution.csv`
+- `supplementary_tables/Supplementary_Table_S52_clinical_action_context_summary.tsv`
+- `supplementary_tables/Supplementary_Table_S53_frequency_tension_regime_distribution.tsv`
+
 ## Frequency Constraint and Maximum Credible AF
 
 The frequency-constraint layer formalizes the "too common for high-penetrance Mendelian disease" argument using maximum credible allele frequency, disease-prevalence logic, Bayesian ACMG-style odds, recessive carrier logic, and allele-count reliability. In these outputs, `allelic_contribution_fraction` means the fraction of disease attributable to a variant, while gnomAD `AC` remains allele count.

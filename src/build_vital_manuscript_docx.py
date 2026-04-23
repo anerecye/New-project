@@ -25,7 +25,7 @@ FIGURE_INSERTIONS = {}
 
 APPENDIX_TABLES = [
     (
-        "Appendix Table A1. Baseline comparison against VITAL red",
+        "Appendix Table A1. Baseline comparison against the urgent review queue",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_method_comparison.csv",
         [
             "method",
@@ -39,7 +39,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A2. VITAL threshold sweep",
+        "Appendix Table A2. Frequency-tension threshold sweep",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_threshold_sweep.csv",
         [
             "score_threshold",
@@ -118,7 +118,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A7. VITAL expert-weight sensitivity by red-priority variant",
+        "Appendix Table A7. Expert-weight sensitivity by urgent-review variant",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_weight_sensitivity_variant_profile_table.csv",
         [
             "gene",
@@ -131,7 +131,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A7b. One-weight-at-a-time VITAL sensitivity",
+        "Appendix Table A7b. One-weight-at-a-time score sensitivity",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_one_weight_sensitivity.csv",
         [
             "component_varied",
@@ -172,7 +172,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A10. VITAL pathogenicity tension continuum by score band",
+        "Appendix Table A10. Pathogenicity tension continuum by score band",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_frequency_function_discordance_summary.csv",
         [
             "vital_score_band_20pt",
@@ -187,7 +187,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A11. VITAL signal reorganization layers",
+        "Appendix Table A11. Signal reorganization layers",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_signal_reorganization_summary.csv",
         [
             "signal_layer",
@@ -203,7 +203,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A12. LOF subtype discordance across the VITAL continuum",
+        "Appendix Table A12. LOF subtype discordance across the frequency-tension continuum",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_lof_subtype_discordance_summary.csv",
         [
             "lof_subtype",
@@ -222,7 +222,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A13. Live manual-review snapshot for VITAL-red variants",
+        "Appendix Table A13. Live manual-review snapshot for urgent-review variants",
         BASE_DIR / "data" / "processed" / "vital_red_manual_review_live_check.csv",
         [
             "gene",
@@ -271,7 +271,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A16. VITAL-red biological contrast case studies",
+        "Appendix Table A16. Biological contrast case studies for urgent-review variants",
         BASE_DIR / "data" / "processed" / "arrhythmia_vital_biological_contrast_cases.csv",
         [
             "variant",
@@ -324,7 +324,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A21. Temporal red-priority tracking fields",
+        "Appendix Table A21. Temporal urgent-review tracking fields",
         BASE_DIR / "data" / "processed" / "vital_temporal_red_tracking_summary.csv",
         [
             "snapshot",
@@ -341,7 +341,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A22. Contextual overlay modules excluded from the core VITAL score",
+        "Appendix Table A22. Contextual overlay modules excluded from the core frequency-tension score",
         BASE_DIR / "data" / "processed" / "vital_contextual_overlay_modules.csv",
         [
             "overlay",
@@ -351,7 +351,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A23. Clinical decision projection for VITAL-red variants",
+        "Appendix Table A23. Clinical decision projection for urgent-review variants",
         BASE_DIR / "data" / "processed" / "vital_red_clinical_decision_projection.csv",
         [
             "gene",
@@ -435,7 +435,7 @@ APPENDIX_TABLES = [
         ],
     ),
     (
-        "Appendix Table A29. Allele-count reliability for red-priority cases",
+        "Appendix Table A29. Allele-count reliability for exemplar high-tension cases",
         BASE_DIR / "data" / "processed" / "vital_allele_count_reliability.csv",
         [
             "gene",

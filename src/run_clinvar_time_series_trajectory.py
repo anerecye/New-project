@@ -597,7 +597,7 @@ def make_summary_tables(wide: pd.DataFrame, long_df: pd.DataFrame, snapshots: li
 def make_retention_plot(snapshot_summary: pd.DataFrame, output_path: Path) -> None:
     plot_groups = ["VITAL_red", "orange_high_tension", "yellow_watch", "gray_no_frequency", "green_low_tension"]
     labels = {
-        "VITAL_red": "VITAL red",
+        "VITAL_red": "Urgent review",
         "orange_high_tension": "Orange",
         "yellow_watch": "Yellow",
         "gray_no_frequency": "Gray",
@@ -704,7 +704,7 @@ def run(historical_predictions: Path, output_prefix: str, snapshots: list[tuple[
             "first_strict_downgrade_snapshot",
             "current_missing_category",
         ]
-        print("\nVITAL-red trajectories:")
+        print("\nUrgent-review trajectories:")
         print(red_queue[cols].to_string(index=False))
 
 
@@ -716,7 +716,7 @@ def parse_args() -> argparse.Namespace:
         "--historical-predictions",
         type=Path,
         default=DEFAULT_HISTORICAL_PREDICTIONS,
-        help="Historical VITAL predictions table to annotate with archived ClinVar trajectories.",
+        help="Historical predictions table to annotate with archived ClinVar trajectories.",
     )
     parser.add_argument(
         "--output-prefix",

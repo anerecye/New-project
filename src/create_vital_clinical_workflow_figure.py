@@ -85,7 +85,7 @@ def main() -> None:
     ax.text(
         0.4,
         8.86,
-        "VITAL laboratory decision tree",
+        "Laboratory decision tree for public-label review",
         fontsize=19,
         fontweight="bold",
         ha="left",

@@ -409,9 +409,9 @@ def plot_score_distribution(scores: pd.DataFrame, output_path: Path) -> None:
             edgecolors="none",
         )
 
-    ax.axhline(70, color="#b3261e", linestyle="--", linewidth=1.25, label="VITAL red threshold")
+    ax.axhline(70, color="#b3261e", linestyle="--", linewidth=1.25, label="Urgent-review threshold")
     ax.axhline(60, color="#d18f2f", linestyle=":", linewidth=1.05, label="watchlist threshold")
-    ax.set_ylabel("VITAL score among frequency-observed variants")
+    ax.set_ylabel("Score among frequency-observed variants")
     ax.set_ylim(-3, 105)
     ax.set_xticks(range(1, len(labels) + 1))
     ax.set_xticklabels(labels)
@@ -498,7 +498,7 @@ def run_historical_validation(args: argparse.Namespace) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Run a large independent cross-disease VITAL portability validation "
+            "Run a large independent cross-disease portability validation "
             "using random ClinVar P/LP variants outside the arrhythmia training panel."
         )
     )

@@ -90,7 +90,7 @@ def summarize_prefix(prefix: str, domain: str, domain_type: str) -> tuple[dict[s
     scores_path = data_path(prefix, "vital_scores.csv")
     summary_path = data_path(prefix, "vital_summary.csv")
     if not scores_path.exists() or not summary_path.exists():
-        raise FileNotFoundError(f"Missing VITAL outputs for {prefix}.")
+        raise FileNotFoundError(f"Missing score outputs for {prefix}.")
     scores = pd.read_csv(scores_path)
     summary = pd.read_csv(summary_path)
     vital_score = pd.to_numeric(scores.get("vital_score"), errors="coerce")
@@ -137,7 +137,7 @@ def summarize_prefix(prefix: str, domain: str, domain_type: str) -> tuple[dict[s
 def score_distribution_for_prefix(prefix: str, domain: str, domain_type: str) -> pd.DataFrame:
     scores_path = data_path(prefix, "vital_scores.csv")
     if not scores_path.exists():
-        raise FileNotFoundError(f"Missing VITAL score table for {prefix}.")
+        raise FileNotFoundError(f"Missing score table for {prefix}.")
     scores = pd.read_csv(scores_path)
     keep_columns = [
         "variant_key",
@@ -221,12 +221,12 @@ def plot_external_score_distribution(score_distribution: pd.DataFrame, output_pa
             edgecolors="none",
         )
 
-    ax.axhline(70, color="#b3261e", linestyle="--", linewidth=1.3, label="VITAL red cutoff")
+    ax.axhline(70, color="#b3261e", linestyle="--", linewidth=1.3, label="Urgent-review cutoff")
     ax.axhline(60, color="#d18f2f", linestyle=":", linewidth=1.1, label="watchlist cutoff")
-    ax.set_ylabel("VITAL score among frequency-observed variants")
+    ax.set_ylabel("Score among frequency-observed variants")
     ax.set_xlabel("")
     ax.set_ylim(-3, 105)
-    ax.set_title("External-domain VITAL score distribution")
+    ax.set_title("External-domain score distribution")
     ax.set_xticks(range(1, len(domain_order) + 1))
     ax.set_xticklabels(domain_order)
     ax.grid(axis="y", color="#d8dde6", linewidth=0.8, alpha=0.7)
@@ -243,7 +243,7 @@ def plot_external_score_distribution(score_distribution: pd.DataFrame, output_pa
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run small external-domain VITAL panels and summarize score distributions."
+        description="Run small external-domain panels and summarize score distributions."
     )
     parser.add_argument("--variant-summary", type=Path, default=BASE_DIR / "data" / "variant_summary.txt.gz")
     parser.add_argument("--panel-sample-size", type=int, default=300)

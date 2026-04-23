@@ -558,7 +558,7 @@ def make_historical_ac_threshold_sensitivity(evaluated: pd.DataFrame) -> pd.Data
             variation = str(row.get("clinvar_id", row.get("variation_id", "")))
             score = row.get("vital_score", np.nan)
             score_label = f"{score:.1f}" if pd.notna(score) else "NA"
-            labels.append(f"{gene}:{variation}:VITAL={score_label}")
+            labels.append(f"{gene}:{variation}:score={score_label}")
         return "; ".join(labels)
 
     rows: list[dict[str, object]] = []
@@ -757,7 +757,7 @@ def evaluate_reclassification(
             {"target": target, "metric": "vital_red_recall_ci_low", "value": recall_low},
             {"target": target, "metric": "vital_red_recall_ci_high", "value": recall_high},
             {"target": target, "metric": "vital_red_count", "value": red_total},
-            {"target": target, "metric": "confidence_interval_method", "value": "Wilson 95% for vital_red precision and recall"},
+            {"target": target, "metric": "confidence_interval_method", "value": "Wilson 95% for urgent-review precision and recall"},
         ]
 
     metrics = pd.DataFrame(
@@ -821,7 +821,7 @@ def evaluate_reclassification(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Validate VITAL reclassification predictions across two ClinVar "
+            "Validate cached score reclassification predictions across two ClinVar "
             "variant_summary snapshots. The score table should be generated "
             "from the baseline snapshot."
         )

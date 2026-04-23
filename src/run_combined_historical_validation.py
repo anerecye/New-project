@@ -340,7 +340,7 @@ def deduplicate_for_analysis(predictions: pd.DataFrame, output_prefix: str) -> p
                     "vital_red_before_dedupe": raw_red_count,
                     "vital_red_after_dedupe": int(bool_series(table["vital_red_flag"]).sum()),
                     "vital_red_removed_by_dedupe": raw_red_count - int(bool_series(table["vital_red_flag"]).sum()),
-                    "kept_rule": "within each domain, keep max VITAL score per variation_id, then max VITAL score per variant_key",
+                    "kept_rule": "within each domain, keep the max score per variation_id, then the max score per variant_key",
                 }
             ]
         ),
@@ -440,7 +440,7 @@ def deduplicate_for_pooled(predictions: pd.DataFrame, output_prefix: str) -> pd.
                     - int(bool_series(table["vital_red_flag"]).sum()),
                     "kept_rule": (
                         "prefer domain priority arrhythmia > cardiomyopathy > epilepsy > hearing_loss > "
-                        "random_clinvar_plp; within same key/domain priority keep max VITAL score"
+                        "random_clinvar_plp; within the same key/domain priority keep the max score"
                     ),
                 }
             ]
@@ -714,7 +714,7 @@ def summarize_combined(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run multi-domain historical VITAL validation with strict, broad, and expanded endpoints."
+        description="Run multi-domain historical validation with strict, broad, and expanded endpoints."
     )
     parser.add_argument("--baseline-variant-summary", type=Path, default=BASE_DIR / "data" / "raw" / "variant_summary_2023-01.txt.gz")
     parser.add_argument("--followup-variant-summary", type=Path, default=BASE_DIR / "data" / "variant_summary.txt.gz")

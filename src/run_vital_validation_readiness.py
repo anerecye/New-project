@@ -119,7 +119,7 @@ def select_blinded_pilot(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     controls["pilot_stratum"] = "non_red_frequency_consistent_control"
 
     pilot = pd.concat([red, gray, controls], ignore_index=True)
-    pilot.insert(0, "pilot_variant_id", [f"VITAL-PILOT-{i:03d}" for i in range(1, len(pilot) + 1)])
+    pilot.insert(0, "pilot_variant_id", [f"PILOT-{i:03d}" for i in range(1, len(pilot) + 1)])
     pilot["pre_specified_endpoint"] = "expert_requires_re_review"
     pilot["expert_consensus_rule"] = "two_of_three_reviewers_or_adjudication_panel"
     pilot["planned_metrics"] = (
@@ -196,7 +196,7 @@ def build_protocol() -> pd.DataFrame:
         {
             "protocol_element": "external_endpoint",
             "pre_specified_value": "requires re-review / does not require re-review",
-            "rationale": "Separates external adjudication from VITAL's internal score construction.",
+            "rationale": "Separates external adjudication from internal score construction.",
         },
         {
             "protocol_element": "pilot_set_size",
@@ -205,8 +205,8 @@ def build_protocol() -> pd.DataFrame:
         },
         {
             "protocol_element": "reviewer_blinding",
-            "pre_specified_value": "review form excludes VITAL score, band, red flag, and pilot stratum",
-            "rationale": "Prevents circular confirmation of VITAL route by reviewers.",
+            "pre_specified_value": "review form excludes score, band, red flag, and pilot stratum",
+            "rationale": "Prevents circular confirmation of the route by reviewers.",
         },
         {
             "protocol_element": "consensus_rule",
@@ -216,7 +216,7 @@ def build_protocol() -> pd.DataFrame:
         {
             "protocol_element": "metrics",
             "pre_specified_value": "sensitivity, specificity, PPV for red/gray routing; Cohen/Fleiss kappa; discordance review",
-            "rationale": "Treats VITAL as review routing support, not as a diagnostic classifier.",
+            "rationale": "Treats the score as review-routing support, not as a diagnostic classifier.",
         },
         {
             "protocol_element": "external_retrospective_sources",
@@ -386,19 +386,19 @@ def build_context_overlays() -> pd.DataFrame:
             "overlay": "functional_flag",
             "examples": "MAVE/MaveDB, patch clamp, splicing assay, minigene",
             "role": "interpretive overlay for red cases",
-            "score_policy": "not part of core VITAL score",
+            "score_policy": "not part of the core score",
         },
         {
             "overlay": "segregation_flag",
             "examples": "de novo, cosegregation, phase, second allele",
-            "role": "case-level adjudication after VITAL routing",
-            "score_policy": "not part of core VITAL score",
+            "role": "case-level adjudication after routing",
+            "score_policy": "not part of the core score",
         },
         {
             "overlay": "transcript_flag",
             "examples": "MANE Select, clinically relevant transcript, alternative transcript only, NMD rescue",
             "role": "mechanism qualification and annotation-inflation review",
-            "score_policy": "not part of core VITAL score",
+            "score_policy": "not part of the core score",
         },
     ]
     return pd.DataFrame(rows)

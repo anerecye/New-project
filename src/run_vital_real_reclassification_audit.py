@@ -52,7 +52,7 @@ def main() -> None:
                 "vital_red_precision_percent": pct(len(red_strict), len(red)),
                 "vital_red_recall_percent": pct(len(red_strict), len(strict)),
                 "clinical_interpretation": (
-                    "This is the real classification-change endpoint. VITAL red is not sensitive for all future "
+                    "This is the real classification-change endpoint. The urgent-review queue is not sensitive for all future "
                     "downgrades, but it did capture one high-frequency weak-review P/LP assertion that later moved to VUS."
                 ),
             },
@@ -66,7 +66,7 @@ def main() -> None:
                 "vital_red_precision_percent": pct(len(red_strict), len(red)),
                 "vital_red_recall_percent": pct(len(red_strict), len(frequency_strict)),
                 "clinical_interpretation": (
-                    "Restricting to variants where VITAL can read population frequency still leaves low recall; "
+                    "Restricting to variants where the score can read population frequency still leaves low recall; "
                     "the endpoint validates scope rather than broad prediction."
                 ),
             },
@@ -81,7 +81,7 @@ def main() -> None:
                 "vital_red_recall_percent": pct(int(expert_strict["red_priority"].sum()), len(expert_strict)),
                 "clinical_interpretation": (
                     "External curated downgrade stress-test: the expert-panel RYR1 downgrade had no frequency tension, "
-                    "so VITAL appropriately did not flag it. VITAL is not a general reclassification detector."
+                    "so the score appropriately did not flag it. This is not a general reclassification detector."
                 ),
             },
         ]
@@ -105,7 +105,7 @@ def main() -> None:
     case_cols = [c for c in case_cols if c in df.columns]
 
     real_red_cases = red_strict.loc[:, case_cols].copy()
-    real_red_cases["case_role"] = "real_strict_reclassification_captured_by_VITAL_red"
+    real_red_cases["case_role"] = "real_strict_reclassification_captured_by_urgent_review_queue"
     real_red_cases["clinical_impact"] = (
         "Public ClinVar classification changed from P/LP to VUS/B/LB; patient-level downstream outcomes are not available."
     )
@@ -113,7 +113,7 @@ def main() -> None:
     curated_cases = expert_strict.loc[:, case_cols].copy()
     curated_cases["case_role"] = "expert_panel_curated_strict_downgrade_not_frequency_tension"
     curated_cases["clinical_impact"] = (
-        "External curated downgrade event; absence of frequency tension marks the boundary of VITAL's intended scope."
+        "External curated downgrade event; absence of frequency tension marks the boundary of the score's intended scope."
     )
 
     all_cases = pd.concat([real_red_cases, curated_cases], ignore_index=True, sort=False)

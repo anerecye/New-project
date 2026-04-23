@@ -341,7 +341,7 @@ def score_preloaded_snapshot(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Generate VITAL scores from an archived ClinVar variant_summary snapshot."
+        description="Generate cached score tables from an archived ClinVar variant_summary snapshot."
     )
     parser.add_argument("--variant-summary", type=Path, required=True)
     parser.add_argument("--output-prefix", required=True)
@@ -379,7 +379,7 @@ def main() -> None:
         sample_variants=args.sample_variants,
         random_seed=args.random_seed,
     )
-    print("VITAL snapshot scoring outputs")
+    print("Snapshot scoring outputs")
     for name, path in outputs.items():
         print(f"{name}: {path}")
 

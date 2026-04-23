@@ -424,7 +424,7 @@ def make_s15_cross_disease_outliers() -> pd.DataFrame:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Generate machine-readable supplementary tables S2, S5, and VITAL supplements."
+        description="Generate machine-readable supplementary tables S2, S5, and score-based supplements."
     )
     parser.add_argument("--output-prefix", default="arrhythmia")
     parser.add_argument("--refresh-gene-loci", action="store_true")

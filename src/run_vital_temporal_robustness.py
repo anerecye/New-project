@@ -266,7 +266,7 @@ def compute_vital(
 
 def load_current_canonical_scores() -> pd.DataFrame:
     if not CURRENT_CANONICAL_SCORES.exists():
-        raise FileNotFoundError(f"Missing current canonical VITAL scores: {CURRENT_CANONICAL_SCORES}")
+        raise FileNotFoundError(f"Missing current canonical score table: {CURRENT_CANONICAL_SCORES}")
     scores = pd.read_csv(CURRENT_CANONICAL_SCORES, low_memory=False)
     scores["snapshot"] = CURRENT_SNAPSHOT_NAME
     scores["variation_id"] = scores["variation_id"].map(normalize_variation_id)
@@ -465,9 +465,9 @@ def make_distribution_plot(scored: pd.DataFrame, output_path: Path) -> None:
             color=colors.get(snapshot),
         )
     ax.axvline(70, color="#9B1C31", linestyle="--", linewidth=1.5, label="red gate")
-    ax.set_xlabel("VITAL score")
+    ax.set_xlabel("Score")
     ax.set_ylabel("Density")
-    ax.set_title("Temporal VITAL score distribution")
+    ax.set_title("Temporal score distribution")
     ax.legend(frameon=False)
     ax.grid(axis="y", alpha=0.25)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -542,7 +542,7 @@ def run(output_prefix: str, download_missing: bool) -> dict[str, Path]:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Temporal robustness analysis for arrhythmia ClinVar VITAL scoring."
+        description="Temporal robustness analysis for arrhythmia ClinVar score-based prioritization."
     )
     parser.add_argument(
         "--output-prefix",

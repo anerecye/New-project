@@ -237,7 +237,7 @@ def calibrate_target(df: pd.DataFrame, target_name: str, target_col: str) -> tup
                 "uncalibrated_brier_oof": brier_score(y, np.repeat(y.mean(), len(y))),
                 "isotonic_ece_oof": expected_calibration_error(y, iso_oof),
                 "platt_ece_oof": expected_calibration_error(y, platt_oof),
-                "calibration_method": "5-fold out-of-fold isotonic PAVA and Platt logistic scaling on VITAL score only",
+                "calibration_method": "5-fold out-of-fold isotonic PAVA and Platt logistic scaling on the cached score only",
             }
         ]
     )
@@ -363,7 +363,7 @@ def empirical_logistic_calibration(df: pd.DataFrame, calibration_scope: str) -> 
                 "average_precision": average_precision(y, expert_score),
                 "brier_score": brier_score(y, np.clip(expert_score / 100, 0, 1)),
                 "spearman_vs_expert_score": 1.0,
-                "method_note": "Expert-specified VITAL score; not fitted to historical endpoint",
+                "method_note": "Expert-specified score; not fitted to the historical endpoint",
             },
             {
                 "model": "component_logistic_oof",
@@ -375,7 +375,7 @@ def empirical_logistic_calibration(df: pd.DataFrame, calibration_scope: str) -> 
                 "average_precision": average_precision(y, oof),
                 "brier_score": brier_score(y, oof),
                 "spearman_vs_expert_score": spearman_rho(expert_score, oof),
-                "method_note": "5-fold out-of-fold non-negative logistic regression using VITAL component scores",
+                "method_note": "5-fold out-of-fold non-negative logistic regression using component scores",
             },
             {
                 "model": "component_logistic_full_fit_for_ranking_audit",
@@ -408,7 +408,7 @@ def empirical_logistic_calibration(df: pd.DataFrame, calibration_scope: str) -> 
     coefficients["expert_max_points"] = [45, 20, 10, 7, 8, 10, 10]
     coefficients["expert_weight_fraction"] = coefficients["expert_max_points"] / coefficients["expert_max_points"].sum()
     coefficients["calibration_note"] = (
-        "Component weights are design-prespecified; this audit checks consistency and does not refit VITAL"
+        "Component weights are design-prespecified; this audit checks consistency and does not refit the score"
     )
 
     overlap = pd.DataFrame(
@@ -673,11 +673,11 @@ def plot_calibration(bins: pd.DataFrame, mapping: pd.DataFrame) -> None:
             )
         ax.set_ylim(0, min(1.0, max(0.08, max_value * 1.25)))
         ax.set_title(title, weight="bold")
-        ax.set_xlabel("VITAL score bin")
+        ax.set_xlabel("Score bin")
         ax.set_ylabel("Event probability")
         ax.grid(axis="y", alpha=0.25)
     axes[0].legend(frameon=False)
-    fig.suptitle("VITAL score calibration on the 3,000-variant historical cross-disease set", weight="bold")
+    fig.suptitle("Score calibration on the 3,000-variant historical cross-disease set", weight="bold")
     fig.tight_layout()
     path = FIGURE_DIR / "vital_cross_disease_3000_score_calibration.png"
     fig.savefig(path, dpi=220)
@@ -720,7 +720,7 @@ def plot_empirical_weight_calibration(coefficients: pd.DataFrame, grid: pd.DataF
     axes[1].set_title("Top grid-search profiles", weight="bold")
     axes[1].grid(axis="x", alpha=0.25)
 
-    fig.suptitle("VITAL weight-consistency audit", weight="bold")
+    fig.suptitle("Component-consistency audit", weight="bold")
     fig.tight_layout()
     path = FIGURE_DIR / "vital_cross_disease_3000_empirical_weight_calibration.png"
     fig.savefig(path, dpi=220)
@@ -774,7 +774,7 @@ def plot_restricted_calibration_models(
     axes[2].grid(axis="y", alpha=0.25)
     axes[2].legend(frameon=False, fontsize=8)
 
-    fig.suptitle("Restricted VITAL weight-consistency audit within frequency-positive variants", weight="bold")
+    fig.suptitle("Restricted component-consistency audit within frequency-positive variants", weight="bold")
     fig.tight_layout()
     path = FIGURE_DIR / "vital_cross_disease_3000_restricted_calibration_models.png"
     fig.savefig(path, dpi=220)
@@ -874,7 +874,7 @@ def main() -> None:
         grid_df[grid_df["calibration_scope"].eq("frequency_positive_records")].head(50),
     )
     plot_restricted_calibration_models(restricted_metrics, restricted_curve, restricted_dominance)
-    print("Saved VITAL score calibration outputs")
+    print("Saved score-calibration outputs")
 
 
 if __name__ == "__main__":

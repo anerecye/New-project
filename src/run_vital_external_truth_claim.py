@@ -85,7 +85,7 @@ def summarize_expert_panel_truth(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd
                 "max_vital_score": float(sub["vital_score"].max()) if len(sub) else np.nan,
                 "interpretation": (
                     "Curated expert-panel P/LP assertions are treated as an external specificity comparator, "
-                    "not as ClinVar churn. VITAL should not convert high-frequency curated exceptions into red calls."
+                    "not as ClinVar churn. The review-routing layer should not convert high-frequency curated exceptions into red calls."
                     if label == "expert_panel_reviewed_PLP"
                     else "Comparator group."
                 ),
@@ -408,7 +408,7 @@ def plot_claim(severe: pd.DataFrame, truth: pd.DataFrame) -> None:
         label="AC-supported",
         color="#f4a261",
     )
-    axes[0].bar(x + 0.2, subtype["red_priority_percent"], width=0.2, label="VITAL red", color="#b23a48")
+    axes[0].bar(x + 0.2, subtype["red_priority_percent"], width=0.2, label="Urgent review", color="#b23a48")
     axes[0].set_xticks(x)
     axes[0].set_xticklabels(subtype["label"], rotation=20, ha="right")
     axes[0].set_ylabel("Percent of exact AF-observed subtype")
@@ -427,7 +427,7 @@ def plot_claim(severe: pd.DataFrame, truth: pd.DataFrame) -> None:
         label="AC-supported",
         color="#f4a261",
     )
-    axes[1].bar(x + 0.24, truth_plot["red_priority_percent"], width=0.24, label="VITAL red", color="#b23a48")
+    axes[1].bar(x + 0.24, truth_plot["red_priority_percent"], width=0.24, label="Urgent review", color="#b23a48")
     axes[1].set_xticks(x)
     axes[1].set_xticklabels(labels, rotation=0)
     axes[1].set_ylabel("Percent")

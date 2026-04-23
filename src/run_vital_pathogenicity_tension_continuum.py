@@ -83,7 +83,7 @@ def format_variant_list(df: pd.DataFrame) -> str:
         labels.append(
             f"{row.get('gene', '')}:{row.get('clinvar_id', '')}:"
             f"{row.get('lof_subtype', row.get('functional_class', ''))}:"
-            f"VITAL={row.get('vital_score_numeric', 0):.1f}"
+            f"score={row.get('vital_score_numeric', 0):.1f}"
         )
     return "; ".join(labels)
 
@@ -229,7 +229,7 @@ def summarize_signal_reorganization(scored: pd.DataFrame) -> pd.DataFrame:
                 "median_max_frequency_signal": subset["max_frequency_signal"].median(),
                 "median_qualifying_ac": subset["qualifying_frequency_ac"].median(),
                 "interpretation_note": (
-                    "Naive AF, AC support, and VITAL bands reorganize the same frequency signal "
+                    "Naive AF, AC support, and score bands reorganize the same frequency signal "
                     "into increasingly review-fragile and function-frequency discordant subsets."
                 ),
             }
@@ -304,7 +304,7 @@ def run_continuum(score_table: Path, output_prefix: str) -> None:
     table["pathogenicity_tension_zone"] = table.apply(tension_zone, axis=1)
     table["frequency_function_discordance_class"] = table.apply(functional_discordance_class, axis=1)
     table["continuum_note"] = (
-        "VITAL positions ClinVar P/LP assertions on a pathogenicity tension continuum; "
+        "The score positions ClinVar P/LP assertions on a pathogenicity tension continuum; "
         "high-scoring variants are candidates for functional overcall, reduced penetrance, "
         "hypomorphic effect, transcript/domain context, or review re-evaluation."
     )
@@ -352,7 +352,7 @@ def run_continuum(score_table: Path, output_prefix: str) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Summarize VITAL pathogenicity tension continuum.")
+    parser = argparse.ArgumentParser(description="Summarize the pathogenicity tension continuum.")
     parser.add_argument("--score-table", type=Path, default=data_path("arrhythmia", "vital_scores.csv"))
     parser.add_argument("--output-prefix", default="arrhythmia")
     return parser.parse_args()

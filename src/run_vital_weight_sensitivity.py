@@ -203,7 +203,7 @@ def plot_one_weight_heatmap(sensitivity: pd.DataFrame, output_path: Path) -> Non
     ax.set_yticks(range(len(row_labels)))
     ax.set_yticklabels(row_labels, fontsize=10)
     ax.set_xlabel("Single component weight multiplier", fontsize=11)
-    ax.set_title("VITAL red-priority queue under one-weight-at-a-time sensitivity", fontsize=15, weight="bold")
+    ax.set_title("Urgent-review queue under one-weight-at-a-time sensitivity", fontsize=15, weight="bold")
     ax.text(
         0.0,
         1.08,
@@ -397,7 +397,7 @@ def run_weight_sensitivity(score_table: Path, output_prefix: str) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run VITAL expert-weight sensitivity profiles.")
+    parser = argparse.ArgumentParser(description="Run expert-weight sensitivity profiles.")
     parser.add_argument("--score-table", type=Path, default=data_path("arrhythmia", "vital_scores.csv"))
     parser.add_argument("--output-prefix", default="arrhythmia")
     return parser.parse_args()

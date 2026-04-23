@@ -101,7 +101,7 @@ def load_red_cases() -> pd.DataFrame:
             df[col] = pd.to_numeric(df[col], errors="coerce")
     red = df[df["vital_red_flag"].astype(str).str.lower().isin(["true", "1"])].copy()
     if red.empty:
-        raise ValueError("No VITAL red-priority cases found.")
+        raise ValueError("No urgent-review cases found.")
     return red.sort_values("vital_score", ascending=False)
 
 

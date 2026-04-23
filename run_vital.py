@@ -21,7 +21,7 @@ COMPONENTS = [
 ]
 
 BAND_LABELS = {
-    "red_reclassification_priority": "RED (reclassification-priority)",
+    "red_reclassification_priority": "RED (urgent review)",
     "orange_high_tension": "ORANGE (high tension)",
     "yellow_watchlist": "YELLOW (watchlist)",
     "blue_low_support_signal": "BLUE (low-support signal)",
@@ -149,7 +149,7 @@ def key_signals(row: pd.Series) -> list[str]:
     if truthy(row.get("vital_red_flag")):
         signals.append("manual expert re-review recommended; not automatic benign classification")
 
-    return signals or ["no major VITAL tension signal in cached score table"]
+    return signals or ["no major frequency-tension signal in cached score table"]
 
 
 def component_lines(row: pd.Series) -> list[str]:
@@ -162,14 +162,14 @@ def component_lines(row: pd.Series) -> list[str]:
 
 def print_single(row: pd.Series, query: str) -> None:
     print("=" * 64)
-    print("VITAL cached demo result")
+    print("Cached review summary")
     print("=" * 64)
     print(f"Query:        {query}")
     print(f"ClinVar ID:   {row.get('clinvar_id', 'NA')}")
     print(f"Gene:         {row.get('gene', 'NA')}")
     print(f"Variant:      {row.get('title', 'NA')}")
     print()
-    print(f"VITAL score:  {fmt_score(row.get('vital_score'))}")
+    print(f"Score:        {fmt_score(row.get('vital_score'))}")
     print(f"Band:         {band_label(row)}")
     print(f"Red flag:     {truthy(row.get('vital_red_flag'))}")
     print()
@@ -248,12 +248,12 @@ def batch_results(scores: pd.DataFrame, input_csv: Path) -> pd.DataFrame:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Fast offline VITAL demo for cached ClinVar VCV records.",
+        description="Fast offline cached-score demo for ClinVar VCV records.",
     )
     parser.add_argument("--vcv", help="ClinVar VCV ID, for example VCV000440850")
     parser.add_argument("--input", type=Path, help="CSV with a vcv/clinvar_id/variation_id column")
     parser.add_argument("--output", type=Path, help="Optional output CSV for batch mode")
-    parser.add_argument("--scores", type=Path, default=DEFAULT_SCORES, help="Cached VITAL scores CSV")
+    parser.add_argument("--scores", type=Path, default=DEFAULT_SCORES, help="Cached score CSV")
     parser.add_argument("--examples", action="store_true", help="Print demo VCV IDs")
     return parser.parse_args(argv)
 
@@ -276,7 +276,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.vcv:
         hit = find_variant(scores, args.vcv)
         if hit is None:
-            print(f"Not found in cached VITAL score table: {args.vcv}")
+            print(f"Not found in cached score table: {args.vcv}")
             print("Tip: this offline demo currently uses arrhythmia_vital_scores.csv.")
             return 2
         print_single(hit, args.vcv)

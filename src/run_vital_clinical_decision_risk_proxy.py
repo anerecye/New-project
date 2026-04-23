@@ -260,7 +260,7 @@ def run() -> dict[str, Path]:
 
 def parse_args() -> argparse.Namespace:
     return argparse.ArgumentParser(
-        description="Quantify public ClinVar P/LP decision-risk exposure using VITAL layers."
+    description="Quantify public ClinVar P/LP decision-risk exposure using cached score layers."
     ).parse_args()
 
 

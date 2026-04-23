@@ -1706,9 +1706,9 @@ def make_vital_summary_table(scores: pd.DataFrame) -> pd.DataFrame:
         }
 
     rows = [
-        row("clinvar_plp_variants_in_vital_table", denominator, denominator, "All P/LP variants carried through VITAL, including explicit no-frequency-evidence rows."),
-        row("exact_af_covered_clinvar_plp_variants", frequency_observed_count, frequency_observed_count, "Variants with observed exact gnomAD AF used for continuous VITAL scoring."),
-        row("no_gnomad_frequency_evidence_variants", no_gnomad_evidence_count, no_gnomad_evidence_count, "No AF imputation is applied; these variants retain NaN frequency fields and gray VITAL band."),
+        row("clinvar_plp_variants_in_vital_table", denominator, denominator, "All P/LP variants carried through the cached score table, including explicit no-frequency-evidence rows."),
+        row("exact_af_covered_clinvar_plp_variants", frequency_observed_count, frequency_observed_count, "Variants with observed exact gnomAD AF used for continuous score-based prioritization."),
+        row("no_gnomad_frequency_evidence_variants", no_gnomad_evidence_count, no_gnomad_evidence_count, "No AF imputation is applied; these variants retain NaN frequency fields and a gray no-frequency band."),
         row("allele_discordance_no_exact_af_variants", allele_discordance_count, allele_discordance_count, "ClinVar/gnomAD allele mismatch rows kept outside frequency scoring."),
         row("gnomad_query_error_no_frequency_evidence_variants", query_error_count, query_error_count, "Transient gnomAD query failures are flagged separately and kept outside frequency scoring."),
         row("standard_popmax_or_global_af_gt_1e_5_flags", standard_flags, standard_flags, "Naive frequency-only ACMG-style contradiction screen."),
@@ -1718,7 +1718,7 @@ def make_vital_summary_table(scores: pd.DataFrame) -> pd.DataFrame:
         row("global_af_gt_1e_4_flags", global_high, global_high, "High-frequency flags found by global AF alone."),
         row("popmax_af_gt_1e_4_flags", popmax_high, popmax_high, "High-frequency flags found when population maximum AF is considered."),
         row("ac_supported_frequency_flags", ac_supported, ac_supported, f"Frequency signal has AC >= {MIN_RECLASSIFICATION_AC} in global or popmax source."),
-        row("vital_red_reclassification_predictions", red_flags, red_flags, f"VITAL >= {VITAL_ACTION_THRESHOLD:g}, weak review, and AC-supported frequency signal."),
+        row("vital_red_reclassification_predictions", red_flags, red_flags, f"Score >= {VITAL_ACTION_THRESHOLD:g}, weak review, and AC-supported frequency signal."),
         {
             "metric": "alert_reduction_vs_standard_frequency_screen_percent",
             "value": reduction,
@@ -1730,7 +1730,7 @@ def make_vital_summary_table(scores: pd.DataFrame) -> pd.DataFrame:
     ]
     band_counts = scores["vital_band"].value_counts().to_dict()
     for band, count in sorted(band_counts.items()):
-        rows.append(row(f"vital_band_{band}", int(count), int(count), "VITAL score band count."))
+        rows.append(row(f"vital_band_{band}", int(count), int(count), "Score band count."))
     return pd.DataFrame(rows)
 
 
@@ -2072,17 +2072,17 @@ def make_vital_benchmark_tables(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd.
                     & ~table["vital_red_flag"]
                 ).sum()
             ),
-            "note": "High-confidence current P/LP variants with observed frequency evidence not called red by VITAL.",
+                "note": "High-confidence current P/LP variants with observed frequency evidence not called urgent-review.",
         },
         {
             "metric": "roc_auc_vital_score_operational_benchmark",
             "value": binary_roc_auc(positives, universe["vital_score"]),
-            "note": "Continuous VITAL score AUC on operational benchmark.",
+                "note": "Continuous score AUC on the operational benchmark.",
         },
         {
             "metric": "average_precision_vital_score_operational_benchmark",
             "value": binary_average_precision(positives, universe["vital_score"]),
-            "note": "Continuous VITAL score average precision on operational benchmark.",
+                "note": "Continuous score average precision on the operational benchmark.",
         },
     ]
     return method_comparison, curve_points, pd.DataFrame(retention_rows)
@@ -2188,7 +2188,7 @@ def make_vital_ac_threshold_sensitivity(scores: pd.DataFrame) -> pd.DataFrame:
             variation = str(row.get("clinvar_id", row.get("variation_id", "")))
             score = row.get("vital_score", np.nan)
             score_label = f"{score:.1f}" if pd.notna(score) else "NA"
-            labels.append(f"{gene}:{variation}:VITAL={score_label}")
+            labels.append(f"{gene}:{variation}:score={score_label}")
         return "; ".join(labels)
 
     reference_red = red_set(MIN_RECLASSIFICATION_AC)
@@ -2748,11 +2748,11 @@ def plot_reclassification_risk(table: pd.DataFrame, output_path: Path) -> None:
 
 def plot_vital_model(scores: pd.DataFrame, output_path: Path) -> None:
     if scores.empty:
-        log.warning("Skipping VITAL figure because score table is empty.")
+        log.warning("Skipping score figure because score table is empty.")
         return
     plot_df = scores[scores["max_frequency_signal"].fillna(0) > 0].copy()
     if plot_df.empty:
-        log.warning("Skipping VITAL figure because all frequency signals are zero/missing.")
+        log.warning("Skipping score figure because all frequency signals are zero/missing.")
         return
     plot_df["log10_max_frequency_signal"] = np.log10(plot_df["max_frequency_signal"])
     band_order = [
@@ -2788,9 +2788,9 @@ def plot_vital_model(scores: pd.DataFrame, output_path: Path) -> None:
     ax.axvline(np.log10(AF_RARE), color="#111827", linestyle="--", linewidth=1)
     ax.axhline(VITAL_ACTION_THRESHOLD, color="#DC2626", linestyle="--", linewidth=1)
     ax.set_xlabel("log10(max global/popmax AF)")
-    ax.set_ylabel("VITAL score")
-    ax.set_title("VITAL reclassification-priority model")
-    ax.legend(title="VITAL band", frameon=False, bbox_to_anchor=(1.02, 1), loc="upper left")
+    ax.set_ylabel("Score")
+    ax.set_title("Urgent-review scoring model")
+    ax.legend(title="Score band", frameon=False, bbox_to_anchor=(1.02, 1), loc="upper left")
     fig.tight_layout()
     fig.savefig(output_path, dpi=180, bbox_inches="tight")
     plt.close(fig)
@@ -2799,7 +2799,7 @@ def plot_vital_model(scores: pd.DataFrame, output_path: Path) -> None:
 
 def plot_vital_validation_curves(curve_points: pd.DataFrame, output_path: Path) -> None:
     if curve_points.empty:
-        log.warning("Skipping VITAL validation curves because curve table is empty.")
+        log.warning("Skipping validation curves because curve table is empty.")
         return
     plot_df = curve_points.copy()
     roc_auc = np.trapezoid(
@@ -2832,7 +2832,7 @@ def plot_vital_validation_curves(curve_points: pd.DataFrame, output_path: Path) 
     axes[1].set_title(f"Precision-recall (AUC={pr_auc:.2f})")
     axes[1].set_xlim(-0.02, 1.02)
     axes[1].set_ylim(-0.02, 1.02)
-    fig.suptitle("VITAL operational benchmark curves")
+    fig.suptitle("Operational benchmark curves")
     fig.tight_layout()
     fig.savefig(output_path, dpi=180)
     plt.close(fig)

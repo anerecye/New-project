@@ -190,7 +190,7 @@ def main() -> None:
     ax.text(
         0.5,
         0.985,
-        "VITAL gray-zone workflow: absence is a managed evidence state, not rarity",
+        "Gray-zone workflow: absence is a managed evidence state, not rarity",
         ha="center",
         va="top",
         fontsize=13,

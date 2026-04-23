@@ -170,7 +170,7 @@ def variant_summary(df: pd.DataFrame) -> str:
         clinvar_id = row.get("clinvar_id", row.get("variation_id", ""))
         score = pd.to_numeric(pd.Series([row.get("vital_score")]), errors="coerce").iloc[0]
         score_label = f"{score:.1f}" if pd.notna(score) else "NA"
-        labels.append(f"{gene}:{clinvar_id}:VITAL={score_label}")
+        labels.append(f"{gene}:{clinvar_id}:score={score_label}")
     return "; ".join(labels)
 
 
@@ -292,7 +292,7 @@ def run_calibration(prediction_table: Path, output_prefix: str) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Explore historical VITAL threshold calibration.")
+    parser = argparse.ArgumentParser(description="Explore historical threshold calibration.")
     parser.add_argument("--prediction-table", type=Path, required=True)
     parser.add_argument("--output-prefix", required=True)
     return parser.parse_args()

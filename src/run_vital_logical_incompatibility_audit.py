@@ -179,7 +179,7 @@ def save_table(df: pd.DataFrame, path: Path, sep: str = ",") -> None:
 
 def main() -> None:
     if not SCORES.exists():
-        raise FileNotFoundError(f"Missing VITAL score table: {SCORES}")
+        raise FileNotFoundError(f"Missing score table: {SCORES}")
     if not MANUAL_REVIEW.exists():
         raise FileNotFoundError(f"Missing manual review table: {MANUAL_REVIEW}")
     scores = pd.read_csv(SCORES, low_memory=False)

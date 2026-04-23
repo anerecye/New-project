@@ -1,7 +1,7 @@
-"""Create a compact biological-contrast layer for VITAL red case studies.
+"""Create a compact biological-contrast layer for urgent-review case studies.
 
 This script intentionally keeps the biological layer small and interpretable:
-it joins VITAL scores to real gnomAD v4.1 LOEUF values and HPA v23 heart
+it joins cached score tables to real gnomAD v4.1 LOEUF values and HPA v23 heart
 expression, then emits a clinician-readable contrast table for the red queue.
 """
 
@@ -59,7 +59,7 @@ CONTEXT = {
         "domain_context": "frameshift in triadin luminal protein; LOF assertion intersects recessive/biallelic triadin-null biology",
         "expected_mechanism": "recessive or biallelic null mechanism; heterozygous carrier frequency can be tolerated",
         "contrast_interpretation": (
-            "Consistent with recessive carrier frequency rather than automatic benignity; VITAL flags assertion tension, "
+            "Consistent with recessive carrier frequency rather than automatic benignity; the score flags assertion tension, "
             "not loss of affected-state pathogenicity."
         ),
     },
@@ -231,7 +231,7 @@ def make_summary(scores: pd.DataFrame, cases: pd.DataFrame) -> pd.DataFrame:
             "denominator": len(af_observed),
             "percent": 100 * len(high) / len(af_observed) if len(af_observed) else float("nan"),
             "interpretation": (
-                "VITAL >=60 compresses the broad frequency-tension space into a small set of variants "
+                "Scores >=60 compress the broad frequency-tension space into a small set of variants "
                 "where frequency must be interpreted against mechanism, LOEUF, expression, and domain context."
             ),
         },
@@ -241,7 +241,7 @@ def make_summary(scores: pd.DataFrame, cases: pd.DataFrame) -> pd.DataFrame:
             "denominator": len(af_observed),
             "percent": 100 * len(red) / len(af_observed) if len(af_observed) else float("nan"),
             "interpretation": (
-                "VITAL red is a case-study queue, not an appendix: each red variant has a distinct biological explanation "
+                "The urgent-review queue is a case-study set, not an appendix: each red variant has a distinct biological explanation "
                 "for why AF tension does or does not undermine a P/LP assertion."
             ),
         },
@@ -277,7 +277,7 @@ def make_figure(cases: pd.DataFrame, path: Path) -> None:
         variant = row["variant"].split(" (")[0]
         body = (
             f"{variant}\n"
-            f"VITAL: {row['vital']}\n"
+            f"Score: {row['vital']}\n"
             f"AF: {row['af_signal']}\n"
             f"{row['loeuf_constraint_argument']} | {row['heart_expression']}\n"
             f"Mechanism: {row['expected_mechanism']}\n"
@@ -294,7 +294,7 @@ def make_figure(cases: pd.DataFrame, path: Path) -> None:
             linespacing=1.35,
         )
     fig.suptitle(
-        "VITAL red variants as biological contrast case studies",
+        "Urgent-review variants as biological contrast case studies",
         fontsize=14,
         fontweight="bold",
         color="#1f2933",
@@ -305,7 +305,7 @@ def make_figure(cases: pd.DataFrame, path: Path) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build VITAL biological contrast case tables.")
+    parser = argparse.ArgumentParser(description="Build biological contrast case tables.")
     parser.add_argument("--score-table", type=Path, default=PROCESSED_DIR / "arrhythmia_vital_scores.csv")
     parser.add_argument("--constraint-table", type=Path, default=EXTERNAL_DIR / "gnomad.v4.1.constraint_metrics.tsv")
     parser.add_argument("--hpa-table", type=Path, default=EXTERNAL_DIR / "hpa_rna_tissue_consensus.tsv.zip")
@@ -332,7 +332,7 @@ def main() -> None:
     make_figure(cases, FIGURE_DIR / "vital_biological_contrast_cases.png")
 
     print(f"Wrote {len(gene_context)} gene biological context rows")
-    print(f"Wrote {len(cases)} VITAL-red contrast cases")
+    print(f"Wrote {len(cases)} urgent-review contrast cases")
 
 
 if __name__ == "__main__":

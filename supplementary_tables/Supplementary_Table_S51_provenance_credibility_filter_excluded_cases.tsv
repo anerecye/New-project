@@ -1,0 +1,4 @@
+variant_key	gene	clinvar_id	title	review_status	review_strength	submitter_count	max_frequency_signal	max_frequency_source	qualifying_frequency_ac	vital_score	vital_band	vital_red_flag
+3:38562456:G:A	SCN5A	VCV000440850	NM_000335.4(SCN5A):c.[3919C>T;694G>A]	no assertion criteria provided	weak_or_no_assertion		0.0056763862332695	popmax	214.0	96.07000729211028	red_reclassification_priority	True
+6:123438063:CT:C	TRDN	VCV001325231	NM_006073.4(TRDN):c.1050del (p.Glu351fs)	criteria provided, single submitter	single_submitter	1.0	0.0002182135583357	popmax	40.0	74.34422242107016	red_reclassification_priority	True
+7:150950166:A:C	KCNH2	VCV004535537	NM_000238.4(KCNH2):c.2398+2T>G	criteria provided, single submitter	single_submitter	1.0	0.0001315270288044	popmax	24.0	70.32659802420157	red_reclassification_priority	True

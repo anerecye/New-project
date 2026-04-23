@@ -171,6 +171,58 @@ Key outputs:
 
 The blinded pilot contains 23 variants: 3 red-priority cases, 10 gray no-frequency-evidence cases, and 10 non-red controls. The endpoint is expert consensus on `requires re-review` versus `does not require re-review`; planned metrics are sensitivity, specificity, PPV for red/gray routing, Cohen/Fleiss kappa, and discordance adjudication.
 
+## Provenance Credibility Filter
+
+The repository also includes a narrow provenance-aware sensitivity analysis for the sharpened "public label is not a disease state" framing. The filter is intentionally conservative: it excludes weak/no-assertion or single-submitter P/LP records with extreme population-frequency inconsistency (`max_frequency_signal > 1e-4` and `qualifying_frequency_ac >= 20`). In the current arrhythmia run, that removes exactly 3 records: `SCN5A VCV000440850`, `TRDN VCV001325231`, and `KCNH2 VCV004535537`.
+
+```bash
+python src/run_vital_provenance_credibility_sensitivity.py
+```
+
+Outputs:
+
+- `data/processed/vital_provenance_credibility_filter_summary.csv`
+- `data/processed/vital_provenance_credibility_filter_excluded_cases.csv`
+- `supplementary_tables/Supplementary_Table_S50_provenance_credibility_filter_summary.tsv`
+- `supplementary_tables/Supplementary_Table_S51_provenance_credibility_filter_excluded_cases.tsv`
+
+The point of this filter is not to redefine pathogenicity. It is to show what remains true after the most obviously fragile extreme-frequency public records are removed.
+
+## Tiered Match Reconciliation
+
+The representation audit now includes a separate reconciliation layer that asks a deliberately annoying question: how much of the apparent ClinVar-to-gnomAD gap is just formatting, and how much is real infrastructure friction? The current answer is: not much is rescued by lightweight reconciliation.
+
+```bash
+python src/run_vital_match_reconciliation.py
+```
+
+Current cached outputs:
+
+- strict exact exome AF-observed space: `334 / 1,731` (`19.3%`)
+- strict exact any-dataset space: `350 / 1,731` (`20.2%`)
+- exact/equivalent reconciliation space: `357 / 1,731` (`20.6%`)
+- locus/regional context without exact/equivalent AF: `1,326 / 1,731` (`76.6%`)
+- still unevaluable after both passes: `48 / 1,731` (`2.8%`)
+
+What is and is not being claimed:
+
+- Tier 1 exact/equivalent evidence is allele-resolved and suitable for direct population-frequency interpretation.
+- Tier 2 locus/regional context is useful context, but it is **not** allele-resolved AF evidence.
+- Tier 3 still-unevaluable variants remain outside clean population-frequency review even after reconciliation.
+
+Equivalent recovery is intentionally modest: 5 local-window indel equivalents and 2 decomposed substitution equivalents. That is the point. The representation gap is not mainly a cosmetic exact-key problem.
+
+Outputs:
+
+- `data/processed/vital_tiered_match_reconciliation_detail.csv`
+- `data/processed/vital_tiered_match_reconciliation_summary.csv`
+- `data/processed/vital_tiered_match_reconciliation_layers.csv`
+- `supplementary_tables/Supplementary_Table_S47_tiered_match_reconciliation_detail.tsv`
+- `supplementary_tables/Supplementary_Table_S48_tiered_match_reconciliation_summary.tsv`
+- `supplementary_tables/Supplementary_Table_S49_tiered_match_reconciliation_layers.tsv`
+
+Implementation note: this audit uses trim-normalization, local indel-payload equivalence, unphased decomposition-aware matching, and a second slow pass to eliminate transient API failures. Full `bcftools norm -f GRCh38.fa -m -both` left-alignment against a local reference FASTA is not claimed in the current runtime.
+
 ## Clinical Decision-Risk Proxy
 
 ClinVar does not expose patient counts, diagnoses changed, or cascade-testing uptake. The repository therefore includes a conservative public-exposure proxy: each P/LP record is a potential decision-risk record, and each submitter contributes one minimum submitter-exposure unit; missing submitter counts are counted as one.

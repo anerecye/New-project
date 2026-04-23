@@ -446,6 +446,48 @@ APPENDIX_TABLES = [
             "binomial_global_af_standard_error",
         ],
     ),
+    (
+        "Appendix Table A30. Tiered match reconciliation summary",
+        BASE_DIR / "data" / "processed" / "vital_tiered_match_reconciliation_summary.csv",
+        [
+            "reconciliation_tier",
+            "variants",
+            "percent_of_total",
+            "interpretation",
+        ],
+    ),
+    (
+        "Appendix Table A31. Tiered match reconciliation evidence layers",
+        BASE_DIR / "data" / "processed" / "vital_tiered_match_reconciliation_layers.csv",
+        [
+            "evidence_layer",
+            "variants",
+            "percent_of_total",
+            "meaning",
+        ],
+    ),
+    (
+        "Appendix Table A32. Provenance credibility-filter sensitivity summary",
+        BASE_DIR / "data" / "processed" / "vital_provenance_credibility_filter_summary.csv",
+        [
+            "metric",
+            "value",
+            "note",
+        ],
+    ),
+    (
+        "Appendix Table A33. Provenance credibility-filter excluded cases",
+        BASE_DIR / "data" / "processed" / "vital_provenance_credibility_filter_excluded_cases.csv",
+        [
+            "gene",
+            "clinvar_id",
+            "review_strength",
+            "max_frequency_signal",
+            "qualifying_frequency_ac",
+            "vital_score",
+            "vital_red_flag",
+        ],
+    ),
 ]
 
 

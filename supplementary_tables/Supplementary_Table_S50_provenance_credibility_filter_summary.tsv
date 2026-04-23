@@ -1,0 +1,12 @@
+metric	value	note
+excluded_low_credibility_extreme_frequency_records	3	Weak/no-assertion or single-submitters with max_frequency_signal >1e-4 and qualifying_frequency_ac >=20.
+filtered_total_records	1728	Remaining arrhythmia P/LP assertions after the provenance credibility filter.
+filtered_exact_or_equivalent_records	354	Tier 1 exact/equivalent context after filtering.
+filtered_locus_or_regional_records	1326	Tier 2 locus/regional context after filtering.
+filtered_still_unevaluable_records	48	Tier 3 genuinely unevaluable context after filtering.
+filtered_af_observed_records	331	Canonical exact AF-observed subset after filtering.
+filtered_global_af_gt_1e_5	10	Global-only frequency alerts in the filtered exact AF subset.
+filtered_popmax_or_global_af_gt_1e_5	112	Ancestry-aware frequency alerts in the filtered exact AF subset.
+filtered_popmax_only_alerts	102	Alerts missed by global AF but visible under popmax in the filtered exact AF subset.
+filtered_ac_supported_frequency_records	6	Remaining AC-supported frequency signals after filtering.
+filtered_vital_red_records	0	Red-priority records remaining after filtering.

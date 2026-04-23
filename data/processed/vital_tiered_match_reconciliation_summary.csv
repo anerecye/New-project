@@ -1,0 +1,11 @@
+reconciliation_tier,variants,percent_of_total,interpretation
+tier1_exact_exome,334,19.295205083766607,Gold-standard exact exome match.
+tier1_exact_genome_or_no_exome,16,0.9243212016175621,Gold-standard exact match without exome AF block; genome evidence separate.
+tier1_exact_found_by_region,0,0.0,Exact allele recovered by local region query despite original miss.
+tier2_trim_normalized_equivalent,0,0.0,Equivalent after trim-normalization only; not full left-alignment.
+tier2_event_equivalent_window,5,0.28885037550548814,Equivalent indel payload in local window; moderate-confidence equivalent evidence.
+tier2_decomposed_equivalent_unphased,2,0.11554015020219527,"All MNV/substitution components observed, but phase is unconfirmed."
+tier3_locus_observed_no_exact_af,638,36.85730791450029,Same position observed with different allele; locus-level evidence only.
+tier3_regional_context_only,688,39.745811669555174,"Nearby regional variation present, but no same-locus or equivalent allele."
+tier4_still_unevaluable,48,2.7729636048526864,"No exact, equivalent, or locus-level evidence recovered."
+tier4_query_error,0,0.0,Reconciliation query failed.

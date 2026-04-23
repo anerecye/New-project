@@ -1,0 +1,6 @@
+evidence_layer,variants,percent_of_total,meaning
+original_exact_exome,334,19.295205083766607,Original strict exome AF-observed space used in the manuscript core analysis.
+original_exact_any_dataset,350,20.21952628538417,Original strict exact-match space including genome-only/no-exome exact records.
+reconciled_equivalent,357,20.623916811091853,Strict exact plus equivalent-allele reconciliation tiers; should not be mixed with locus-only evidence.
+locus_or_regional_observed,1326,76.60311958405546,"Region observed, but no exact/equivalent allele recovered; not AF evidence."
+still_unevaluable_after_reconciliation,48,2.7729636048526864,Substantial representation gap remains even after aggressive local-window reconciliation.

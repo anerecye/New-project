@@ -1,0 +1,13 @@
+variant_key,clinvar_id,gene,n_hgdp_populations,n_hgdp_regions,total_hgdp_ac,haplotype_diversity_class,single_effect_assumption_undermined,hgdp_populations,hgdp_regions
+3:38562456:G:A,VCV000440850,SCN5A,2,2,2,two_independent_backgrounds,True,makrani;makrani_XY,Central_South_Asia;unknown
+6:123516189:C:A,VCV000838068,TRDN,2,2,2,two_independent_backgrounds,True,burusho;burusho_XY,Central_South_Asia;unknown
+3:38604874:CG:C,VCV003629463,SCN5A,2,2,2,two_independent_backgrounds,True,bedouin;bedouin_XX,Middle_East;unknown
+11:2570663:C:CGTGGTCCGCCT,VCV001709048,KCNQ1,2,2,4,two_independent_backgrounds,True,russian;russian_XX,Europe;unknown
+11:2572105:G:C,VCV000869436,KCNQ1,2,2,2,two_independent_backgrounds,True,uygur;uygur_XY,East_Asia;unknown
+7:150948446:T:GTGTCG,VCV000663923,KCNH2,91,5,434,multiple_independent_backgrounds,True,adygei;adygei_XX;adygei_XY;balochi;balochi_XY;basque;basque_XX;basque_XY;bedouin;bedouin_XX;bedouin_XY;brahui;brahui_XY;burusho;burusho_XX;burusho_XY;dai;dai_XX;dai_XY;daur;daur_XY;druze;druze_XX;druze_XY;french;french_XX;french_XY;han;han_XX;han_XY;hazara;hazara_XY;hezhen;hezhen_XY;italian;italian_XX;italian_XY;japanese;japanese_XX;japanese_XY;kalash;kalash_XX;kalash_XY;lahu;lahu_XY;makrani;makrani_XX;makrani_XY;miaozu;miaozu_XY;mongola;mongola_XY;mozabite;mozabite_XX;mozabite_XY;orcadian;orcadian_XX;orcadian_XY;oroqen;oroqen_XX;oroqen_XY;palestinian;palestinian_XX;palestinian_XY;pathan;pathan_XX;pathan_XY;russian;russian_XX;russian_XY;sardinian;sardinian_XX;sardinian_XY;sindhi;sindhi_XX;sindhi_XY;tu;tu_XY;tujia;tujia_XX;tuscan;tuscan_XX;tuscan_XY;uygur;uygur_XY;xibo;xibo_XY;yakut;yakut_XY;yizu;yizu_XY,Central_South_Asia;East_Asia;Europe;Middle_East;unknown
+3:38556576:A:C,VCV004536358,SCN5A,4,2,4,two_independent_backgrounds,True,japanese;japanese_XY;xibo;xibo_XX,East_Asia;unknown
+3:38575395:CCTTCCCTGGG:C,VCV003251141,SCN5A,2,2,2,two_independent_backgrounds,True,miaozu;miaozu_XY,East_Asia;unknown
+3:38581041:CG:C,VCV002733575,SCN5A,2,2,2,two_independent_backgrounds,True,xibo;xibo_XY,East_Asia;unknown
+3:38551515:CG:C,VCV000689494,SCN5A,2,2,2,two_independent_backgrounds,True,burusho;burusho_XY,Central_South_Asia;unknown
+6:123516208:T:A,VCV003721374,TRDN,2,2,2,two_independent_backgrounds,True,brahui;brahui_XY,Central_South_Asia;unknown
+19:46608950:C:G,VCV001358003,CALM3,11,4,18,multiple_independent_backgrounds,True,bantukenya;bantukenya_XY;bedouin;bedouin_XX;bedouin_XY;makrani;makrani_XY;mandenka;mandenka_XY;palestinian;palestinian_XX,Africa;Central_South_Asia;Middle_East;unknown

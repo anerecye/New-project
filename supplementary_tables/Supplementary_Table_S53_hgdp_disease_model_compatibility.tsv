@@ -1,0 +1,13 @@
+variant_key	clinvar_id	gene	max_hgdp_af	global_hgdp_af	total_hgdp_ac	n_hgdp_populations	strict_dominant_status	generous_dominant_status	carrier_flag	disease_model_regime	required_penetrance_for_dominant	match_class	is_strict_allele_match
+3:38562456:G:A	VCV000440850	SCN5A	0.025	0.022727272727272728	2	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.001	strict_allele	True
+6:123516189:C:A	VCV000838068	TRDN	0.0277777777777777	0.025	2	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.0009000000000000026	strict_allele	True
+3:38604874:CG:C	VCV003629463	SCN5A	0.0263157894736842	0.015384615384615385	2	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.0009500000000000004	strict_allele	True
+11:2570663:C:CGTGGTCCGCCT	VCV001709048	KCNQ1	0.1111111111111111	0.058823529411764705	4	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.00022500000000000002	strict_allele	True
+11:2572105:G:C	VCV000869436	KCNQ1	0.0714285714285714	0.06666666666666667	2	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.00035000000000000016	strict_allele	True
+7:150948446:T:GTGTCG	VCV000663923	KCNH2	0.5833333333333334	0.24272930648769575	434	91	excluded	excluded	carrier_architecture_implied	hard_incompatible	4.2857142857142856e-05	strict_allele	True
+3:38556576:A:C	VCV004536358	SCN5A	0.5	0.034482758620689655	4	4	excluded	excluded	carrier_architecture_implied	hard_incompatible	5e-05	strict_allele	True
+3:38575395:CCTTCCCTGGG:C	VCV003251141	SCN5A	0.0714285714285714	0.058823529411764705	2	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.00035000000000000016	strict_allele	True
+3:38581041:CG:C	VCV002733575	SCN5A	0.0625	0.058823529411764705	2	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.0004	strict_allele	True
+3:38551515:CG:C	VCV000689494	SCN5A	0.0294117647058823	0.02631578947368421	2	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.0008500000000000016	strict_allele	True
+6:123516208:T:A	VCV003721374	TRDN	0.0227272727272727	0.022727272727272728	2	2	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.0011000000000000014	strict_allele	True
+19:46608950:C:G	VCV001358003	CALM3	0.0833333333333333	0.03529411764705882	18	11	excluded	excluded	carrier_architecture_implied	hard_incompatible	0.00030000000000000014	strict_allele	True

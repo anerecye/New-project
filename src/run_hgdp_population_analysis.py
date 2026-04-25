@@ -1022,20 +1022,36 @@ def analyse_evaluability(
     result["n_populations_observed"] = result["n_populations_observed"].fillna(0).astype(int)
 
     conditions = [
+        # Technical unevaluability — variant absent from gnomAD r3 entirely
         (result["hgdp_status"] == "not_in_gnomad_r3"),
+        # Data-insufficient — variant exists in gnomAD r3 but HGDP sampling
+        # too shallow (AN < 10) for frequency estimation
         (result["total_hgdp_an"] < MIN_AN_FOR_EVALUATION),
+        # Biologically uninformative — adequate sampling, zero observations;
+        # consistent with rarity but cannot constrain disease model
         (result["n_populations_observed"] == 0),
+        # Evaluable — single population context
         (result["n_populations_observed"] == 1),
+        # Evaluable — multi-population context (strongest constraint)
         (result["n_populations_observed"] >= 2),
     ]
     choices = [
-        "technically_unevaluable",
-        "insufficient_population_sampling",
-        "evaluable_population_absent",
-        "evaluable_single_population_context",
-        "evaluable_multi_population_context",
+        "technical_no_reference_data",
+        "technical_insufficient_sampling",
+        "biological_uninformative",
+        "evaluable_single_population",
+        "evaluable_multi_population",
     ]
-    result["hgdp_evaluability"] = np.select(conditions, choices, default="technically_unevaluable")
+    result["hgdp_evaluability"] = np.select(conditions, choices, default="technical_no_reference_data")
+
+    # Coarser grouping for headline reporting
+    result["evaluability_class"] = result["hgdp_evaluability"].map({
+        "technical_no_reference_data": "technical_unevaluable",
+        "technical_insufficient_sampling": "data_insufficient",
+        "biological_uninformative": "data_insufficient",
+        "evaluable_single_population": "evaluable",
+        "evaluable_multi_population": "evaluable",
+    }).fillna("technical_unevaluable")
 
     # Population spread score (0–1)
     spread_data = []
@@ -1243,21 +1259,21 @@ def plot_ancestry_nonportability_heatmap(hgdp: pd.DataFrame, ancestry: pd.DataFr
 
 
 def plot_evaluability_crisis(evaluability: pd.DataFrame) -> None:
-    """Pie: the majority cannot be technically evaluated."""
+    """Pie: technical vs biological unevaluability — distinct categories."""
     counts = evaluability["hgdp_evaluability"].value_counts()
     labels_map = {
-        "technically_unevaluable": "Technically unevaluable",
-        "insufficient_population_sampling": "Insufficient sampling",
-        "evaluable_population_absent": "Absent in HGDP",
-        "evaluable_single_population_context": "Single-population context",
-        "evaluable_multi_population_context": "Multi-population context",
+        "technical_no_reference_data": "Technical: no reference data",
+        "technical_insufficient_sampling": "Technical: insufficient sampling",
+        "biological_uninformative": "Biological: uninformative\n(sampled, zero observations)",
+        "evaluable_single_population": "Evaluable: single population",
+        "evaluable_multi_population": "Evaluable: multi-population",
     }
     colors_map = {
-        "technically_unevaluable": "#616161",
-        "insufficient_population_sampling": "#9e9e9e",
-        "evaluable_population_absent": "#90caf9",
-        "evaluable_single_population_context": "#ffcc80",
-        "evaluable_multi_population_context": "#ef5350",
+        "technical_no_reference_data": "#616161",
+        "technical_insufficient_sampling": "#9e9e9e",
+        "biological_uninformative": "#90caf9",
+        "evaluable_single_population": "#ffcc80",
+        "evaluable_multi_population": "#ef5350",
     }
     ordered = [k for k in labels_map if k in counts.index]
     fig, ax = plt.subplots(figsize=(8, 6))
@@ -1271,7 +1287,7 @@ def plot_evaluability_crisis(evaluability: pd.DataFrame) -> None:
     )
     ax.set_title(
         "Population evaluability of ClinVar P/LP arrhythmia assertions\n"
-        "Most public assertions cannot be technically evaluated under population constraint",
+        "Technical unevaluability (no data) vs biological uninformativeness (data but no signal)",
         fontsize=10, fontweight="bold",
     )
     fig.tight_layout()
@@ -1489,23 +1505,48 @@ def print_report(
     else:
         print("   No disease-model data available.")
 
-    # 5. Evaluability crisis
+    # 5. Evaluability crisis — split technical vs biological
     print(f"\n{'─' * 60}")
-    print("5. EVALUABILITY CRISIS")
-    print("   Not 'rare' — technically unevaluable.")
+    print("5. EVALUABILITY — technical vs biological unevaluability")
     print(f"{'─' * 60}")
+
+    # Fine-grained breakdown
+    eval_order = [
+        "technical_no_reference_data",
+        "technical_insufficient_sampling",
+        "biological_uninformative",
+        "evaluable_single_population",
+        "evaluable_multi_population",
+    ]
     eval_counts = evaluability["hgdp_evaluability"].value_counts()
-    for ev, count in eval_counts.items():
+    for ev in eval_order:
+        count = eval_counts.get(ev, 0)
         print(f"   {ev:45s}  {count:5d}  ({100*count/n_total:.1f}%)")
-    n_unevaluable = evaluability[
-        evaluability["hgdp_evaluability"].isin([
-            "technically_unevaluable", "insufficient_population_sampling",
-        ])
-    ].shape[0]
-    print(f"\n   → {n_unevaluable}/{n_total} P/LP assertions ({100*n_unevaluable/n_total:.1f}%)")
-    print("     cannot be technically evaluated under population constraint.")
-    print("     The distinction matters: absence of frequency evidence")
-    print("     is not evidence of rarity.")
+
+    # Coarse summary
+    if "evaluability_class" in evaluability.columns:
+        coarse = evaluability["evaluability_class"].value_counts()
+        n_tech = coarse.get("technical_unevaluable", 0)
+        n_insuff = coarse.get("data_insufficient", 0)
+        n_eval = coarse.get("evaluable", 0)
+        print("\n   Summary:")
+        print(f"   • Technical unevaluable (no reference data):  {n_tech:5d}  ({100*n_tech/n_total:.1f}%)")
+        print(f"   • Data-insufficient (sampled, uninformative): {n_insuff:5d}  ({100*n_insuff/n_total:.1f}%)")
+        print(f"   • Evaluable (population-constrained):         {n_eval:5d}  ({100*n_eval/n_total:.1f}%)")
+        print()
+        print(f"   → {n_tech}/{n_total} ({100*n_tech/n_total:.1f}%) are technically unevaluable:")
+        print("     the variant does not exist in gnomAD r3 reference data.")
+        print(f"   → {n_insuff}/{n_total} ({100*n_insuff/n_total:.1f}%) are data-insufficient:")
+        print("     matched in gnomAD r3 but HGDP sampling yields zero observations.")
+        print("     Consistent with rarity, but cannot constrain disease model.")
+        print(f"   → {n_eval}/{n_total} ({100*n_eval/n_total:.1f}%) are evaluable:")
+        print("     observed in HGDP populations with sufficient allele numbers.")
+    else:
+        n_unevaluable = evaluability[
+            evaluability["hgdp_evaluability"].str.startswith("technical")
+        ].shape[0]
+        print(f"\n   → {n_unevaluable}/{n_total} ({100*n_unevaluable/n_total:.1f}%)"
+              " technically unevaluable")
 
     # 6. RECONCILIATION-AWARE HEADLINE
     print(f"\n{'═' * 78}")
@@ -1545,7 +1586,17 @@ def print_report(
         print(f"   • {n_not_dom}/{n_dm} population-mapped variants ({100*n_not_dom/n_dm:.0f}%) "
               f"span disease regimes incompatible with dominant reading")
         print(f"     ({n_hard} hard_incompatible, {n_boundary} boundary)")
-    print(f"   • {n_unevaluable} cannot be technically evaluated under population constraint")
+    # Evaluability split in headline
+    if "evaluability_class" in evaluability.columns:
+        coarse = evaluability["evaluability_class"].value_counts()
+        n_tech_hl = coarse.get("technical_unevaluable", 0)
+        n_insuff_hl = coarse.get("data_insufficient", 0)
+        n_eval_hl = coarse.get("evaluable", 0)
+        print(f"   • {n_tech_hl} ({100*n_tech_hl/n_total:.1f}%) technically unevaluable "
+              "(absent from gnomAD r3)")
+        print(f"   • {n_insuff_hl} ({100*n_insuff_hl/n_total:.1f}%) data-insufficient "
+              "(matched but no HGDP observations)")
+        print(f"   • {n_eval_hl} ({100*n_eval_hl/n_total:.1f}%) evaluable with population data")
     print()
     print("   The public P/LP label often does not transfer to population data")
     print(f"   without additional interpretation — {n_rescued}/{n_mapped} matched variants")

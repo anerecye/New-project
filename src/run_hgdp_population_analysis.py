@@ -877,6 +877,45 @@ def analyse_haplotype_independence(hgdp: pd.DataFrame, scores: pd.DataFrame) -> 
 # 4. Disease-model incompatibility — the main hammer
 # ═══════════════════════════════════════════════════════════════════════
 
+def _classify_regime(af: float, n_pops: int) -> dict:
+    """Classify a variant into a disease-model regime based on AF."""
+    if af > DOMINANT_LOW_PEN_MCAF:
+        strict_compat = "excluded"
+        generous_compat = "excluded"
+    elif af > DOMINANT_HIGH_PEN_MCAF:
+        strict_compat = "excluded"
+        generous_compat = "boundary" if af > DOMINANT_LOW_PEN_MCAF / 2 else "permitted"
+    else:
+        strict_compat = "permitted"
+        generous_compat = "permitted"
+
+    if n_pops >= 2 and af > AF_REVIEW_THRESHOLD:
+        carrier_flag = "carrier_architecture_implied"
+    else:
+        carrier_flag = "not_flagged"
+
+    if strict_compat == "excluded" and generous_compat == "excluded":
+        regime = "hard_incompatible"
+    elif strict_compat == "excluded":
+        regime = "boundary"
+    elif carrier_flag == "carrier_architecture_implied":
+        regime = "carrier_compatible"
+    else:
+        regime = "dominant_compatible"
+
+    required_pen = None
+    if af > 0:
+        required_pen = (1 / 2000 * 0.1) / (af * 2.0)
+
+    return {
+        "strict_dominant_status": strict_compat,
+        "generous_dominant_status": generous_compat,
+        "carrier_flag": carrier_flag,
+        "disease_model_regime": regime,
+        "required_penetrance_for_dominant": required_pen,
+    }
+
+
 def analyse_disease_model_incompatibility(
     hgdp: pd.DataFrame,
     presence: pd.DataFrame,
@@ -884,82 +923,59 @@ def analyse_disease_model_incompatibility(
 ) -> pd.DataFrame:
     """A single P/LP label spans mutually exclusive disease models.
 
-    For each variant observed in HGDP, determine which disease model(s)
-    are mathematically excluded by the observed population frequency.
+    For ALL matched variants (not just HGDP-observed), determine regime
+    using max(max_hgdp_af, gnomad_r3_genome_af) — whichever is higher
+    provides the most informative constraint.
 
-    Includes dual analysis: results are computed for all matches, and
-    separately flagged for strict_allele-only matches, so the conclusion
-    can be validated against representation-rescued data.
+    Includes dual analysis: strict_allele-only vs all matches for robustness.
     """
-    observed = presence[presence["hgdp_status"] == "observed_in_hgdp"].copy()
-    if observed.empty:
+    # Work with ALL matched variants, not just observed_in_hgdp
+    matched = presence[presence["hgdp_status"] != "not_in_gnomad_r3"].copy()
+    if matched.empty:
         return pd.DataFrame()
 
-    # Merge match_class from hgdp for dual analysis
-    if "match_class" in hgdp.columns:
-        match_per_variant = hgdp.groupby("variant_key")["match_class"].first().reset_index()
-        observed = observed.merge(match_per_variant, on="variant_key", how="left")
-        observed["match_class"] = observed["match_class"].fillna("no_match")
-    else:
-        observed["match_class"] = "strict_allele"
+    # Merge gnomad_r3_genome_af from hgdp (match_class comes from presence)
+    if "gnomad_r3_genome_af" in hgdp.columns and "gnomad_r3_genome_af" not in matched.columns:
+        genome_af_per_variant = (
+            hgdp.groupby("variant_key")["gnomad_r3_genome_af"]
+            .first()
+            .reset_index()
+        )
+        matched = matched.merge(genome_af_per_variant, on="variant_key", how="left")
+    if "gnomad_r3_genome_af" not in matched.columns:
+        matched["gnomad_r3_genome_af"] = 0.0
+    matched["gnomad_r3_genome_af"] = matched["gnomad_r3_genome_af"].fillna(0.0)
+    # match_class should already be in presence; fall back if missing
+    if "match_class" not in matched.columns:
+        if "match_class" in hgdp.columns:
+            mc_per_variant = hgdp.groupby("variant_key")["match_class"].first().reset_index()
+            matched = matched.merge(mc_per_variant, on="variant_key", how="left")
+        if "match_class" not in matched.columns:
+            matched["match_class"] = "strict_allele"
+    matched["match_class"] = matched["match_class"].fillna("no_match")
 
     rows: list[dict] = []
-    for _, row in observed.iterrows():
-        max_af = row.get("max_hgdp_af", 0.0)
-        if max_af is None or pd.isna(max_af):
-            max_af = 0.0
-        global_af = row.get("global_hgdp_af", 0.0)
-        if global_af is None or pd.isna(global_af):
-            global_af = 0.0
-        total_ac = int(row.get("total_hgdp_ac", 0))
+    for _, row in matched.iterrows():
+        _raw_hgdp = row.get("max_hgdp_af", 0.0)
+        max_hgdp_af = 0.0 if (_raw_hgdp is None or pd.isna(_raw_hgdp)) else float(_raw_hgdp)
+        _raw_genome = row.get("gnomad_r3_genome_af", 0.0)
+        genome_af = 0.0 if (_raw_genome is None or pd.isna(_raw_genome)) else float(_raw_genome)
+        # Use the higher AF as the most informative constraint
+        effective_af = max(max_hgdp_af, genome_af)
         n_pops = int(row.get("n_populations_observed", 0))
 
-        # Strict dominant high-penetrance: max credible AF = 2.5e-5
-        # Generous dominant low-penetrance: max credible AF = 1e-3
-        if max_af > DOMINANT_LOW_PEN_MCAF:
-            strict_compat = "excluded"
-            generous_compat = "excluded"
-        elif max_af > DOMINANT_HIGH_PEN_MCAF:
-            strict_compat = "excluded"
-            generous_compat = "boundary" if max_af > DOMINANT_LOW_PEN_MCAF / 2 else "permitted"
-        else:
-            strict_compat = "permitted"
-            generous_compat = "permitted"
-
-        # Carrier/recessive architecture
-        if n_pops >= 2 and max_af > AF_REVIEW_THRESHOLD:
-            carrier_flag = "carrier_architecture_implied"
-        else:
-            carrier_flag = "not_flagged"
-
-        # The regime this P/LP label actually implies
-        if strict_compat == "excluded" and generous_compat == "excluded":
-            regime = "hard_incompatible"
-        elif strict_compat == "excluded":
-            regime = "boundary"
-        elif carrier_flag == "carrier_architecture_implied":
-            regime = "carrier_compatible"
-        else:
-            regime = "dominant_compatible"
-
-        # Required penetrance for this AF to be compatible with dominant model
-        required_pen = None
-        if max_af > 0:
-            required_pen = (1 / 2000 * 0.1) / (max_af * 2.0)
+        regime_info = _classify_regime(effective_af, n_pops)
 
         rows.append({
             "variant_key": row["variant_key"],
             "clinvar_id": row["clinvar_id"],
             "gene": row["gene"],
-            "max_hgdp_af": max_af,
-            "global_hgdp_af": global_af,
-            "total_hgdp_ac": total_ac,
+            "max_hgdp_af": max_hgdp_af,
+            "gnomad_r3_genome_af": genome_af,
+            "effective_af": effective_af,
+            "total_hgdp_ac": int(row.get("total_hgdp_ac", 0)),
             "n_hgdp_populations": n_pops,
-            "strict_dominant_status": strict_compat,
-            "generous_dominant_status": generous_compat,
-            "carrier_flag": carrier_flag,
-            "disease_model_regime": regime,
-            "required_penetrance_for_dominant": required_pen,
+            **regime_info,
             "match_class": row.get("match_class", "strict_allele"),
             "is_strict_allele_match": row.get("match_class", "strict_allele") == "strict_allele",
         })
@@ -1409,34 +1425,43 @@ def print_report(
     # 4. Disease-model incompatibility — THE HAMMER (with dual analysis)
     print(f"\n{'─' * 60}")
     print("4. DISEASE-MODEL INCOMPATIBILITY")
-    print("   A single P/LP label spans mutually exclusive disease models.")
+    print("   A single P/LP label spans mutually exclusive disease regimes.")
     print(f"{'─' * 60}")
     if not disease_model.empty:
-        regime_counts = disease_model["disease_model_regime"].value_counts()
-        for regime, count in regime_counts.items():
-            print(f"   {regime:40s}  {count:5d}")
         n_observed = len(disease_model)
+        regime_order = ["hard_incompatible", "boundary", "carrier_compatible", "dominant_compatible"]
+        regime_counts = disease_model["disease_model_regime"].value_counts()
+        for regime in regime_order:
+            count = regime_counts.get(regime, 0)
+            pct = 100 * count / n_observed if n_observed else 0
+            print(f"   {regime:40s}  {count:5d}  ({pct:.1f}%)")
+
         n_not_dominant = disease_model[
             disease_model["disease_model_regime"] != "dominant_compatible"
         ].shape[0]
         if n_observed > 0:
-            print(f"\n   → ALL MATCHES: {n_not_dominant}/{n_observed} "
-                  f"({100*n_not_dominant/n_observed:.1f}%) incompatible/boundary/carrier")
+            print(f"\n   → ALL MATCHES ({n_observed} variants): "
+                  f"{n_not_dominant}/{n_observed} ({100*n_not_dominant/n_observed:.1f}%)"
+                  " incompatible/boundary/carrier")
 
-        # Dual analysis: strict_allele only
+        # Dual analysis: strict_allele only vs representation-rescued
         if "is_strict_allele_match" in disease_model.columns:
             strict_only = disease_model[disease_model["is_strict_allele_match"]]
             n_strict = len(strict_only)
             n_strict_not_dom = strict_only[
                 strict_only["disease_model_regime"] != "dominant_compatible"
             ].shape[0]
+
+            print("\n   ROBUSTNESS — strict-only vs full set:")
             if n_strict > 0:
-                print(f"   → STRICT ALLELE ONLY: {n_strict_not_dom}/{n_strict} "
-                      f"({100*n_strict_not_dom/n_strict:.1f}%) incompatible/boundary/carrier")
-                print()
+                print(f"   → STRICT ALLELE ONLY ({n_strict} variants):")
                 strict_regime = strict_only["disease_model_regime"].value_counts()
-                for regime, count in strict_regime.items():
-                    print(f"     [strict] {regime:35s}  {count:5d}")
+                for regime in regime_order:
+                    count = strict_regime.get(regime, 0)
+                    pct = 100 * count / n_strict
+                    print(f"     {regime:38s}  {count:5d}  ({pct:.1f}%)")
+                print(f"     → {n_strict_not_dom}/{n_strict} "
+                      f"({100*n_strict_not_dom/n_strict:.1f}%) non-dominant-compatible")
 
             overlap_only = disease_model[~disease_model["is_strict_allele_match"]]
             n_overlap = len(overlap_only)
@@ -1444,15 +1469,22 @@ def print_report(
                 n_overlap_not_dom = overlap_only[
                     overlap_only["disease_model_regime"] != "dominant_compatible"
                 ].shape[0]
-                print(f"\n   → REPRESENTATION-RESCUED: {n_overlap_not_dom}/{n_overlap} "
-                      f"({100*n_overlap_not_dom/n_overlap:.1f}%) incompatible/boundary/carrier")
+                print(f"\n   → REPRESENTATION-RESCUED ({n_overlap} variants):")
+                overlap_regime = overlap_only["disease_model_regime"].value_counts()
+                for regime in regime_order:
+                    count = overlap_regime.get(regime, 0)
+                    pct = 100 * count / n_overlap
+                    print(f"     {regime:38s}  {count:5d}  ({pct:.1f}%)")
+                print(f"     → {n_overlap_not_dom}/{n_overlap} "
+                      f"({100*n_overlap_not_dom/n_overlap:.1f}%) non-dominant-compatible")
 
-            # Verdict: does the conclusion hold in both?
-            holds_strict = n_strict > 0 and n_strict_not_dom / n_strict > 0.3
-            holds_all = n_observed > 0 and n_not_dominant / n_observed > 0.3
-            if holds_strict and holds_all:
-                print("\n   ▸ CONCLUSION HOLDS in both strict-only AND all-match analyses.")
-            elif holds_all and not holds_strict:
+            # Verdict
+            strict_pct = 100 * n_strict_not_dom / n_strict if n_strict > 0 else 0
+            all_pct = 100 * n_not_dominant / n_observed if n_observed > 0 else 0
+            if strict_pct > 10 and all_pct > 10:
+                print(f"\n   ▸ ROBUST: pattern holds in strict-only ({strict_pct:.1f}%) "
+                      f"and all matches ({all_pct:.1f}%).")
+            elif all_pct > 10 and strict_pct <= 10:
                 print("\n   ▸ WARNING: conclusion depends on representation-rescued matches.")
     else:
         print("   No disease-model data available.")
@@ -1506,8 +1538,13 @@ def print_report(
         n_undermined = int(haplotype["single_effect_assumption_undermined"].sum())
         print(f"   • {n_undermined} undermine the single-effect assumption (multi-regional)")
     if not disease_model.empty:
+        n_dm = len(disease_model)
         n_not_dom = disease_model[disease_model["disease_model_regime"] != "dominant_compatible"].shape[0]
-        print(f"   • {n_not_dom} span disease models mutually exclusive with dominant reading")
+        n_hard = (disease_model["disease_model_regime"] == "hard_incompatible").sum()
+        n_boundary = (disease_model["disease_model_regime"] == "boundary").sum()
+        print(f"   • {n_not_dom}/{n_dm} population-mapped variants ({100*n_not_dom/n_dm:.0f}%) "
+              f"span disease regimes incompatible with dominant reading")
+        print(f"     ({n_hard} hard_incompatible, {n_boundary} boundary)")
     print(f"   • {n_unevaluable} cannot be technically evaluated under population constraint")
     print()
     print("   The public P/LP label often does not transfer to population data")
@@ -1545,6 +1582,9 @@ def main() -> None:
     if args.cached and HGDP_CACHE.exists():
         log.info("Loading cached HGDP data from %s", HGDP_CACHE.name)
         hgdp = pd.read_csv(HGDP_CACHE)
+        # Ensure match classification columns exist (may be absent in older caches)
+        if "match_class" not in hgdp.columns:
+            hgdp = add_match_classification(hgdp)
     else:
         hgdp = fetch_all_hgdp_data(scores)
         hgdp.to_csv(HGDP_CACHE, index=False)

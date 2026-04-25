@@ -54,6 +54,7 @@ HGDP_SUMMARY_OUT = DATA_DIR / "hgdp_population_analysis_summary.csv"
 HGDP_REGIME_FIGURE = FIGURE_DIR / "hgdp_regime_distribution.png"
 HGDP_ANCESTRY_FIGURE = FIGURE_DIR / "hgdp_ancestry_mismatch_heatmap.png"
 HGDP_EVALUABILITY_FIGURE = FIGURE_DIR / "hgdp_evaluability_breakdown.png"
+HGDP_KILLER_FIGURE = FIGURE_DIR / "hgdp_killer_plp_decomposition.png"
 
 HGDP_PRESENCE_SUPP = (
     SUPPLEMENT_DIR / "Supplementary_Table_S50_hgdp_population_presence.tsv"
@@ -1349,6 +1350,162 @@ def plot_portability_vs_disease_model(summary: pd.DataFrame) -> None:
     log.info("Saved %s", HGDP_SCATTER_FIGURE)
 
 
+def plot_killer_plp_decomposition(hgdp: pd.DataFrame) -> None:
+    """THE killer figure: Same P/LP label → different AF → different disease
+    models → contradiction.
+
+    Heatmap: rows = HGDP-observed P/LP variants, columns = 7 geographic
+    regions.  Cell color = disease-model regime implied by that region's AF.
+    White = absent (not observed).  Green = dominant-compatible.
+    Orange = boundary.  Red = hard incompatible.
+
+    One glance shows the same label decomposing across ancestries.
+    """
+    from matplotlib.colors import ListedColormap, BoundaryNorm
+    from matplotlib.patches import Patch
+
+    real = hgdp[
+        ~hgdp["hgdp_population"].isin(["NOT_FOUND", "NO_HGDP_DATA"])
+    ].copy()
+    if real.empty:
+        log.warning("No HGDP data for killer figure.")
+        return
+
+    # Aggregate to region level (exclude sex-split)
+    region_data = real[real["hgdp_region"] != "unknown"].copy()
+    region_agg = (
+        region_data.groupby(["variant_key", "gene", "hgdp_region"])
+        .agg(region_ac=("hgdp_ac", "sum"), region_an=("hgdp_an", "sum"))
+        .reset_index()
+    )
+    region_agg["region_af"] = np.where(
+        region_agg["region_an"] > 0,
+        region_agg["region_ac"] / region_agg["region_an"],
+        0.0,
+    )
+
+    # Pick variants observed in ≥1 region
+    observed_vks = region_agg[region_agg["region_ac"] > 0]["variant_key"].unique()
+    if len(observed_vks) == 0:
+        log.warning("No observed variants for killer figure.")
+        return
+
+    region_order = [
+        "Africa", "Middle_East", "Europe",
+        "Central_South_Asia", "East_Asia", "Americas", "Oceania",
+    ]
+    region_labels = ["AFR", "MDE", "EUR", "CSA", "EAS", "AMR", "OCE"]
+
+    # Build matrix: rows=variants, cols=regions, values=regime code
+    # 0=absent, 1=dominant_compatible, 2=boundary, 3=hard_incompatible
+    def _regime_code(af: float, ac: int) -> int:
+        if ac == 0:
+            return 0  # absent
+        if af > DOMINANT_LOW_PEN_MCAF:
+            return 3  # hard incompatible
+        if af > DOMINANT_HIGH_PEN_MCAF:
+            return 2  # boundary
+        return 1  # dominant compatible
+
+    gene_map = region_agg.groupby("variant_key")["gene"].first().to_dict()
+
+    # Sort variants by max AF descending (most dramatic on top)
+    vk_max = (
+        region_agg[region_agg["variant_key"].isin(observed_vks)]
+        .groupby("variant_key")["region_af"]
+        .max()
+        .sort_values(ascending=False)
+    )
+    vk_order = vk_max.index.tolist()
+
+    matrix = np.zeros((len(vk_order), len(region_order)), dtype=int)
+    af_annotations = np.full((len(vk_order), len(region_order)), "", dtype=object)
+
+    for i, vk in enumerate(vk_order):
+        vk_data = region_agg[region_agg["variant_key"] == vk]
+        for j, region in enumerate(region_order):
+            rows = vk_data[vk_data["hgdp_region"] == region]
+            if rows.empty:
+                matrix[i, j] = 0
+                af_annotations[i, j] = ""
+            else:
+                r = rows.iloc[0]
+                af = r["region_af"]
+                ac = int(r["region_ac"])
+                matrix[i, j] = _regime_code(af, ac)
+                if ac > 0:
+                    af_annotations[i, j] = (
+                        f"{af:.4f}" if af < 0.01 else f"{af:.1%}"
+                    )
+
+    # Build variant labels
+    var_labels = []
+    for vk in vk_order:
+        gene = gene_map.get(vk, "?")
+        pos = vk.split(":")[1]
+        var_labels.append(f"{gene}  chr{vk.split(':')[0]}:{pos}")
+
+    # Plot
+    cmap = ListedColormap(["#f5f5f5", "#4caf50", "#ff9800", "#d32f2f"])
+    norm = BoundaryNorm([-0.5, 0.5, 1.5, 2.5, 3.5], cmap.N)
+
+    n_vars = len(vk_order)
+    fig_height = max(4, 0.6 * n_vars + 2.5)
+    fig, ax = plt.subplots(figsize=(10, fig_height))
+
+    ax.imshow(matrix, cmap=cmap, norm=norm, aspect="auto")
+
+    # Annotate cells with AF values
+    for i in range(n_vars):
+        for j in range(len(region_order)):
+            txt = af_annotations[i, j]
+            if txt:
+                text_color = "white" if matrix[i, j] >= 2 else "black"
+                ax.text(j, i, txt, ha="center", va="center",
+                        fontsize=7, fontweight="bold", color=text_color)
+            elif matrix[i, j] == 0:
+                ax.text(j, i, "—", ha="center", va="center",
+                        fontsize=8, color="#bdbdbd")
+
+    ax.set_xticks(range(len(region_labels)))
+    ax.set_xticklabels(region_labels, fontsize=10, fontweight="bold")
+    ax.set_yticks(range(n_vars))
+    ax.set_yticklabels(var_labels, fontsize=8)
+    ax.xaxis.tick_top()
+    ax.xaxis.set_label_position("top")
+
+    # Grid lines between cells
+    for edge in range(n_vars + 1):
+        ax.axhline(edge - 0.5, color="white", linewidth=2)
+    for edge in range(len(region_order) + 1):
+        ax.axvline(edge - 0.5, color="white", linewidth=2)
+
+    # Legend
+    legend_elements = [
+        Patch(facecolor="#f5f5f5", edgecolor="#999", label="Not observed (AF = 0)"),
+        Patch(facecolor="#4caf50", edgecolor="#999", label="Dominant-compatible (AF \u2264 2.5\u00d710\u207b\u2075)"),
+        Patch(facecolor="#ff9800", edgecolor="#999", label="Boundary (2.5\u00d710\u207b\u2075 < AF \u2264 1\u00d710\u207b\u00b3)"),
+        Patch(facecolor="#d32f2f", edgecolor="#999", label="Hard incompatible (AF > 1\u00d710\u207b\u00b3)"),
+    ]
+    ax.legend(
+        handles=legend_elements, loc="upper center",
+        bbox_to_anchor=(0.5, -0.04), ncol=2, fontsize=8, framealpha=0.9,
+    )
+
+    ax.set_title(
+        "Same ClinVar P/LP label \u2192 different ancestral frequencies "
+        "\u2192 mutually exclusive disease regimes\n"
+        "Each cell = one HGDP geographic region. "
+        "All variants carry the same public \u201cPathogenic\u201d assertion.",
+        fontsize=11, fontweight="bold", pad=12,
+    )
+
+    fig.tight_layout()
+    fig.savefig(HGDP_KILLER_FIGURE, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    log.info("Saved %s", HGDP_KILLER_FIGURE)
+
+
 # ═══════════════════════════════════════════════════════════════════════
 # Console report — assertive framing
 # ═══════════════════════════════════════════════════════════════════════
@@ -1670,6 +1827,7 @@ def main() -> None:
     plot_ancestry_nonportability_heatmap(hgdp, ancestry)
     plot_evaluability_crisis(evaluability)
     plot_portability_vs_disease_model(summary)
+    plot_killer_plp_decomposition(hgdp)
 
     # Report
     print_report(scores, hgdp, presence, ancestry, haplotype, disease_model, evaluability)

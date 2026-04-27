@@ -43,3 +43,7 @@ data/variant_summary.txt.gz
 data/processed/bed_by_chr/
 data/processed/gnomad_by_chr/
 data/processed/gnomad_genomes_by_chr/
+data/processed/gnomad_r3_region_variants_cache.csv.gz
+
+# Local run artifacts
+logs/

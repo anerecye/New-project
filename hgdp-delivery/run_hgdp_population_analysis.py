@@ -692,6 +692,15 @@ def analyse_biological_contradiction(hgdp: pd.DataFrame, scores: pd.DataFrame) -
         result["match_class"] = "no_match"
         result["allele_resolution_level"] = "unevaluable"
 
+    # Reconciliation-derived matches must not remain labelled as
+    # "not_in_gnomad_r3". If a variant was rescued to a non-`no_match` class
+    # but has no observed HGDP populations, it belongs to the
+    # "absent_in_hgdp" state rather than the unrecoverable "not_in_gnomad_r3"
+    # bucket.
+    rescued_mask = result["match_class"].ne("no_match")
+    result.loc[rescued_mask & result["n_populations_observed"].eq(0), "hgdp_status"] = "absent_in_hgdp"
+    result.loc[result["match_class"].eq("no_match"), "hgdp_status"] = "not_in_gnomad_r3"
+
     # Biological contradiction verdict
     conditions = [
         (result["hgdp_status"] == "not_in_gnomad_r3"),
@@ -1139,13 +1148,16 @@ def build_summary(
     regime_map = {"hard_incompatible": 0.0, "boundary": 0.33, "carrier_compatible": 0.67, "dominant_compatible": 1.0}
     summary["disease_model_score"] = summary.get("disease_model_regime", pd.Series(dtype=float)).map(regime_map).fillna(1.0)
 
-    # Evaluability numeric score (0=unevaluable, 0.5=single, 1=multi)
+    # Evaluability numeric score (0=technical/data limit, 0.25=adequate but
+    # biologically uninformative, 0.5=single evaluable population,
+    # 1.0=multi-population evaluable context). These keys must mirror the
+    # categorical outputs emitted by analyse_evaluability().
     eval_map = {
-        "technically_unevaluable": 0.0,
-        "insufficient_population_sampling": 0.0,
-        "evaluable_population_absent": 0.25,
-        "evaluable_single_population_context": 0.5,
-        "evaluable_multi_population_context": 1.0,
+        "technical_no_reference_data": 0.0,
+        "technical_insufficient_sampling": 0.0,
+        "biological_uninformative": 0.25,
+        "evaluable_single_population": 0.5,
+        "evaluable_multi_population": 1.0,
     }
     summary["evaluability_score"] = summary["hgdp_evaluability"].map(eval_map).fillna(0.0)
 

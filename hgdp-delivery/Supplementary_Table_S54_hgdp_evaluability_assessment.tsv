@@ -1310,7 +1310,7 @@ variant_key	clinvar_id	gene	total_hgdp_an	n_pops_with_data	hgdp_status	n_populat
 21:34449542:GGCCAGGCCCGACATGTT:G	VCV004724223	KCNE1	0	0	not_in_gnomad_r3	0		technical_no_reference_data	technical_unevaluable	0.0
 21:34449512:CT:C	VCV003601178	KCNE1	0	0	absent_in_hgdp	0		technical_insufficient_sampling	data_insufficient	0.0
 21:34449404:TG:T	VCV001415503	KCNE1	0	0	not_in_gnomad_r3	0		technical_no_reference_data	technical_unevaluable	0.0
-21:34449611:C:CGCTG	VCV001343372	KCNE1	0	0	not_in_gnomad_r3	0		technical_no_reference_data	technical_unevaluable	0.0
+21:34449611:C:CGCTG	VCV001343372	KCNE1	0	0	absent_in_hgdp	0		technical_insufficient_sampling	data_insufficient	0.0
 21:34449634:T:A	VCV001065921	KCNE1	0	0	not_in_gnomad_r3	0		technical_no_reference_data	technical_unevaluable	0.0
 21:34449540:C:CG	VCV000812588	KCNE1	0	0	not_in_gnomad_r3	0		technical_no_reference_data	technical_unevaluable	0.0
 21:34449367:T:A	VCV000620398	KCNE1	0	0	not_in_gnomad_r3	0		technical_no_reference_data	technical_unevaluable	0.0

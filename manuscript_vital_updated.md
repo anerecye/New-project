@@ -2,164 +2,204 @@
 
 ## Abstract
 
-Public pathogenic and likely pathogenic (P/LP) assertions are widely reused across clinical databases, laboratory pipelines, and research workflows as though they carry a stable and portable disease claim. In practice, however, a public P/LP label is a compressed clinical object. Once separated from its original submission context, it does not reliably preserve the inheritance model, penetrance assumptions, or evaluability conditions required for responsible downstream interpretation.
+Public pathogenic and likely pathogenic (P/LP) assertions are widely reused across clinical and research workflows as though they carry a stable and portable disease claim. That reuse assumes that a categorical pathogenicity label preserves the disease model under which it was originally assigned. Here we show that this assumption is systematically unstable once population evaluability and ancestry-aware frequency are restored at the point of downstream use.
 
-We examined this problem in a high-stakes domain by analyzing 1,731 unique ClinVar P/LP variants across 20 inherited arrhythmia genes. We integrated ancestry-aware population frequency, allele-resolved variant representation, allele count support, and disease mechanism, and classified each variant into one of three evaluability tiers according to the depth of population constraint that could technically be applied.
+We analyzed 1,731 unique ClinVar P/LP variants across 20 inherited arrhythmia genes. Against gnomAD v4.1.1 exomes, we applied strict exact matching, trim-aware and decomposition-aware reconciliation, and full reference-based normalization with `bcftools norm` against a local GRCh38 reference. Only 357 of 1,731 variants (20.6%) achieved allele-resolved population context, while 1,326 (76.6%) retained only locus- or region-level context without allele-resolved allele frequency and 48 (2.8%) remained unevaluable. Reference-based normalization changed 0 of 1,731 variant representations, showing that the dominant limitation was not residual normalization failure but the structural unavailability of allele-resolved population constraint under current representation and aggregation regimes.
 
-After strict initial matching, exhaustive trim-aware and decomposition-aware reconciliation, and full reference-based normalization with `bcftools norm`, only 357 of 1,731 variants (20.6%) achieved allele-resolved population context. The remaining 1,326 (76.6%) retained only locus- or region-level context without allele-resolved allele frequency, and 48 (2.8%) remained unevaluable. Reference-based normalization changed 0 of 1,731 variant representations, indicating that the dominant limitation was not residual normalization failure but the structural unavailability of allele-resolved population constraint under current representation and aggregation regimes.
+Disease-model analysis was therefore restricted to the Tier 1 subset with usable allele-frequency data (`n = 334`, 19.3% of the full cohort). Within this subset, a global-AF-only screen flagged 13 variants above the `1x10^-5` review threshold, whereas a global-or-popmax screen flagged 115. Global-only review therefore missed 102 of 115 ancestry-aware alerts (88.7%). These 115 variants spanned three interpretation regimes beneath the same public P/LP label: hard incompatibility with an unqualified dominant high-penetrance reading (`n = 1`), boundary or monitoring status (`n = 76`), and recessive or carrier-compatible architecture (`n = 38`). Of the 115 alerts, 103 occurred in genes linked to clinically consequential interpretation contexts, including cascade testing, drug restriction, intensive surveillance, and device-related management.
 
-Disease-model analysis was possible only for the Tier 1 subset with usable allele frequency data (`n = 334`, 19.3% of the full cohort). Within this subset, a screen based on global allele frequency (AF) alone identified 13 variants above the `1x10^-5` review threshold. A global-or-popmax screen identified 115, meaning that global-only review missed 102 of 115 ancestry-aware frequency alerts (88.7%). Of these 115 alerts, 103 fell within genes linked to clinically actionable interpretation contexts, including drug restriction, intensive surveillance, and device-related management. These 115 variants, despite sharing the same public P/LP label, resolved into three biologically distinct interpretation regimes: hard incompatibility with an unqualified dominant high-penetrance reading (`n = 1`), boundary or monitoring status (`n = 76`), and recessive or carrier-compatible architecture (`n = 38`).
+We then applied an independent HGDP regional stress-test using gnomAD r3.1.2 genomes. Under four-level reconciliation, 340 of 1,731 variants entered the HGDP matched universe: 64 as strict allele matches, 4 as representation-rescued matches, and 272 as position-overlap matches. Within that full matched set, 67 of 340 variants (19.7%) fell outside a dominant-compatible regime under the tested maximum-credible-allele-frequency framework, compared with 4 of 64 (6.2%) in the strict-allele-only subset. The difference is not a nuisance detail; it marks the boundary between allele-level evidence and locus-context inference.
 
-Two limitations define the scope of inference. First, all disease-model findings are restricted to the minority of variants for which allele-resolved population constraint was technically recoverable. The prevalence of the same regime structure in the unevaluable majority cannot be estimated from these data. Second, the clinical-action classification used here identifies exposure to consequential decision environments, not measured downstream harm.
-
-These findings support a governance conclusion rather than a simple technical one. A public P/LP label does not reliably preserve the disease-state definition required for safe downstream reuse. For most variants in this study, one of the key constraining signals, allele-resolved population frequency, was not operationally available. Where such constraint was available, the same exported label supported mutually inconsistent biological readings. Responsible reuse therefore requires explicit specification of the disease model being invoked and explicit declaration of the level of population evaluability available for the asserted allele.
+These findings support a governance conclusion. A public P/LP label does not reliably preserve the disease-state definition required for safe downstream reuse. For most variants in this study, one of the main constraining signals, allele-resolved population frequency, was not operationally available. Where such constraint was available, the same exported label supported mutually inconsistent biological readings. Responsible reuse therefore requires explicit specification of both the disease model being invoked and the level of population evaluability available for the asserted allele.
 
 ## Introduction
 
-Public clinical variant assertions now function as shared infrastructure. A pathogenic or likely pathogenic label exported from ClinVar is routinely reimported into laboratory interpretation pipelines, cascade testing workflows, decision-support systems, and research analyses as though it were a portable unit of clinical meaning. This pattern of reuse rests on an implicit assumption: that the public label preserves the disease state it was originally intended to describe.
+Public clinical variant assertions now function as shared infrastructure. A pathogenic or likely pathogenic label exported from ClinVar is routinely reimported into laboratory interpretation pipelines, cascade-testing workflows, decision-support systems, and research analyses as though it were a portable unit of clinical meaning. This pattern of reuse rests on an implicit assumption: that the public label preserves the disease model it was originally intended to describe.
 
-That assumption is structurally unsafe. A public P/LP assertion is not a self-sufficient disease claim. It is a compressed object that records a classification outcome while omitting key components of the interpretive model that produced it, including the relevant inheritance logic, penetrance assumptions, ancestry context, and the evaluability conditions under which the assertion was judged. Once the label circulates independently of those parameters, downstream users are forced to reconstruct a disease model that the public object does not itself encode.
+That assumption is structurally unsafe. A public P/LP assertion is not a self-sufficient disease claim. It is a compressed object that records a classification outcome while omitting key parts of the interpretive model that produced it, including inheritance logic, penetrance assumptions, ancestry context, representation stability, and the evaluability conditions under which population evidence could be applied. Once the label circulates independently of those parameters, downstream users are forced to reconstruct a disease model that the public object does not itself encode.
 
-This problem is not merely theoretical. In domains where variant interpretation influences drug restriction, surveillance intensity, cascade testing, or device management, importing the wrong disease model can change the practical meaning of a public label. The central question is therefore not whether an individual assertion may have been internally coherent in its original submission context. The question is whether the exported label remains interpretable as a coherent disease-state claim once ancestry-aware population structure and mechanism are reintroduced at the point of downstream use.
+This problem is not merely theoretical. In settings where a variant label can influence syndrome diagnosis, family cascade testing, medication guidance, surveillance intensity, or device-related decisions, importing the wrong disease model changes the practical meaning of the assertion. The central question is therefore not whether an individual ClinVar submission may once have been coherent in its original context. The question is whether the exported label remains interpretable as a coherent disease-state claim once ancestry-aware population structure, allele-resolved representation, and mechanism are reintroduced downstream.
 
-Inherited arrhythmia genes provide an unusually stringent test domain for this problem. They span dominant, recessive, and mixed architectures; variable penetrance; ancestry-specific enrichment patterns; founder effects; and clinically consequential interpretation contexts. They therefore constitute a stress-test setting in which both the biological and operational consequences of label reuse become especially visible. This is not because arrhythmia genes are unique, but because they make the underlying infrastructure problem easier to detect. If disease-state ambiguity and population evaluability limits are visible here, they are unlikely to be confined to this gene space.
+Inherited arrhythmia genes provide a stringent test domain for this problem. They span dominant, recessive, and mixed architectures; variable penetrance; ancestry-specific enrichment; founder effects; and clinically consequential interpretation contexts. They therefore expose both the biological and operational consequences of label reuse. This is not because arrhythmia genes are unique, but because they make the infrastructure problem easier to detect.
 
-In this study, we examined 1,731 unique ClinVar P/LP variants across 20 inherited arrhythmia genes and asked two related questions. First, for how many public assertions can allele-resolved population constraint actually be recovered under current public representation and aggregation systems? Second, when that constraint is available, what kinds of disease-model heterogeneity become visible beneath a shared public P/LP label?
+We examine two linked questions. First, for how many public arrhythmia assertions can allele-resolved population constraint actually be recovered under current public representation and aggregation systems? Second, when such constraint is available, how stable is the disease model implied by the label as observational resolution increases from global AF to ancestry-aware population maxima and then to regional stress-testing in HGDP?
 
-We show that most public arrhythmia assertions cannot be connected to allele-resolved population frequency even after exhaustive reconciliation and reference-based normalization. Among the minority of variants for which allele-resolved population context can be established, ancestry-aware frequency exposes three biologically distinct interpretation regimes concealed beneath the same exported label. These findings do not estimate the full scale of the problem across all public assertions. Rather, they establish its structure and show that safe downstream reuse requires more explicit metadata than current public labels provide.
+We show that most public arrhythmia assertions cannot be connected to allele-resolved population frequency even after exhaustive reconciliation and reference-based normalization. Among the minority for which allele-resolved context is available, ancestry-aware frequency exposes distinct interpretation regimes concealed beneath the same public P/LP label. A second HGDP-based analysis sharpens the same point: once reconciliation expands beyond strict allele identity, the apparent burden of non-dominant-compatible variants rises markedly, but much of that burden lives in a locus-context universe rather than an allele-proven one. Safe downstream reuse therefore requires more explicit metadata than current public labels provide.
 
-## Results
+## Methods
 
-### Evaluability tiering: allele-resolved population constraint is unavailable for most variants
+### Cohort definition
 
-We assembled 1,731 unique ClinVar P/LP variants across 20 canonical inherited arrhythmia genes and classified each into one of three evaluability tiers according to the depth of allele-resolved population constraint that could be established against gnomAD v4.1.1 exomes after exhaustive reconciliation (Table 1).
+We analyzed ClinVar P/LP assertions across 20 inherited arrhythmia genes: `KCNQ1`, `KCNH2`, `SCN5A`, `KCNE1`, `KCNE2`, `RYR2`, `CASQ2`, `TRDN`, `CALM1`, `CALM2`, `CALM3`, `ANK2`, `SCN4B`, `KCNJ2`, `HCN4`, `CACNA1C`, `CACNB2`, `CACNA2D1`, `AKAP9`, and `SNTA1`. Variants were collapsed to unique GRCh38 alleles by chromosome, position, reference allele, and alternate allele, yielding 1,731 unique variants in the April 24, 2026 ClinVar data freeze used for this manuscript.
 
-Table 1. Evaluability tier distribution (`n = 1,731 variants`)
+### Exome reconciliation and evaluability tiering
+
+Variants were cross-referenced against gnomAD v4.1.1 exomes using a multi-step reconciliation pipeline. Matching began with strict allele identity and then added trim-aware and decomposition-aware rescue. All variants were additionally normalized against a local GRCh38 reference using `bcftools norm`. Each variant was then assigned to one of three exome evaluability tiers:
 
 | Tier | Definition | N | % |
 |---|---|---:|---:|
-| 1 | Exact or equivalent allele-resolved match in gnomAD v4.1.1 exomes | 357 | 20.6 |
+| 1 | Exact or equivalent allele-resolved match with usable allele-level AF | 357 | 20.6 |
 | 2 | Locus or regional context only; no allele-resolved AF | 1,326 | 76.6 |
 | 3 | Genuinely unevaluable after all reconciliation steps | 48 | 2.8 |
 
-Under strict initial matching, 350 variants achieved exact allele-level recovery. Trim-aware and decomposition-aware reconciliation increased this number to 357. Full reference-based normalization using `bcftools norm` against a local GRCh38 reference changed 0 of 1,731 variant representations. The combination of a marginal reconciliation gain (7 variants, 0.4%) and zero normalization-induced changes argues strongly against residual left-alignment artefacts or incomplete decomposition as primary explanations for missing allele-level matches. The dominant limitation is structural: under current representation and aggregation regimes, most public arrhythmia assertions cannot be connected to allele-resolved population frequency.
+Tier 1 contains the only variants used for allele-level frequency conclusions in the exome analysis. Tier 2 was never interpreted as population-consistent by implication.
 
-This finding defines an operational boundary on downstream interpretation. For most variants in this cohort, population frequency cannot be applied at the asserted allele level, not because it was overlooked analytically, but because the relevant representation is not recoverable from current public infrastructure.
+### Exome frequency screening and regime assignment
 
-### Tier 2 reflects structured representation limits, not random absence
+For Tier 1 variants with usable AF (`n = 334`), we extracted global AF, popmax AF, allele count, review-strength metadata, and variant-class annotations from existing processed outputs. We used `1x10^-5` as a review trigger rather than as a pathogenicity boundary and compared global-AF-only review with global-or-popmax review. Regime assignment within the 115 ancestry-aware alerts followed the precomputed arrhythmia interpretation framework already present in the repository: hard incompatibility with an unqualified dominant high-penetrance reading, boundary or monitoring status, and recessive or carrier-compatible architecture.
 
-The 1,326 Tier 2 variants were not uniformly uninformative. Within this group, 638 (48.1%) showed allele discordance at the queried locus, meaning that gnomAD contained a record at the same position but not for the exact ClinVar allele. The remaining 688 (51.9%) lacked even a same-locus gnomAD record and retained only regional context.
+### HGDP regional stress-test
 
-Tier 2 was also enriched for representation-sensitive variant classes. Indels, duplications, and insertions collectively accounted for 640 of 1,326 Tier 2 variants (48.3%), compared with 106 of 357 Tier 1 variants (29.7%), corresponding to an odds ratio of 2.21. This enrichment has a direct interpretive consequence: non-observation at the allele level is not a uniform proxy for rarity. For representation-sensitive classes, especially indels and duplications, the absence of an allele-resolved match often reflects discordance between public assertion and population aggregation systems rather than genuine population absence.
+We next queried gnomAD r3.1.2 genomes and the HGDP+1KG population layer using cached GraphQL outputs. Variant reconciliation used four levels: exact allele identity, normalization rescue, event-equivalent rescue, and position-overlap rescue. For reporting, these were collapsed into four match classes:
 
-Accordingly, Tier 2 should not be treated as weak positive evidence of rarity. Its primary value is diagnostic: it identifies where rarity logic cannot safely be applied because allele-resolved evaluability has not been achieved.
+1. `strict_allele`
+2. `normalized_allele` (including event-equivalent rescue)
+3. `position_overlap`
+4. `no_match`
+
+We also tracked a higher-level allele-resolution label: `allele_resolved`, `representation_rescued`, `locus_context_only`, or `unevaluable`.
+
+### HGDP disease-model compatibility
+
+For HGDP-matched variants, we defined effective AF as the larger of `max_hgdp_af` and `gnomad_r3_genome_af`. We then compared that effective AF to two maximum-credible-allele-frequency thresholds used here as a resolution stress-test:
+
+1. strict dominant high-penetrance ceiling: `2.5x10^-5`
+2. generous low-penetrance dominant ceiling: `1x10^-3`
+
+Variants were classified as `dominant_compatible`, `boundary`, or `hard_incompatible`. We report results both for the full HGDP matched universe and for the strict-allele subset alone.
+
+### Clinical-action context
+
+To connect population tension with real downstream use environments, we retained the existing action-context summaries already computed in the repository. These classify alerted variants into clinically consequential gene contexts relevant to cascade testing, drug restriction, and intensive surveillance or device-related management. These context labels are exposure indicators, not patient-outcome measurements.
+
+## Results
+
+### 1. A structural evaluability boundary limits allele-resolved population review
+
+Across 1,731 unique arrhythmia P/LP variants, only 357 (20.6%) reached exact or equivalent allele-resolved population context in gnomAD v4.1.1 exomes. Of these, 334 retained usable allele-frequency data for downstream screening. The remaining 1,326 variants occupied Tier 2 locus- or region-context space, and 48 remained genuinely unevaluable after all reconciliation steps.
+
+Strict initial matching recovered 350 variants. Trim-aware and decomposition-aware reconciliation increased recovery by only 7 variants. Full reference-based normalization using `bcftools norm` changed 0 of 1,731 representations. Together, these negative findings matter more than a cosmetic recovery gain: the dominant barrier is not an avoidable formatting miss, but the structural inability to connect most public arrhythmia assertions to allele-resolved population frequency.
+
+### 2. Tier 2 reflects structured representation limits, not random absence
+
+Tier 2 is not a homogeneous gray zone. Within its 1,326 variants, 638 (48.1%) showed allele discordance at the queried locus, whereas 688 (51.9%) lacked even a same-locus gnomAD record. Tier 2 was also enriched for representation-sensitive classes: indels, duplications, and insertions accounted for 640 of 1,326 Tier 2 variants (48.3%), compared with 106 of 357 Tier 1 variants (29.7%), corresponding to an odds ratio of 2.21.
+
+This means that non-observation at the allele level is not a uniform proxy for rarity. For precisely the classes most vulnerable to representation instability, absence of an allele-resolved match often reflects discordance between public assertion and aggregation systems rather than genuine population absence.
 
 ![Allele-level non-observation is shaped by variant class](figures/arrhythmia_vital_absence_not_rarity.png)
 
-### Global AF alone misses most ancestry-aware frequency signals
+### 3. Global AF alone suppresses ancestry-localized tension in the evaluable exome subset
 
-Disease-model analysis was restricted to Tier 1 variants with usable AF data (`n = 334`). Within this subset, 321 variants (96.1%) had global AF `<= 1x10^-5`, so a global-AF-only screen would have flagged 13 variants for closer review. Replacing global AF with the maximum of global AF and popmax AF increased the number of flagged variants to 115. Global-only review therefore missed 102 of 115 ancestry-aware frequency alerts (88.7%).
+Within the 334 Tier 1 variants with usable AF, 321 (96.1%) had global AF `<= 1x10^-5`, so a global-AF-only review would have flagged just 13 variants. Replacing global AF with the maximum of global AF and popmax AF increased the alert set to 115. Global-only review therefore missed 102 of 115 ancestry-aware alerts (88.7%).
 
-The threshold of `1x10^-5` is used here as a screening trigger rather than as a biological boundary separating pathogenic from benign variants. Sensitivity analysis indicated that the qualitative structure of the signal, specifically the large proportional gain from incorporating popmax, was robust to reasonable threshold variation, although absolute counts shifted accordingly.
-
-Of the 115 alerted variants, 103 occurred in genes associated with clinically consequential interpretation contexts, including drug restriction, intensive surveillance, and device-related management. Some variants fell into more than one decision context. These classifications identify exposure to meaningful clinical decision environments, not measured downstream outcomes.
-
-The central result of this analysis is therefore not merely that popmax increases alert counts. It is that global AF alone systematically suppresses ancestry-localized signals in a gene set where ancestry structure, founder effects, and non-uniform inheritance architecture are biologically relevant.
+This was not a trivial methodological refinement. Of the 115 alerted variants, 103 fell in genes linked to clinically consequential interpretation contexts. Sixty occurred in drug-restriction contexts, 59 in intensive-surveillance or device-related contexts, and 103 in cascade-testing contexts. Global AF alone therefore suppresses precisely the ancestry-localized signal most relevant to downstream disease-model constraint in this domain.
 
 ![Population-specific frequency signals missed by global AF](figures/arrhythmia_population_af_outliers.png)
 
-### Three interpretation regimes beneath a shared public label
+### 4. Exome-resolved frequency tension spans three interpretation regimes beneath a shared public label
 
-The principal finding was not the number of frequency alerts, but the biological heterogeneity revealed when ancestry-aware frequency was used to constrain the disease model implicitly carried by the public P/LP label. The 115 frequency-tension variants resolved into three distinct interpretation regimes (Table 2).
-
-Table 2. Interpretation regimes among frequency-tension variants (`n = 115`)
+The 115 ancestry-aware exome alerts did not represent one kind of problem. They resolved into three distinct interpretation regimes:
 
 | Regime | N variants | Representative locus | Defining feature |
 |---|---:|---|---|
-| Hard dominant incompatibility | 1 | SCN5A `VCV000440850` | AF incompatible with an unqualified dominant high-penetrance reading |
-| Boundary / monitoring | 76 | KCNH2 `VCV004535537` | Exceeds strict ceiling but remains compatible with lower-penetrance dominant interpretation |
-| Recessive / carrier-compatible | 38 | TRDN `VCV001325231` | Dominant reading implausible; recessive or carrier logic remains coherent |
+| Hard dominant incompatibility | 1 | `SCN5A VCV000440850` | AF incompatible with an unqualified dominant high-penetrance reading |
+| Boundary / monitoring | 76 | `KCNH2 VCV004535537` | Exceeds a strict ceiling but remains compatible with a lower-penetrance dominant interpretation |
+| Recessive / carrier-compatible | 38 | `TRDN VCV001325231` | Dominant reading implausible; recessive or carrier logic remains coherent |
 
-#### Hard dominant incompatibility
+`SCN5A VCV000440850` remains the clearest incompatibility case in the exome-resolved subset. `KCNH2 VCV004535537` illustrates a parameter-sensitive monitoring regime rather than a categorical collapse, and `TRDN VCV001325231` shows how a generic P/LP label can flatten a carrier-compatible recessive allele into an apparently dominant claim unless the disease model is made explicit.
 
-One variant, SCN5A `VCV000440850`, `c.[3919C>T;694G>A]`, showed population signals incompatible with any unqualified dominant high-penetrance reading across a broad and deliberately permissive parameter space. Its AFR popmax AF was `5.68x10^-3` (allele count 214), exceeding a strict dominant high-penetrance ceiling by 113.5-fold, a Brugada-appropriate 20% penetrance ceiling by 45.4-fold, and a deliberately permissive low-penetrance dominant ceiling by 5.7-fold.
+### 5. HGDP adds regional resolution but sharpens the match-class problem
 
-This does not exclude all possible biological relevance. Low penetrance, haplotypic dependence, or more complex allelic architecture remain conceivable. What it does exclude is the most common downstream reading of a standalone public P/LP label as a portable dominant Mendelian disease claim without qualification.
+We next applied a second, stricter resolution stress-test using gnomAD r3.1.2 genomes and HGDP regional frequencies. Under four-level reconciliation, 340 of 1,731 variants entered the HGDP matched universe:
 
-#### Boundary and monitoring cases
+| HGDP match class | N | % of total cohort |
+|---|---:|---:|
+| `strict_allele` | 64 | 3.7 |
+| `normalized_allele` | 4 | 0.2 |
+| `position_overlap` | 272 | 15.7 |
+| `no_match` | 1,391 | 80.4 |
 
-Seventy-six variants occupied an intermediate zone. These variants were incompatible with a strict high-penetrance dominant disease model but not contradicted to the same degree as the SCN5A outlier. KCNH2 `VCV004535537`, `c.2398+2T>G`, illustrates this class. It showed a global allele count of 24 and an ASJ popmax AF of `1.32x10^-4`, exceeding a strict long-QT high-penetrance ceiling by 2.6-fold while remaining compatible with a more permissive low-penetrance dominant model.
+This is the core caution of the HGDP layer. The matched universe is substantially larger than the strict-allele subset, but most of that expansion comes from `position_overlap`, not allele identity. Under the accompanying evaluability classification, only 12 variants were HGDP-evaluable, 328 were present but data-insufficient or absent in HGDP populations, and 1,391 remained technically unevaluable in the regional layer.
 
-The allele count of 24 is part of the interpretation, not a side note. At this level, the signal is meaningful but still carries material statistical uncertainty. These variants therefore warrant qualified review and monitored interpretation rather than automated assignment of full dominant disease weight.
+![Same public P/LP labels decompose across HGDP geographic regions under position-aware matching](hgdp-delivery/hgdp_killer_plp_decomposition.png)
 
-#### Recessive and carrier-compatible architecture
+![HGDP regime distribution across the matched universe](hgdp-delivery/hgdp_regime_distribution.png)
 
-Thirty-eight variants were more coherent under recessive or carrier architecture than under a dominant disease interpretation. TRDN `VCV001325231`, `c.1050del`, illustrates this regime. It had a global allele count of 40 and an AMR popmax AF of `2.18x10^-4`, rendering a dominant Mendelian reading implausible while remaining fully coherent under recessive logic, with an implied carrier frequency of approximately `4.36x10^-4` and an expected homozygote frequency of approximately `4.76x10^-8`.
+![HGDP evaluability classes remain sharply constrained](hgdp-delivery/hgdp_evaluability_breakdown.png)
 
-The core interpretive failure in this regime is not excessive frequency in isolation. It is the importation of the wrong inheritance-class reading from a public label that does not specify which disease model it encodes.
+### 6. Quantitative regime burden depends strongly on whether locus-context matches are allowed
 
-Across all three regimes, allele count acted as a graded modifier of confidence in the population signal. The SCN5A variant, with allele count 214, supported a robust and stable incompatibility conclusion. The TRDN variant, with allele count 40, supported a meaningful but more cautious inference. The KCNH2 variant, with allele count 24, was most appropriately treated as a monitoring case. Allele count is therefore not a binary quality filter but a continuous modifier of evidentiary weight.
+Within the full HGDP matched universe (`n = 340`), 67 variants (19.7%) fell outside a dominant-compatible regime under the tested MCAF framework: 14 `hard_incompatible` and 53 `boundary`. In the strict-allele-only subset (`n = 64`), only 4 variants (6.2%) were non-dominant-compatible: 1 `hard_incompatible` and 3 `boundary`.
+
+| Analysis universe | Hard incompatible | Boundary | Dominant-compatible | Total non-dominant-compatible |
+|---|---:|---:|---:|---:|
+| Full HGDP matched set (`n = 340`) | 14 (4.1%) | 53 (15.6%) | 273 (80.3%) | 67 (19.7%) |
+| Strict-allele HGDP subset (`n = 64`) | 1 (1.6%) | 3 (4.7%) | 60 (93.8%) | 4 (6.2%) |
+
+This distinction is not cosmetic. Position-overlap matching expands the scope of evaluability and highlights where regime shifts may be hiding, but it does not constitute allele-level proof of frequency incompatibility. The public-label problem is therefore two-layered: a structural inability to recover allele-resolved context for most variants, and a second inferential gap between locus-context stress signals and allele-level evidence.
+
+![Disease-model portability versus evaluability in the HGDP summary layer](hgdp-delivery/hgdp_portability_vs_disease_model.png)
 
 ## Discussion
 
-### The evaluability boundary is structural, not technical
+### A public P/LP label is a compressed object, not a self-contained disease claim
 
-The most informative result of the reconciliation analysis is what further technical effort did not achieve. Despite strict matching, trim-aware reconciliation, decomposition-aware reconciliation, and full reference-based normalization, only 357 of 1,731 variants (20.6%) reached allele-resolved population context, and normalization contributed zero additional matches. This localizes the problem clearly. The dominant barrier is not an avoidable pipeline failure or a remediable normalization oversight. It is a structural property of the current interface between public clinical assertions and population aggregation systems.
+The most important result of this study is not simply that some P/LP variants are too frequent. It is that the exported label does not reliably preserve the disease-state model required for downstream reuse. In the exome-resolved subset, the same public label spans hard incompatibility, monitoring, and carrier-compatible regimes. In the HGDP layer, the same label can move between dominant-compatible and non-dominant-compatible interpretations depending on whether one works with strict allele identity or with position-overlap rescue.
 
-This distinction matters because it changes what downstream users should infer from missing allele-level population context. In this setting, lack of allele-resolved recovery is often an infrastructure limitation rather than an interpretable biological signal. Analytical diligence cannot fully repair a representational interface that does not preserve allele-level evaluability across systems.
+### The evaluability boundary is structural, not a pipeline artifact
 
-### Inherited arrhythmia genes function here as a stress-test domain
+The exome reconciliation result is especially informative because of what it did not show. Reference-based normalization changed 0 of 1,731 variants. Exhaustive reconciliation rescued only 7 additional exact or equivalent exome matches. This localizes the failure clearly: the main barrier is not missed left-alignment or sloppy trimming, but a structural disconnect between public clinical assertions and population aggregation systems.
 
-This study does not claim that inherited arrhythmia genes are uniquely affected. The point of this gene set is methodological. These genes combine ancestry structure, variable penetrance, dominant and recessive mechanisms, founder effects, and clinically consequential interpretation contexts. They therefore offer a stringent domain in which failures of disease-model portability and population evaluability are easier to detect.
+### Population structure is not a refinement layer; it is part of the claim
 
-The present findings should therefore be read as proof of structure rather than a direct estimate of prevalence across all disease areas. The study demonstrates that the problem exists in a domain where the stakes of interpretive slippage are unusually visible. Whether the same regime distribution holds elsewhere requires separate empirical study.
+Global-only screening missed 88.7% of ancestry-aware exome alerts. In a domain shaped by ancestry-localized enrichment, founder effects, and mixed inheritance architectures, global AF is not a sufficient stand-in for the population signal needed to constrain a disease model. Popmax does not add decorative granularity; it restores biologically relevant structure that global AF suppresses.
 
-### The popmax gap is not a minor methodological detail
+### The HGDP layer exposes a second boundary: allele proof versus locus-context stress
 
-The finding that global-AF-only review missed 88.7% of ancestry-aware frequency alerts is not an artifact of an eccentric threshold choice. It reflects a general problem that arises whenever ancestry-heterogeneous frequencies are collapsed into a single global summary statistic. When a variant is rare globally but enriched in a specific ancestry group, global AF dilutes precisely the signal that matters most for disease-model constraint. Popmax restores that signal.
+The HGDP analysis sharpens the story rather than replacing it. It shows that once one pushes beyond exome popmax into regional stress-testing, most additional coverage is gained through `position_overlap`, not through allele-resolved rescue. That is valuable because it identifies where regime shifts may be hiding, but it also creates a new evidentiary boundary. A full matched-universe estimate (19.7% non-dominant-compatible) and a strict-allele estimate (6.2%) answer different questions. Both are informative; neither should be reported as though it were the other.
 
-In inherited arrhythmia genes, where ancestry-localized enrichment, founder effects, and recessive carrier architecture are biologically relevant features rather than edge cases, global-only screening is not merely incomplete. It is misaligned with the biology it is meant to constrain.
+### Arrhythmia genes act here as a stress-test domain
 
-### The label compression problem has both biological and operational dimensions
-
-The three interpretation regimes identified here illustrate two distinct dimensions of label compression. The first is biological. The same public P/LP label may remain compatible with dominant high-penetrance disease, low-penetrance susceptibility, recessive or carrier architecture, or a biologically implausible unqualified dominant claim. The disease-state model is therefore not contained in the label itself.
-
-The second dimension is operational. For most variants in this cohort, the principal quantitative constraint on that disease model, allele-resolved population frequency, was not technically recoverable. A downstream user facing a Tier 2 assertion therefore lacks both an explicit disease model and a clean population constraint. The public label is most compressed precisely where interpretive support is weakest.
-
-This is why the problem cannot be reduced to a generic statement that "context matters." The more consequential claim is that the shared infrastructure surrounding public labels behaves as though that missing context were optional, even in settings where downstream interpretation depends on it.
+This manuscript does not claim that arrhythmia genes are uniquely affected. Rather, they provide a stringent domain in which ancestry structure, variable penetrance, founder effects, and high-consequence downstream interpretation coexist. That combination makes failures of disease-model portability easier to see. Whether the same quantitative regime burdens recur in other disease areas requires separate empirical work.
 
 ## Limitations
 
-First, all disease-model analyses were restricted to Tier 1 variants with usable allele-resolved AF data (`n = 334`, 19.3% of the full cohort). The interpretation regimes described here therefore cannot be assumed to represent the unevaluable majority. Because Tier 1 was enriched for SNVs and depleted of indels and duplications relative to Tier 2, direct extrapolation across variant classes would be inappropriate.
+First, all exome disease-model conclusions are restricted to the 334 Tier 1 variants with usable allele-resolved AF. The unevaluable majority cannot be assumed to follow the same regime structure.
 
-Second, this is a study of disease-model compatibility, not a study of patient-level outcomes. The clinical-action categories used here identify exposure to consequential decision environments but do not quantify realized downstream harm.
+Second, the HGDP regional analysis is limited by both sparse evaluability and the distinction between strict-allele and position-overlap matching. The expanded matched universe is directionally informative, but the strongest quantitative claims remain concentrated in the strict or representation-rescued allele-level subset.
 
-Third, frequency-based analysis can exclude a particular disease-model reading, but it cannot on its own establish the correct alternative interpretation. Low penetrance, haplotypic context, allelic phase, transcript-specific effects, segregation evidence, and functional validation remain outside the scope of this analysis unless orthogonal data are introduced.
+Third, this is a study of disease-model compatibility, not of patient-level outcomes. The clinical-action categories used here identify exposure to consequential decision environments but do not quantify realized downstream harm.
 
-Fourth, the `1x10^-5` threshold was used as a review trigger rather than as a biological boundary. The qualitative structure of the findings was robust to threshold variation, but the absolute number of flagged variants depends on the screening threshold chosen.
+Fourth, frequency-based analysis can exclude a particular disease-model reading, but it cannot on its own establish the correct alternative interpretation. Low penetrance, haplotypic context, allelic phase, transcript-specific rescue, segregation evidence, and functional validation remain outside the scope of this analysis unless orthogonal data are introduced.
 
-Fifth, Tier 2 does not provide allele-level frequency evidence. Its interpretive value lies in identifying where allele-resolved rarity logic cannot be safely applied, not in resolving the status of individual variants.
+Fifth, the `1x10^-5` trigger used in the exome screening layer is operational rather than ontological. The qualitative result, especially the large popmax gain over global AF, was stable, but absolute alert counts depend on the screening threshold selected.
 
 ## Governance Implications
 
-Three governance-relevant conclusions follow from these findings.
+Three governance-relevant conclusions follow.
 
-First, popmax should be required alongside global AF in inherited arrhythmia variant review. In this study, global-only screening missed 88.7% of ancestry-aware frequency alerts, and 103 of those alerts occurred in genes linked to clinically consequential interpretation contexts. Omitting popmax in such settings is not a small methodological omission. It is a systematic failure to apply available population constraint.
+First, popmax should be required alongside global AF in inherited arrhythmia variant review. In this study, global-only screening missed 88.7% of ancestry-aware frequency alerts, and 103 of those alerts occurred in clinically consequential gene contexts.
 
-Second, public variant assertions intended for downstream reuse should carry three additional fields alongside pathogenicity category. These are:
+Second, public assertions intended for downstream reuse should carry at least three additional fields alongside pathogenicity category:
 
-1. the disease-state model being asserted, including inheritance class and penetrance logic, for example dominant high penetrance, dominant reduced penetrance, recessive, or unspecified;
-2. the evaluability tier of the asserted allele with respect to population constraint, using a schema analogous to the one developed here; and
-3. the allele count supporting any cited population signal, together with explicit acknowledgment of the uncertainty associated with low-count observations.
+1. the disease-state model being asserted, including inheritance class and penetrance logic;
+2. the population evaluability tier of the asserted allele; and
+3. the allele count supporting any cited population signal, together with explicit acknowledgment of low-count uncertainty.
 
-These additions do not require new biological evidence. They require explicit curation of information that downstream users already need but that the public label does not currently preserve.
-
-Third, downstream users should treat non-observation in population databases as a property of representation rather than biology for indels, duplications, insertions, and splice-disrupting variants. The enrichment of such classes in Tier 2 indicates that absence of an allele-level gnomAD match cannot be naively interpreted as evidence of rarity. Evaluability metadata must therefore remain conceptually distinct from pathogenicity classification.
+Third, downstream users should not equate locus-context stress with allele-level proof. For indels, duplications, splice-disrupting variants, and other representation-sensitive classes, non-observation and same-position overlap are properties of representation before they are properties of biology.
 
 ## Conclusion
 
-Across 1,731 ClinVar P/LP variants in 20 inherited arrhythmia genes, two problems converge. The first is operational. Even after exhaustive reconciliation and reference-based normalization, 76.6% of variants lacked allele-resolved population context, meaning that one of the main quantitative constraints on disease-model evaluation was not technically recoverable for most public assertions in this setting. The second is biological. Among the minority of variants for which allele-resolved frequency could be established, ancestry-aware population data exposed three distinct interpretation regimes beneath the same exported P/LP label: hard incompatibility with an unqualified dominant high-penetrance reading, boundary cases requiring monitored interpretation, and recessive or carrier-compatible architecture.
+Across 1,731 ClinVar P/LP variants in 20 inherited arrhythmia genes, two problems converge. The first is operational: even after exhaustive reconciliation and reference-based normalization, most public assertions lacked allele-resolved population context in the exome layer, and the HGDP regional layer was even more sharply constrained. The second is biological: among the minority of variants for which population constraint was recoverable, the same exported P/LP label supported mutually inconsistent disease-model readings.
 
-These findings should be read as establishing a structural problem, not as claiming a complete estimate of its prevalence. The unevaluable majority cannot yet be analyzed in the same way, and that inability to assess scope is itself part of the governance failure documented here.
+These findings establish a structural problem rather than a complete prevalence estimate. The unevaluable majority cannot yet be analyzed at the same depth, and that inability to assess scope is itself part of the governance failure documented here.
 
-A public pathogenic label does not reliably preserve the disease-state definition required for safe downstream reuse. Responsible reuse requires, at minimum, explicit specification of the disease model being invoked and explicit declaration of the degree of population evaluability available for the asserted allele. Without both, a compact public object can circulate as though it carried stable clinical meaning while supporting mutually inconsistent biological readings.
+A public pathogenic label does not reliably preserve the disease-state definition required for safe downstream reuse. Responsible reuse requires, at minimum, explicit specification of the disease model being invoked and explicit declaration of the degree of population evaluability available for the asserted allele.
+
+## Tool Availability
+
+The computational pipeline used for these analyses is available in the project repository. Historical script names retain the `vital` prefix, but the current manuscript framing is evaluability- and disease-model-centric rather than tool-centric.
+
+## Data Availability
+
+Code, cached intermediate files, processed tables, and figure assets required to reproduce the analyses summarized here are available in the repository. The April 24, 2026 data freeze used ClinVar public assertion snapshots together with gnomAD v4.1.1 exome outputs and gnomAD r3.1.2 genome/HGDP regional outputs already cached in the project workspace.

@@ -293,6 +293,7 @@ variant_key,clinvar_id,gene,max_hgdp_af,gnomad_r3_genome_af,effective_af,total_h
 3:38609764:C:A,VCV000406427,SCN5A,0.0,1.31366341316028e-05,1.31366341316028e-05,0,0,permitted,permitted,not_flagged,dominant_compatible,1.9030750000000003,position_overlap,False
 3:38551459:C:G,VCV000389150,SCN5A,0.0,6.575573061192283e-06,6.575573061192283e-06,0,0,permitted,permitted,not_flagged,dominant_compatible,3.80195,position_overlap,False
 21:34449512:CT:C,VCV003601178,KCNE1,0.0,0.0,0.0,0,0,permitted,permitted,not_flagged,dominant_compatible,,position_overlap,False
+21:34449611:C:CGCTG,VCV001343372,KCNE1,0.0,0.0,0.0,0,0,permitted,permitted,not_flagged,dominant_compatible,,position_overlap,False
 21:34449429:TTGGA:T,VCV000527017,KCNE1,0.0,0.0002047921359819,0.0002047921359819,0,0,excluded,permitted,not_flagged,boundary,0.12207500000004667,position_overlap,False
 1:237819130:G:T,VCV003895065,RYR2,0.0,6.572720580502681e-06,6.572720580502681e-06,0,0,permitted,permitted,not_flagged,dominant_compatible,3.8036000000000003,position_overlap,False
 1:237783971:T:C,VCV003766443,RYR2,0.0,6.570647603027754e-06,6.570647603027754e-06,0,0,permitted,permitted,not_flagged,dominant_compatible,3.8048,strict_allele,True

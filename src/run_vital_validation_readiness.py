@@ -20,6 +20,7 @@ AC_SENSITIVITY_OUT = DATA_DIR / "vital_ac_threshold_sensitivity_extended.csv"
 DETECTABILITY_OUT = DATA_DIR / "vital_detectability_required_fields.csv"
 TEMPORAL_TRACKING_OUT = DATA_DIR / "vital_temporal_red_tracking_summary.csv"
 CONTEXT_OVERLAYS_OUT = DATA_DIR / "vital_contextual_overlay_modules.csv"
+EXPANSION_DESIGN_OUT = DATA_DIR / "vital_expanded_validation_design.csv"
 
 PILOT_KEY_SUPP = SUPPLEMENT_DIR / "Supplementary_Table_S34_blinded_expert_pilot_key.tsv"
 PILOT_FORM_SUPP = SUPPLEMENT_DIR / "Supplementary_Table_S35_blinded_expert_review_form.tsv"
@@ -27,6 +28,7 @@ AC_STRATA_SUPP = SUPPLEMENT_DIR / "Supplementary_Table_S36_ac_reliability_strata
 DETECTABILITY_SUPP = SUPPLEMENT_DIR / "Supplementary_Table_S37_detectability_required_fields.tsv"
 TEMPORAL_TRACKING_SUPP = SUPPLEMENT_DIR / "Supplementary_Table_S38_temporal_red_tracking.tsv"
 CONTEXT_OVERLAYS_SUPP = SUPPLEMENT_DIR / "Supplementary_Table_S39_contextual_overlay_modules.tsv"
+EXPANSION_DESIGN_SUPP = SUPPLEMENT_DIR / "Supplementary_Table_S56_expanded_validation_design.tsv"
 
 
 def read_scores() -> pd.DataFrame:
@@ -404,6 +406,47 @@ def build_context_overlays() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def build_expanded_validation_design() -> pd.DataFrame:
+    rows = [
+        {
+            "design_element": "layer_1_primary_analysis",
+            "pre_specified_value": "334 arrhythmia variants with usable allele-resolved AF",
+            "rationale": "Keeps the primary quantitative disease-model analysis restricted to variants with allele-level population evidence.",
+        },
+        {
+            "design_element": "layer_2_expanded_validation",
+            "pre_specified_value": "204 current-snapshot strict expert P/LP positives as the gold layer plus 942 allele-deduplicated pooled cross-domain expert-curated positives for preservation robustness",
+            "rationale": "Uses the largest available expert-positive comparator for false-interruption and specificity auditing without treating it as interchangeable with the core cohort.",
+        },
+        {
+            "design_element": "layer_3_non_evaluable_universe",
+            "pre_specified_value": "locus-context-only, allele-discordant, representation-sensitive, and unevaluable variants",
+            "rationale": "Measures infrastructure limits separately from disease-model compatibility.",
+        },
+        {
+            "design_element": "negative_and_domain_controls",
+            "pre_specified_value": "benign/likely benign controls plus cardiomyopathy, epilepsy, hearing-loss, and random P/LP panels",
+            "rationale": "Distinguishes general routing behavior from arrhythmia-specific enrichment.",
+        },
+        {
+            "design_element": "required_strata",
+            "pre_specified_value": "evaluability tier; mechanism; inheritance; consequence class; ancestry enrichment; review status; disease domain",
+            "rationale": "Prevents a large validation set from collapsing structured failure modes into one pooled percentage.",
+        },
+        {
+            "design_element": "main_endpoint",
+            "pre_specified_value": "probability of direct-actionability compatibility or review/deferral from evaluability, mechanism, inheritance, popmax/global discordance, and variant class",
+            "rationale": "Frames VITAL as a governance risk model rather than a larger threshold-count exercise; current pooled expert-curated comparator reports 0/942 red interruptions.",
+        },
+        {
+            "design_element": "false_interruption_metric",
+            "pre_specified_value": "hard model-conflict rate among high-review or expert-curated P/LP positives",
+            "rationale": "Quantifies how often the framework stops a strong expert positive rather than routing it to metadata completion or review.",
+        },
+    ]
+    return pd.DataFrame(rows)
+
+
 def save(df: pd.DataFrame, path: Path, sep: str = ",") -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(path, sep=sep, index=False, lineterminator="\n")
@@ -418,6 +461,7 @@ def main() -> None:
     detectability = build_detectability_table()
     temporal = build_temporal_tracking()
     overlays = build_context_overlays()
+    expansion_design = build_expanded_validation_design()
 
     save(key, PILOT_KEY_OUT)
     save(form, PILOT_FORM_OUT)
@@ -427,6 +471,7 @@ def main() -> None:
     save(detectability, DETECTABILITY_OUT)
     save(temporal, TEMPORAL_TRACKING_OUT)
     save(overlays, CONTEXT_OVERLAYS_OUT)
+    save(expansion_design, EXPANSION_DESIGN_OUT)
 
     save(key, PILOT_KEY_SUPP, sep="\t")
     save(form, PILOT_FORM_SUPP, sep="\t")
@@ -434,6 +479,7 @@ def main() -> None:
     save(detectability, DETECTABILITY_SUPP, sep="\t")
     save(temporal, TEMPORAL_TRACKING_SUPP, sep="\t")
     save(overlays, CONTEXT_OVERLAYS_SUPP, sep="\t")
+    save(expansion_design, EXPANSION_DESIGN_SUPP, sep="\t")
 
 
 if __name__ == "__main__":

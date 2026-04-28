@@ -101,7 +101,9 @@ python src/run_vital_biological_contrast.py
 
 This audit asks whether severe-looking ClinVar P/LP consequence annotations are
 sufficient to override ancestry-aware population-frequency contradiction. The
-answer here is no: severe annotation does not, by itself, rescue coherence.
+answer here is no: severe annotation does not, by itself, rescue coherence. It
+also separates strict expert truth from pooled expert-curated robustness
+and high-review non-expert consistency layers.
 
 ```bash
 python src/run_vital_external_truth_claim.py
@@ -113,6 +115,9 @@ Headline outputs include:
   AF `> 1e-5`
 - `57/197` severe annotations still discordant after excluding `CASQ2/TRDN`
 - `102/115` ancestry-aware alerts hidden by global-AF-only review
+- `942` allele-level deduplicated current expert-panel/practice-guideline P/LP positives
+  audited for false interruption; `0` entered the red-priority queue, while
+  `4/942` reached score `>=70` as orange review/monitoring cases
 
 ### Real Reclassification Audit
 

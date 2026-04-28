@@ -1,7 +1,7 @@
 protocol_element,pre_specified_value,rationale
-external_endpoint,requires re-review / does not require re-review,Separates external adjudication from VITAL's internal score construction.
+external_endpoint,requires re-review / does not require re-review,Separates external adjudication from internal score construction.
 pilot_set_size,"23 variants: 3 red, 10 gray, 10 non-red controls",Small blinded pilot designed to test routing plausibility before diagnostic claims.
-reviewer_blinding,"review form excludes VITAL score, band, red flag, and pilot stratum",Prevents circular confirmation of VITAL route by reviewers.
+reviewer_blinding,"review form excludes score, band, red flag, and pilot stratum",Prevents circular confirmation of the route by reviewers.
 consensus_rule,"two of three reviewers, with adjudication for discordance",Produces a reproducible external route label.
-metrics,"sensitivity, specificity, PPV for red/gray routing; Cohen/Fleiss kappa; discordance review","Treats VITAL as review routing support, not as a diagnostic classifier."
+metrics,"sensitivity, specificity, PPV for red/gray routing; Cohen/Fleiss kappa; discordance review","Treats the score as review-routing support, not as a diagnostic classifier."
 external_retrospective_sources,"ClinGen/VCEP reclassification histories, LOVD/registry cases, national consortium candidates when available",Defines the non-internal validation path without changing the current core score.

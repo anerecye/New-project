@@ -20,6 +20,11 @@ ARRHYTHMIA_SCORES = DATA_DIR / "arrhythmia_vital_scores.csv"
 ARRHYTHMIA_LOF_SUMMARY = DATA_DIR / "arrhythmia_vital_lof_subtype_discordance_summary.csv"
 ARRHYTHMIA_CONTEXT = DATA_DIR / "arrhythmia_gene_biological_context.csv"
 CROSS_DISEASE_SCORES = DATA_DIR / "vital_cross_disease_3000_vital_scores.csv"
+MAX_EXPERT_POSITIVE_SOURCES = [
+    DATA_DIR / "vital_cross_disease_3000_vital_scores.csv",
+    DATA_DIR / "vital_external_panel_score_distribution.csv",
+    DATA_DIR / "control_vital_scores.csv",
+]
 
 CANONICAL_RECESSIVE_OR_BIALLELIC_ARRHYTHMIA_GENES = {"CASQ2", "TRDN"}
 
@@ -34,7 +39,109 @@ def pct(numerator: int | float, denominator: int | float) -> float:
     return float(100 * numerator / denominator) if denominator else np.nan
 
 
-def summarize_expert_panel_truth(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def expert_positive_mask(table: pd.DataFrame) -> pd.Series:
+    review_strength = table.get("review_strength", pd.Series("", index=table.index)).fillna("").astype(str).str.lower()
+    review_status = table.get("review_status", pd.Series("", index=table.index)).fillna("").astype(str).str.lower()
+    clinsig = table.get("clinsig", pd.Series("", index=table.index)).fillna("").astype(str).str.lower()
+    high_review = review_strength.isin({"expert_panel", "practice_guideline"}) | review_status.str.contains(
+        "reviewed by expert panel|practice guideline", regex=True
+    )
+    positive = clinsig.str.contains("pathogenic")
+    return high_review & positive
+
+
+def strict_expert_positive_mask(table: pd.DataFrame) -> pd.Series:
+    return expert_positive_mask(table)
+
+
+def high_review_positive_mask(table: pd.DataFrame) -> pd.Series:
+    review_strength = table.get("review_strength", pd.Series("", index=table.index)).fillna("").astype(str).str.lower()
+    review_status = table.get("review_status", pd.Series("", index=table.index)).fillna("").astype(str).str.lower()
+    clinsig = table.get("clinsig", pd.Series("", index=table.index)).fillna("").astype(str).str.lower()
+    high_review = review_strength.eq("multiple_submitters_no_conflicts") | review_status.str.contains(
+        "multiple submitters, no conflicts", regex=False
+    )
+    positive = clinsig.str.contains("pathogenic")
+    return high_review & positive
+
+
+def read_maximal_expert_positive_sources() -> pd.DataFrame:
+    frames = []
+    for path in MAX_EXPERT_POSITIVE_SOURCES:
+        if not path.exists():
+            continue
+        table = pd.read_csv(path)
+        table["expert_positive_source"] = path.stem
+        frames.append(table)
+    if not frames:
+        raise FileNotFoundError("No expert-positive source tables were available.")
+
+    pooled = pd.concat(frames, ignore_index=True, sort=False)
+    expert = pooled.loc[strict_expert_positive_mask(pooled)].copy()
+    expert["frequency_observed_for_priority"] = expert.get(
+        "frequency_evidence_status", pd.Series("", index=expert.index)
+    ).eq("frequency_observed")
+    expert = expert.sort_values(
+        ["frequency_observed_for_priority", "expert_positive_source"],
+        ascending=[False, True],
+    )
+    return expert.drop_duplicates("variant_key", keep="first")
+
+
+def read_high_review_positive_sources() -> pd.DataFrame:
+    frames = []
+    for path in MAX_EXPERT_POSITIVE_SOURCES:
+        if not path.exists():
+            continue
+        table = pd.read_csv(path)
+        table["expert_positive_source"] = path.stem
+        frames.append(table)
+    if not frames:
+        raise FileNotFoundError("No high-review source tables were available.")
+
+    pooled = pd.concat(frames, ignore_index=True, sort=False)
+    high_review = pooled.loc[high_review_positive_mask(pooled)].copy()
+    high_review["frequency_observed_for_priority"] = high_review.get(
+        "frequency_evidence_status", pd.Series("", index=high_review.index)
+    ).eq("frequency_observed")
+    high_review = high_review.sort_values(
+        ["frequency_observed_for_priority", "expert_positive_source"],
+        ascending=[False, True],
+    )
+    return high_review.drop_duplicates("variant_key", keep="first")
+
+
+def summarize_group(label: str, sub: pd.DataFrame, interpretation: str) -> dict[str, object]:
+    return {
+        "truth_comparator_group": label,
+        "n": len(sub),
+        "frequency_observed_count": int(sub["frequency_evidence_status"].eq("frequency_observed").sum()),
+        "severe_annotation_count": int(sub["severe_annotation"].sum()),
+        "severe_annotation_percent": pct(sub["severe_annotation"].sum(), len(sub)),
+        "naive_af_flags": int(sub["naive_af_flag"].sum()),
+        "naive_af_flag_percent": pct(sub["naive_af_flag"].sum(), len(sub)),
+        "ac_supported_frequency_flags": int((sub["naive_af_flag"] & sub["ac_supported_frequency"]).sum()),
+        "ac_supported_frequency_percent": pct((sub["naive_af_flag"] & sub["ac_supported_frequency"]).sum(), len(sub)),
+        "score_ge70_count": int(sub["score_ge70"].sum()),
+        "score_ge70_percent": pct(sub["score_ge70"].sum(), len(sub)),
+        "red_priority_count": int(sub["red_priority"].sum()),
+        "red_priority_percent": pct(sub["red_priority"].sum(), len(sub)),
+        "severe_naive_af_flags": int((sub["severe_annotation"] & sub["naive_af_flag"]).sum()),
+        "severe_naive_af_flag_percent_of_severe": pct(
+            (sub["severe_annotation"] & sub["naive_af_flag"]).sum(),
+            sub["severe_annotation"].sum(),
+        ),
+        "severe_ac_supported_frequency_flags": int(
+            (sub["severe_annotation"] & sub["naive_af_flag"] & sub["ac_supported_frequency"]).sum()
+        ),
+        "severe_red_priority_count": int((sub["severe_annotation"] & sub["red_priority"]).sum()),
+        "orange_high_tension_count": int(sub["vital_band"].eq("orange_high_tension").sum()),
+        "max_vital_score": float(sub["vital_score"].max()) if len(sub) else np.nan,
+        "interpretation": interpretation,
+    }
+
+
+def prepare_truth_table(scores: pd.DataFrame) -> pd.DataFrame:
     table = scores.copy()
     for column in ["vital_score", "max_frequency_signal", "qualifying_frequency_ac"]:
         table[column] = pd.to_numeric(table.get(column), errors="coerce")
@@ -46,53 +153,41 @@ def summarize_expert_panel_truth(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd
     table["score_ge70"] = table["vital_score"].ge(70)
     table["ac_supported_frequency"] = bool_series(table["frequency_signal_ac_ge_20"])
     table["severe_annotation"] = table["functional_class"].isin(["LOF", "splice_or_intronic"])
+    return table
+
+
+def summarize_expert_panel_truth(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    table = prepare_truth_table(scores)
+    primary_expert = table.loc[strict_expert_positive_mask(table)].copy().drop_duplicates("variant_key", keep="first")
+    pooled_expert = prepare_truth_table(read_maximal_expert_positive_sources())
+    high_review = prepare_truth_table(read_high_review_positive_sources())
 
     rows = []
-    for label, sub in [
-        ("expert_panel_reviewed_PLP", table[table["expert_panel_truth"]]),
-        ("non_expert_or_non_panel_PLP", table[~table["expert_panel_truth"]]),
-        ("all_cross_disease_PLP", table),
-    ]:
-        rows.append(
-            {
-                "truth_comparator_group": label,
-                "n": len(sub),
-                "severe_annotation_count": int(sub["severe_annotation"].sum()),
-                "severe_annotation_percent": pct(sub["severe_annotation"].sum(), len(sub)),
-                "naive_af_flags": int(sub["naive_af_flag"].sum()),
-                "naive_af_flag_percent": pct(sub["naive_af_flag"].sum(), len(sub)),
-                "ac_supported_frequency_flags": int(
-                    (sub["naive_af_flag"] & sub["ac_supported_frequency"]).sum()
-                ),
-                "ac_supported_frequency_percent": pct(
-                    (sub["naive_af_flag"] & sub["ac_supported_frequency"]).sum(),
-                    len(sub),
-                ),
-                "score_ge70_count": int(sub["score_ge70"].sum()),
-                "score_ge70_percent": pct(sub["score_ge70"].sum(), len(sub)),
-                "red_priority_count": int(sub["red_priority"].sum()),
-                "red_priority_percent": pct(sub["red_priority"].sum(), len(sub)),
-                "severe_naive_af_flags": int((sub["severe_annotation"] & sub["naive_af_flag"]).sum()),
-                "severe_naive_af_flag_percent_of_severe": pct(
-                    (sub["severe_annotation"] & sub["naive_af_flag"]).sum(),
-                    sub["severe_annotation"].sum(),
-                ),
-                "severe_ac_supported_frequency_flags": int(
-                    (sub["severe_annotation"] & sub["naive_af_flag"] & sub["ac_supported_frequency"]).sum()
-                ),
-                "severe_red_priority_count": int((sub["severe_annotation"] & sub["red_priority"]).sum()),
-                "orange_high_tension_count": int(sub["vital_band"].eq("orange_high_tension").sum()),
-                "max_vital_score": float(sub["vital_score"].max()) if len(sub) else np.nan,
-                "interpretation": (
-                    "Curated expert-panel P/LP assertions are treated as an external specificity comparator, "
-                    "not as ClinVar churn. The review-routing layer should not convert high-frequency curated exceptions into red calls."
-                    if label == "expert_panel_reviewed_PLP"
-                    else "Comparator group."
-                ),
-            }
+    rows.append(
+        summarize_group(
+            "primary_same_snapshot_strict_expert_PLP",
+            primary_expert,
+            "Gold-layer current-snapshot ClinVar expert-panel/practice-guideline P/LP assertions, allele-level deduplicated by variant_key.",
         )
+    )
+    rows.append(
+        summarize_group(
+            "pooled_expert_curated_positive_cross_domain",
+            pooled_expert,
+            "Current-snapshot pooled expert-curated positives across domains used to test preservation behavior and false interruption, not domain-specific burden or calibration.",
+        )
+    )
+    rows.append(
+        summarize_group(
+            "high_review_non_expert_PLP",
+            high_review,
+            "Current-snapshot multiple-submitters/no-conflicts P/LP layer; higher-confidence non-expert consistency check, not expert truth.",
+        )
+    )
+    rows.append(summarize_group("non_expert_or_non_panel_PLP", table[~table["expert_panel_truth"]], "Comparator group."))
+    rows.append(summarize_group("all_cross_disease_PLP", table, "Comparator group."))
 
-    expert = table[table["expert_panel_truth"]].copy()
+    expert = pooled_expert.copy()
     top_expert = expert.sort_values(["vital_score", "max_frequency_signal"], ascending=[False, False]).head(12)
     top_cols = [
         "gene",
@@ -110,8 +205,20 @@ def summarize_expert_panel_truth(scores: pd.DataFrame) -> tuple[pd.DataFrame, pd
         "popmax_af",
         "qualifying_frequency_ac",
         "known_founder_or_carrier_context_gene",
+        "expert_positive_source",
     ]
-    return pd.DataFrame(rows), top_expert.loc[:, [c for c in top_cols if c in top_expert.columns]]
+    detail_cols = top_cols + [
+        "frequency_evidence_status",
+        "red_priority",
+        "score_ge70",
+        "variant_key",
+    ]
+    return (
+        pd.DataFrame(rows),
+        top_expert.loc[:, [c for c in top_cols if c in top_expert.columns]],
+        pooled_expert.loc[:, [c for c in detail_cols if c in pooled_expert.columns]],
+        high_review.loc[:, [c for c in detail_cols if c in high_review.columns]],
+    )
 
 
 def prepare_observed_scores(scores: pd.DataFrame, context: pd.DataFrame) -> pd.DataFrame:
@@ -416,8 +523,12 @@ def plot_claim(severe: pd.DataFrame, truth: pd.DataFrame) -> None:
     axes[0].grid(axis="y", alpha=0.25)
     axes[0].legend(frameon=False, fontsize=8)
 
-    truth_plot = truth[truth["truth_comparator_group"].isin(["expert_panel_reviewed_PLP", "all_cross_disease_PLP"])].copy()
-    labels = ["Expert-panel P/LP", "All cross-disease P/LP"]
+    truth_plot = truth[
+        truth["truth_comparator_group"].isin(
+            ["pooled_expert_curated_positive_cross_domain", "all_cross_disease_PLP"]
+        )
+    ].copy()
+    labels = ["Pooled expert-curated P/LP", "All cross-disease P/LP"]
     x = np.arange(len(truth_plot))
     axes[1].bar(x - 0.24, truth_plot["naive_af_flag_percent"], width=0.24, label="Naive AF", color="#5b8db8")
     axes[1].bar(
@@ -453,7 +564,7 @@ def main() -> None:
 
     severe, gene_spread = severe_annotation_summary(arrhythmia, lof_summary, context)
     mechanism_triage = mechanism_triage_summary(arrhythmia, context)
-    truth, top_expert = summarize_expert_panel_truth(cross)
+    truth, top_expert, maximal_expert_detail, high_review_detail = summarize_expert_panel_truth(cross)
     tests = fisher_claim_tests(severe, truth, arrhythmia)
 
     severe.to_csv(DATA_DIR / "vital_severe_annotation_frequency_discordance_summary.csv", index=False)
@@ -461,6 +572,8 @@ def main() -> None:
     mechanism_triage.to_csv(DATA_DIR / "vital_severe_annotation_mechanism_triage.csv", index=False)
     truth.to_csv(DATA_DIR / "vital_expert_panel_truth_validation.csv", index=False)
     top_expert.to_csv(DATA_DIR / "vital_expert_panel_high_tension_examples.csv", index=False)
+    maximal_expert_detail.to_csv(DATA_DIR / "vital_maximal_expert_positive_validation_detail.csv", index=False)
+    high_review_detail.to_csv(DATA_DIR / "vital_high_review_non_expert_validation_detail.csv", index=False)
     tests.to_csv(DATA_DIR / "vital_external_truth_claim_tests.csv", index=False)
 
     supplement = pd.concat(
@@ -470,6 +583,8 @@ def main() -> None:
             mechanism_triage.assign(table_section="severe_annotation_mechanism_triage"),
             truth.assign(table_section="expert_panel_truth_validation"),
             top_expert.assign(table_section="expert_panel_high_tension_examples"),
+            maximal_expert_detail.assign(table_section="maximal_expert_positive_validation_detail"),
+            high_review_detail.assign(table_section="high_review_non_expert_validation_detail"),
             tests.assign(table_section="statistical_tests"),
         ],
         ignore_index=True,

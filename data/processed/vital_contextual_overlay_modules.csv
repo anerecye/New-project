@@ -1,4 +1,4 @@
 overlay,examples,role,score_policy
-functional_flag,"MAVE/MaveDB, patch clamp, splicing assay, minigene",interpretive overlay for red cases,not part of core VITAL score
-segregation_flag,"de novo, cosegregation, phase, second allele",case-level adjudication after VITAL routing,not part of core VITAL score
-transcript_flag,"MANE Select, clinically relevant transcript, alternative transcript only, NMD rescue",mechanism qualification and annotation-inflation review,not part of core VITAL score
+functional_flag,"MAVE/MaveDB, patch clamp, splicing assay, minigene",interpretive overlay for red cases,not part of the core score
+segregation_flag,"de novo, cosegregation, phase, second allele",case-level adjudication after routing,not part of the core score
+transcript_flag,"MANE Select, clinically relevant transcript, alternative transcript only, NMD rescue",mechanism qualification and annotation-inflation review,not part of the core score

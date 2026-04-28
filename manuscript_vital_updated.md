@@ -14,7 +14,7 @@ These findings support a governance conclusion. A public P/LP label does not rel
 
 ## Introduction
 
-Public clinical variant assertions now function as shared infrastructure. A pathogenic or likely pathogenic label exported from ClinVar is routinely reimported into laboratory interpretation pipelines, cascade-testing workflows, decision-support systems, and research analyses as though it were a portable unit of clinical meaning. This pattern of reuse rests on an implicit assumption: that the public label preserves the disease model it was originally intended to describe.
+Public clinical variant assertions now function as shared infrastructure. A pathogenic or likely pathogenic label exported from ClinVar is routinely reimported into laboratory interpretation pipelines, cascade-testing workflows, decision-support systems, and research analyses as though it were a portable unit of clinical meaning. This pattern of reuse rests on an implicit assumption: that the public label preserves the disease model it was originally intended to describe. To test whether the routing framework simply interrupts trusted assertions, we also assembled the current-snapshot pooled expert-curated comparator available in this repository: 942 allele-level deduplicated expert-panel or practice-guideline P/LP assertions from current scored cross-disease, external-panel, and BRCA/MMR/APC control tables.
 
 That assumption is structurally unsafe. A public P/LP assertion is not a self-sufficient disease claim. It is a compressed object that records a classification outcome while omitting key parts of the interpretive model that produced it, including inheritance logic, penetrance assumptions, ancestry context, representation stability, and the evaluability conditions under which population evidence could be applied. Once the label circulates independently of those parameters, downstream users are forced to reconstruct a disease model that the public object does not itself encode.
 
@@ -28,9 +28,11 @@ We show that most public arrhythmia assertions cannot be connected to allele-res
 
 ## Methods
 
-### Cohort definition
+### Cohort definition and evidence layering
 
 We analyzed ClinVar P/LP assertions across 20 inherited arrhythmia genes: `KCNQ1`, `KCNH2`, `SCN5A`, `KCNE1`, `KCNE2`, `RYR2`, `CASQ2`, `TRDN`, `CALM1`, `CALM2`, `CALM3`, `ANK2`, `SCN4B`, `KCNJ2`, `HCN4`, `CACNA1C`, `CACNB2`, `CACNA2D1`, `AKAP9`, and `SNTA1`. Variants were collapsed to unique GRCh38 alleles by chromosome, position, reference allele, and alternate allele, yielding 1,731 unique variants in the April 24, 2026 ClinVar data freeze used for this manuscript.
+
+The analyses are intentionally layered. The primary analysis cohort is the allele-resolved arrhythmia set with usable AF (`n = 334`). Expanded external-domain and historical analyses are validation layers for stability and transportability, not substitutes for the primary cohort. Variants without allele-resolved AF remain a non-evaluable universe used to measure infrastructure limits rather than to infer population compatibility. This separation prevents the study from treating a larger pooled count as stronger evidence when the evidentiary status of variants differs.
 
 ### Exome reconciliation and evaluability tiering
 
@@ -68,9 +70,13 @@ For HGDP-matched variants, we defined effective AF as the larger of `max_hgdp_af
 
 Variants were classified as `dominant_compatible`, `boundary`, or `hard_incompatible`. We report results both for the full HGDP matched universe and for the strict-allele subset alone.
 
-### Clinical-action context
+### Clinical-action context and comparator framing
 
 To connect population tension with real downstream use environments, we retained the existing action-context summaries already computed in the repository. These classify alerted variants into clinically consequential gene contexts relevant to cascade testing, drug restriction, and intensive surveillance or device-related management. These context labels are exposure indicators, not patient-outcome measurements.
+
+The comparator is not a claim that every public P/LP record should be acted on identically. It is the class of label-only downstream pipelines that import public P/LP assertions without explicit evaluability, mechanism, inheritance, or population-constraint layers. Examples include VCF annotation filters that promote ClinVar P/LP status, screening or cascade-testing triage lists that do not require state-aware disease models, and clinical decision-support knowledge bases that carry a label forward without allele-count and ancestry-context metadata. The relevant question is therefore whether these label-only pipelines can safely infer direct-actionability compatibility from pathogenicity category alone.
+
+We further separate three validation layers. The gold expert layer remains same-snapshot and strict: current ClinVar expert-panel or practice-guideline P/LP assertions, allele-level deduplicated by `variant_key` (`n = 204` in the cross-disease scored table). The pooled cross-domain expert-curated layer then adds current scored expert-panel/practice-guideline positives from external panels and BRCA/MMR/APC controls (`n = 942`) to test preservation behavior and false interruption, not domain-specific burden or calibration. Multiple-submitters/no-conflicts records are reported separately as a high-review non-expert consistency layer, not as expert truth.
 
 ## Results
 
@@ -107,6 +113,8 @@ The 115 ancestry-aware exome alerts did not represent one kind of problem. They 
 | Recessive / carrier-compatible | 38 | `TRDN VCV001325231` | Dominant reading implausible; recessive or carrier logic remains coherent |
 
 `SCN5A VCV000440850` remains the clearest incompatibility case in the exome-resolved subset. `KCNH2 VCV004535537` illustrates a parameter-sensitive monitoring regime rather than a categorical collapse, and `TRDN VCV001325231` shows how a generic P/LP label can flatten a carrier-compatible recessive allele into an apparently dominant claim unless the disease model is made explicit.
+
+These regimes convert the result from a single non-pass percentage into a risk model. Direct-actionability compatibility becomes most plausible when a variant is allele-resolved, population-consistent under global and popmax AF, and mechanistically aligned with the asserted inheritance model. Review/deferral becomes more likely when evaluability is incomplete, popmax and global AF disagree, or the variant sits near a maximum-credible-AF boundary. Model conflict becomes most plausible when an AC-supported population signal is incompatible with an unqualified dominant high-penetrance interpretation, or when a carrier-compatible recessive mechanism has been exported as a generic P/LP disease claim.
 
 ### 5. HGDP adds regional resolution but sharpens the match-class problem
 
@@ -162,9 +170,17 @@ The HGDP analysis sharpens the story rather than replacing it. It shows that onc
 
 This manuscript does not claim that arrhythmia genes are uniquely affected. Rather, they provide a stringent domain in which ancestry structure, variable penetrance, founder effects, and high-consequence downstream interpretation coexist. That combination makes failures of disease-model portability easier to see. Whether the same quantitative regime burdens recur in other disease areas requires separate empirical work.
 
+### Expanded validation should test structure, not just scale
+
+Because a 10,000-variant strict expert-positive layer is not available in the current cached snapshot, the current revision preserves a 204-allele gold expert layer and adds a 942-allele pooled cross-domain expert-curated robustness layer. This pooled cross-domain preservation layer includes 191 frequency-observed variants, 811 severe-annotation variants, and no red-priority calls; it is not used for domain-specific burden or calibration claims. Fifty-five of 942 (5.8%) had a naive AF alert, 21 (2.2%) had AC-supported frequency tension, and only 4 (0.4%) reached score >=70, all as orange review/monitoring rather than hard red interruption. This supports the intended safety property: trusted expert positives are not automatically overturned, but high-frequency exceptions are surfaced as state-aware review cases.
+
+A future 10,000- to 20,000-variant expansion would only strengthen the manuscript if it preserves evidence layering and tests stability across strata. The core arrhythmia cohort should remain separate from an expanded high-review or expert-panel ClinVar layer, independent ClinGen/VCEP or locus-specific truth sets where available, benign/likely benign controls, external disease-domain replication panels, and the non-evaluable representation-sensitive universe. Pooling these sources into one denominator would obscure the central result.
+
+The expanded analysis should therefore report stratified validation by evaluability tier, disease mechanism, inheritance model, consequence class, ancestry-localized enrichment, review status, and disease domain. Its main endpoint should be the probability of direct-actionability compatibility or review/deferral as a function of evaluability, mechanism, inheritance, popmax/global discordance, and variant class, not merely the fraction of variants exceeding a fixed alert threshold. A key safety metric should be false interruption: among high-review or expert-curated P/LP positives, how often does the framework create a hard model conflict rather than a review, monitoring, or metadata-completion route?
+
 ## Limitations
 
-First, all exome disease-model conclusions are restricted to the 334 Tier 1 variants with usable allele-resolved AF. The unevaluable majority cannot be assumed to follow the same regime structure.
+First, all exome disease-model conclusions are restricted to the 334 Tier 1 variants with usable allele-resolved AF. The unevaluable majority cannot be assumed to follow the same regime structure. The 942-allele pooled expert-curated comparator is therefore a specificity and false-interruption layer, not an expanded replacement for the primary arrhythmia cohort. Larger future validation sets would not remove this limitation unless they preserve the same evaluability separation and report false-interruption rates in expert-positive strata.
 
 Second, the HGDP regional analysis is limited by both sparse evaluability and the distinction between strict-allele and position-overlap matching. The expanded matched universe is directionally informative, but the strongest quantitative claims remain concentrated in the strict or representation-rescued allele-level subset.
 
@@ -183,8 +199,9 @@ First, popmax should be required alongside global AF in inherited arrhythmia var
 Second, public assertions intended for downstream reuse should carry at least three additional fields alongside pathogenicity category:
 
 1. the disease-state model being asserted, including inheritance class and penetrance logic;
-2. the population evaluability tier of the asserted allele; and
-3. the allele count supporting any cited population signal, together with explicit acknowledgment of low-count uncertainty.
+2. the population evaluability tier of the asserted allele;
+3. the allele count supporting any cited population signal, together with explicit acknowledgment of low-count uncertainty; and
+4. the recommended downstream route: direct-actionability compatible, state-aware review/metadata completion, or explicit disease-model conflict.
 
 Third, downstream users should not equate locus-context stress with allele-level proof. For indels, duplications, splice-disrupting variants, and other representation-sensitive classes, non-observation and same-position overlap are properties of representation before they are properties of biology.
 

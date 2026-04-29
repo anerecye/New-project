@@ -199,8 +199,14 @@ model, not as a substitute for the model.
 Headline cached outputs:
 
 - baseline false causal attributions: `7,975/9,348` causal attributions (`85.3%`)
+- baseline per-case false attribution rate: `7,975/10,000` cases (`79.8%`)
+- baseline per-evaluable-case false attribution rate: `2,540/3,648` evaluable cases (`69.6%`)
 - VITAL false causal attributions: `10/48` supported causal attributions (`20.8%`)
+- VITAL per-case false attribution rate: `10/10,000` cases (`0.1%`)
+- VITAL per-evaluable-case false attribution rate: `10/3,648` evaluable cases (`0.27%`)
 - prevented false attributions: `7,965`
+- VITAL route burden across all cases: `EVAL_LIMITED 61.9%`, `CHECK_MODEL 9.5%`, `CHECK_POPMAX 4.8%`, `MODEL_CONFLICT 9.0%`
+- VITAL route burden among evaluable cases: `EVAL_LIMITED 0.0%`, `CHECK_MODEL 26.1%`, `CHECK_POPMAX 13.1%`, `MODEL_CONFLICT 24.6%`
 - confirmed de novo override errors under the label baseline: `371`
 - gold-standard GoF/DN dominant preservation: `42/42 VITAL_OK`, `0 MODEL_CONFLICT`
 
@@ -210,6 +216,7 @@ Key outputs:
 - `data/processed/vital_autopsy_denovo_variant_design.csv`
 - `data/processed/vital_autopsy_denovo_case_calls.csv`
 - `data/processed/vital_autopsy_denovo_summary.csv`
+- `data/processed/vital_autopsy_denovo_false_attribution_rates.csv`
 - `data/processed/vital_autopsy_denovo_by_denovo_status.csv`
 - `data/processed/vital_autopsy_denovo_by_mechanism.csv`
 - `data/processed/vital_autopsy_denovo_penetrance_sensitivity.csv`

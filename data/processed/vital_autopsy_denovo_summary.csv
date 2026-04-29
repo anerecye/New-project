@@ -1,3 +1,3 @@
-scope,strategy,causal_attributions,false_causal_attributions,false_causal_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors
-main_negative_autopsy,label_driven_baseline,9348,7975,85.31236628155756,0,0,0,371
-main_negative_autopsy,VITAL_routing,48,10,20.833333333333332,7623,899,7965,0
+scope,strategy,total_cases,evaluable_cases,causal_attributions,false_causal_attributions,false_causal_attribution_rate,per_case_false_attribution_rate,false_causal_attributions_evaluable,per_evaluable_case_false_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors
+main_negative_autopsy,label_driven_baseline,10000,3648,9348,7975,85.31236628155756,79.75,2540,69.62719298245614,0,0,0,371
+main_negative_autopsy,VITAL_routing,10000,3648,48,10,20.833333333333332,0.1,10,0.2741228070175439,7623,899,7965,0

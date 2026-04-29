@@ -1,7 +1,7 @@
-scope,strategy,causal_attributions,false_causal_attributions,false_causal_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors,mcaf_strict,mcaf_hard
-mcaf_strict_2p5e-5_hard_1e-4,label_driven_baseline,9331,8009,85.83217232879649,0,0,0,384,2.5e-05,0.0001
-mcaf_strict_2p5e-5_hard_1e-4,VITAL_routing,39,8,20.512820512820515,7701,835,8001,0,2.5e-05,0.0001
-mcaf_boundary_1e-4_hard_1e-3,label_driven_baseline,9274,7923,85.43239163252103,0,0,0,403,0.0001,0.001
-mcaf_boundary_1e-4_hard_1e-3,VITAL_routing,51,17,33.333333333333336,7932,415,7906,0,0.0001,0.001
-mcaf_permissive_1e-3_hard_1e-2,label_driven_baseline,9345,7960,85.17924023542001,0,0,0,400,0.001,0.01
-mcaf_permissive_1e-3_hard_1e-2,VITAL_routing,67,31,46.26865671641791,8190,0,7929,0,0.001,0.01
+scope,strategy,total_cases,evaluable_cases,causal_attributions,false_causal_attributions,false_causal_attribution_rate,per_case_false_attribution_rate,false_causal_attributions_evaluable,per_evaluable_case_false_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors,mcaf_strict,mcaf_hard
+mcaf_strict_2p5e-5_hard_1e-4,label_driven_baseline,10000,3517,9331,8009,85.83217232879649,80.09,2480,70.51464316178561,0,0,0,384,2.5e-05,0.0001
+mcaf_strict_2p5e-5_hard_1e-4,VITAL_routing,10000,3517,39,8,20.512820512820515,0.08,8,0.2274665908444697,7701,835,8001,0,2.5e-05,0.0001
+mcaf_boundary_1e-4_hard_1e-3,label_driven_baseline,10000,3667,9274,7923,85.43239163252103,79.23,2541,69.2937005726752,0,0,0,403,0.0001,0.001
+mcaf_boundary_1e-4_hard_1e-3,VITAL_routing,10000,3667,51,17,33.333333333333336,0.17,17,0.46359421870739026,7932,415,7906,0,0.0001,0.001
+mcaf_permissive_1e-3_hard_1e-2,label_driven_baseline,10000,3729,9345,7960,85.17924023542001,79.6,2605,69.85787074282649,0,0,0,400,0.001,0.01
+mcaf_permissive_1e-3_hard_1e-2,VITAL_routing,10000,3729,67,31,46.26865671641791,0.31,31,0.8313220702601234,8190,0,7929,0,0.001,0.01

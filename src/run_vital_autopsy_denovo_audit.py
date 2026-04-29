@@ -27,6 +27,7 @@ ROUTING_CALLS_IN = DATA_DIR / "vital_routing_validation_calls.csv"
 VARIANT_DESIGN_OUT = DATA_DIR / "vital_autopsy_denovo_variant_design.csv"
 CASE_CALLS_OUT = DATA_DIR / "vital_autopsy_denovo_case_calls.csv"
 SUMMARY_OUT = DATA_DIR / "vital_autopsy_denovo_summary.csv"
+FALSE_ATTRIBUTION_RATES_OUT = DATA_DIR / "vital_autopsy_denovo_false_attribution_rates.csv"
 BY_GENE_OUT = DATA_DIR / "vital_autopsy_denovo_by_gene.csv"
 BY_MECHANISM_OUT = DATA_DIR / "vital_autopsy_denovo_by_mechanism.csv"
 BY_AF_BIN_OUT = DATA_DIR / "vital_autopsy_denovo_by_af_bin.csv"
@@ -498,13 +499,27 @@ def simulate_cases(
 
 def summarize_strategy(cases: pd.DataFrame, label: str) -> pd.DataFrame:
     total = len(cases)
+    evaluable = int(cases["evaluability_tier"].eq("Tier1").sum())
+    baseline_false = int(cases["baseline_false_causal_attribution"].sum())
+    vital_false = int(cases["vital_false_causal_attribution"].sum())
+    baseline_false_evaluable = int(
+        (cases["baseline_false_causal_attribution"] & cases["evaluability_tier"].eq("Tier1")).sum()
+    )
+    vital_false_evaluable = int(
+        (cases["vital_false_causal_attribution"] & cases["evaluability_tier"].eq("Tier1")).sum()
+    )
     rows = [
         {
             "scope": label,
             "strategy": "label_driven_baseline",
+            "total_cases": total,
+            "evaluable_cases": evaluable,
             "causal_attributions": int(cases["baseline_causal_attribution"].sum()),
-            "false_causal_attributions": int(cases["baseline_false_causal_attribution"].sum()),
-            "false_causal_attribution_rate": pct(int(cases["baseline_false_causal_attribution"].sum()), int(cases["baseline_causal_attribution"].sum())),
+            "false_causal_attributions": baseline_false,
+            "false_causal_attribution_rate": pct(baseline_false, int(cases["baseline_causal_attribution"].sum())),
+            "per_case_false_attribution_rate": pct(baseline_false, total),
+            "false_causal_attributions_evaluable": baseline_false_evaluable,
+            "per_evaluable_case_false_attribution_rate": pct(baseline_false_evaluable, evaluable),
             "check_defer": 0,
             "model_conflict": 0,
             "prevented_false_attribution": 0,
@@ -513,15 +528,48 @@ def summarize_strategy(cases: pd.DataFrame, label: str) -> pd.DataFrame:
         {
             "scope": label,
             "strategy": "VITAL_routing",
+            "total_cases": total,
+            "evaluable_cases": evaluable,
             "causal_attributions": int(cases["vital_causal_attribution"].sum()),
-            "false_causal_attributions": int(cases["vital_false_causal_attribution"].sum()),
-            "false_causal_attribution_rate": pct(int(cases["vital_false_causal_attribution"].sum()), int(cases["vital_causal_attribution"].sum())),
+            "false_causal_attributions": vital_false,
+            "false_causal_attribution_rate": pct(vital_false, int(cases["vital_causal_attribution"].sum())),
+            "per_case_false_attribution_rate": pct(vital_false, total),
+            "false_causal_attributions_evaluable": vital_false_evaluable,
+            "per_evaluable_case_false_attribution_rate": pct(vital_false_evaluable, evaluable),
             "check_defer": int(cases["vital_check_defer"].sum()),
             "model_conflict": int(cases["vital_model_conflict"].sum()),
             "prevented_false_attribution": int(cases["prevented_false_attribution"].sum()),
             "de_novo_override_errors": 0,
         },
     ]
+    return pd.DataFrame(rows)
+
+
+def summarize_false_attribution_rates(cases: pd.DataFrame) -> pd.DataFrame:
+    route_order = ["EVAL_LIMITED", "CHECK_MODEL", "CHECK_POPMAX", "MODEL_CONFLICT"]
+    scopes = [
+        ("all_cases", cases.copy()),
+        ("evaluable_cases", cases.loc[cases["evaluability_tier"].eq("Tier1")].copy()),
+    ]
+    rows: list[dict[str, object]] = []
+    for scope, frame in scopes:
+        denominator = len(frame)
+        baseline_false = int(frame["baseline_false_causal_attribution"].sum())
+        vital_false = int(frame["vital_false_causal_attribution"].sum())
+        row: dict[str, object] = {
+            "scope": scope,
+            "denominator_cases": denominator,
+            "baseline_false_causal_attributions": baseline_false,
+            "baseline_false_attribution_rate_per_case": pct(baseline_false, denominator),
+            "vital_false_causal_attributions": vital_false,
+            "vital_false_attribution_rate_per_case": pct(vital_false, denominator),
+            "prevented_false_attribution": int(frame["prevented_false_attribution"].sum()),
+        }
+        for route in route_order:
+            count = int(frame["vital_route"].eq(route).sum())
+            row[f"{route}_count"] = count
+            row[f"{route}_percent_of_cases"] = pct(count, denominator)
+        rows.append(row)
     return pd.DataFrame(rows)
 
 
@@ -764,6 +812,8 @@ def main() -> None:
 
     summary = summarize_strategy(cases, "main_negative_autopsy")
     save_table(summary, SUMMARY_OUT)
+    false_rates = summarize_false_attribution_rates(cases)
+    save_table(false_rates, FALSE_ATTRIBUTION_RATES_OUT)
 
     by_gene = grouped_metrics(cases, "gene")
     by_mechanism = grouped_metrics(cases, "mechanism_class")

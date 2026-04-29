@@ -10,7 +10,7 @@ constraints before downstream systems treat it as direct-actionable.
 
 Core chain:
 
-`label -> baseline actionability -> VITAL constraint -> rerouting -> preserved expert truth`
+`label -> baseline actionability -> VITAL constraint -> rerouting -> explicit review route`
 
 ## What VITAL Does
 
@@ -18,7 +18,6 @@ Core chain:
 - Applies allele-resolved evaluability, ancestry-aware frequency, and disease-model constraints.
 - Converts a label-driven baseline into reviewable routing categories.
 - Separates pathogenicity classification from downstream actionability.
-- Preserves expert-curated positives as compatible or review-level when constraints support that route.
 
 ## What VITAL Does Not Do
 
@@ -55,6 +54,11 @@ Across six disease domains, the mean VITAL nonpass rate is `87.7%`: most
 label-driven actionability decisions require rerouting once minimal constraints
 are restored.
 
+This is a portability/routing burden, not an evidence-conflict rate. In the
+arrhythmia cohort, most nonpass routes are `EVAL_LIMITED` deferrals caused by
+missing allele-level evaluability; the smaller CHECK/MODEL_CONFLICT components
+represent frequency tension or disease-model repair.
+
 In the inherited-arrhythmia cohort:
 
 - `1,512/1,731` public P/LP labels (`87.3%`) leave the direct-actionable baseline.
@@ -62,10 +66,13 @@ In the inherited-arrhythmia cohort:
 - `77/1,731` (`4.4%`) require population/frequency review.
 - `38/1,731` (`2.2%`) require model-specific rerouting.
 - In the high-review subset, `309/365` (`84.7%`) still leave the direct-actionable baseline.
+- Mechanism-stratified decomposition results are conditional on the `334`
+  usable-AF variants; the non-evaluable majority is treated as an evaluability
+  and transportability boundary, not as missing-at-random.
 
-This effect is not driven by low-confidence submissions alone. Among 73
-evaluable expert-curated P/LP positives, `69/73` (`94.5%`) remain `VITAL_OK` or
-review-level and only `4/73` (`5.5%`) enter hard model-conflict routing.
+This effect is not driven by low-confidence submissions alone: in the
+high-review subset, `309/365` (`84.7%`) still leave the direct-actionable
+baseline.
 
 ## Repository Structure
 
@@ -112,7 +119,6 @@ This returns:
 - total alert/reroute burden
 - alert subtypes (`evaluation-limiting`, `VITAL-ALERT`, `VITAL-X`, `SV/CNV-required`)
 - top alerted variants
-- an expert-curated benchmark line for signal-to-noise context
 
 Optional outputs:
 
@@ -179,8 +185,6 @@ Headline cached metrics:
 
 - all arrhythmia P/LP alert rate: `1512/1731` (`87.3%`)
 - high-review arrhythmia P/LP alert rate: `309/365` (`84.7%`)
-- expert-curated evaluable hard-conflict rate: `4/73` (`5.5%`)
-- expert-curated evaluable review-level retention: `69/73` (`94.5%`)
 
 ## Autopsy x de novo Counterfactual Audit
 
@@ -208,7 +212,6 @@ Headline cached outputs:
 - VITAL route burden across all cases: `EVAL_LIMITED 61.9%`, `CHECK_MODEL 9.5%`, `CHECK_POPMAX 4.8%`, `MODEL_CONFLICT 9.0%`
 - VITAL route burden among evaluable cases: `EVAL_LIMITED 0.0%`, `CHECK_MODEL 26.1%`, `CHECK_POPMAX 13.1%`, `MODEL_CONFLICT 24.6%`
 - confirmed de novo override errors under the label baseline: `371`
-- gold-standard GoF/DN dominant preservation: `42/42 VITAL_OK`, `0 MODEL_CONFLICT`
 
 Key outputs:
 
@@ -223,10 +226,9 @@ Key outputs:
 - `data/processed/vital_autopsy_denovo_denovo_rate_sensitivity.csv`
 - `data/processed/vital_autopsy_denovo_mcaf_sensitivity.csv`
 - `data/processed/vital_autopsy_denovo_gold_standard_preservation.csv`
-- `figures/vital_autopsy_denovo_decision_flow.png`
-- `figures/vital_autopsy_denovo_false_attribution.png`
-- `figures/vital_autopsy_denovo_override.png`
-- `figures/vital_autopsy_denovo_mechanism.png`
+- `figures/vital_autopsy_denovo_audit_panel.png`
+
+Figure 5. Autopsy x de novo audit: routing and error control. We simulate phenotype-null autopsy scenarios to test how label-driven attribution behaves under de novo reinforcement and how VITAL reroutes unsupported causal claims.
 
 ## Certification Fields
 
@@ -411,7 +413,7 @@ standalone reclassification engine. It compares a ClinVar-only
 `ROUTE_PLP_ACTIONABLE` baseline against VITAL constraint routes, quantifies
 `actionability at risk`, formalizes the baseline decision model, runs a
 counterfactual decision audit, summarizes burden by workflow context, and checks
-expert-panel calibration plus representative case vignettes.
+representative case vignettes.
 
 ```bash
 python src/run_vital_routing_validation.py
@@ -451,7 +453,8 @@ Primary endpoints:
 - prevented false attribution
 - CHECK/DEFER burden
 - MODEL_CONFLICT routing
-- gold-standard dominant positive preservation
+
+The four visual endpoints are reported as one panel figure: `figures/vital_autopsy_denovo_audit_panel.png`.
 
 ### Temporal Robustness
 
@@ -500,7 +503,7 @@ Current cached outputs:
 - locus/regional context without exact/equivalent AF: `1,326 / 1,731` (`76.6%`)
 - still unevaluable after both passes: `48 / 1,731` (`2.8%`)
 
-Tier 2 is not random residue:
+Tier 2 is not missing-at-random:
 
 - same-locus allele discordance: `638 / 1,326` (`48.1%`)
 - no same-locus record, regional-only context: `688 / 1,326` (`51.9%`)

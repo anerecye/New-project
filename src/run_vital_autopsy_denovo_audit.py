@@ -45,6 +45,7 @@ FLOW_FIGURE_OUT = FIGURE_DIR / "vital_autopsy_denovo_decision_flow.png"
 FALSE_ATTRIBUTION_FIGURE_OUT = FIGURE_DIR / "vital_autopsy_denovo_false_attribution.png"
 DENOVO_FIGURE_OUT = FIGURE_DIR / "vital_autopsy_denovo_override.png"
 MECHANISM_FIGURE_OUT = FIGURE_DIR / "vital_autopsy_denovo_mechanism.png"
+PANEL_FIGURE_OUT = FIGURE_DIR / "vital_autopsy_denovo_audit_panel.png"
 
 RNG_SEED = 20260429
 N_CASES = 10_000
@@ -708,39 +709,43 @@ def build_conflicting_layer(design: pd.DataFrame, rng: np.random.Generator) -> p
     )
 
 
-def draw_decision_flow() -> None:
-    fig, ax = plt.subplots(figsize=(12, 5.5))
+def draw_decision_flow_panel(ax: plt.Axes) -> None:
     ax.axis("off")
-    ax.set_title("Autopsy x de novo counterfactual decision audit", fontsize=15, fontweight="bold", pad=18)
+    ax.set_title("A. Decision flow", fontsize=12, fontweight="bold", loc="left", pad=8)
     boxes = [
-        (0.04, 0.58, "P/LP label\narrhythmia gene", "#eef2f7"),
-        (0.25, 0.58, "Negative autopsy\nphenotype-null", "#f3f4f6"),
-        (0.47, 0.72, "Baseline\ncause assigned\n+ de novo = high confidence", "#f8d7da"),
-        (0.47, 0.36, "VITAL routing\nevaluability -> popmax\nmechanism -> de novo modifier", "#dbeafe"),
-        (0.74, 0.36, "Supported\nCheck/defer\nBlocked", "#dcfce7"),
+        (0.02, 0.58, "P/LP label\narrhythmia gene", "#eef2f7"),
+        (0.24, 0.58, "Negative autopsy\nphenotype-null", "#f3f4f6"),
+        (0.49, 0.74, "Baseline\ncause assigned\n+ de novo = high confidence", "#f8d7da"),
+        (0.49, 0.35, "VITAL routing\nevaluability -> popmax\nmechanism -> de novo modifier", "#dbeafe"),
+        (0.76, 0.35, "Supported\nCheck/defer\nBlocked", "#dcfce7"),
     ]
     for x, y, text, color in boxes:
-        patch = plt.Rectangle((x, y), 0.17, 0.18, facecolor=color, edgecolor="#334155", linewidth=1.2)
+        patch = plt.Rectangle((x, y), 0.18, 0.18, facecolor=color, edgecolor="#334155", linewidth=1.0)
         ax.add_patch(patch)
-        ax.text(x + 0.085, y + 0.09, text, ha="center", va="center", fontsize=10)
-    for start, end in [((0.21, 0.67), (0.25, 0.67)), ((0.42, 0.67), (0.47, 0.79)), ((0.42, 0.67), (0.47, 0.45)), ((0.64, 0.45), (0.74, 0.45))]:
-        ax.annotate("", xy=end, xytext=start, arrowprops={"arrowstyle": "->", "lw": 1.8, "color": "#334155"})
+        ax.text(x + 0.09, y + 0.09, text, ha="center", va="center", fontsize=8.5)
+    for start, end in [((0.20, 0.67), (0.24, 0.67)), ((0.42, 0.67), (0.49, 0.83)), ((0.42, 0.67), (0.49, 0.44)), ((0.67, 0.44), (0.76, 0.44))]:
+        ax.annotate("", xy=end, xytext=start, arrowprops={"arrowstyle": "->", "lw": 1.4, "color": "#334155"})
     ax.text(
         0.5,
-        0.08,
+        0.12,
         "de novo supports a coherent disease model; de novo does not repair an incoherent model.",
         ha="center",
-        fontsize=11,
+        fontsize=8.5,
         color="#1f2937",
     )
+
+
+def draw_decision_flow() -> None:
+    fig, ax = plt.subplots(figsize=(12, 5.5))
+    fig.suptitle("Autopsy x de novo audit: routing and error control", fontsize=15, fontweight="bold", y=0.98)
+    draw_decision_flow_panel(ax)
     fig.savefig(FLOW_FIGURE_OUT, dpi=220, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {FLOW_FIGURE_OUT.relative_to(BASE_DIR)}")
 
 
-def plot_false_attribution(summary: pd.DataFrame) -> None:
+def plot_false_attribution_panel(ax: plt.Axes, summary: pd.DataFrame) -> None:
     plot_df = summary.loc[summary["scope"].eq("main_negative_autopsy")].copy()
-    fig, ax = plt.subplots(figsize=(7.2, 5.2))
     labels = ["Baseline", "VITAL"]
     values = [
         float(plot_df.loc[plot_df["strategy"].eq("label_driven_baseline"), "false_causal_attributions"].iloc[0]),
@@ -748,16 +753,22 @@ def plot_false_attribution(summary: pd.DataFrame) -> None:
     ]
     ax.bar(labels, values, color=["#b94a48", "#2f6f62"])
     ax.set_ylabel("False causal attributions")
-    ax.set_title("False causal attribution reduction")
+    ax.set_title("B. False causal attribution", fontsize=12, fontweight="bold", loc="left")
     for index, value in enumerate(values):
         ax.text(index, value + max(values) * 0.02, f"{int(value):,}", ha="center", fontweight="bold")
     ax.grid(axis="y", alpha=0.25)
+    ax.spines[["top", "right"]].set_visible(False)
+
+
+def plot_false_attribution(summary: pd.DataFrame) -> None:
+    fig, ax = plt.subplots(figsize=(7.2, 5.2))
+    plot_false_attribution_panel(ax, summary)
     fig.savefig(FALSE_ATTRIBUTION_FIGURE_OUT, dpi=220, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {FALSE_ATTRIBUTION_FIGURE_OUT.relative_to(BASE_DIR)}")
 
 
-def plot_denovo_override(denovo: pd.DataFrame) -> None:
+def plot_denovo_override_panel(ax: plt.Axes, denovo: pd.DataFrame) -> None:
     row_order = ["confirmed", "assumed", "unknown", "absent"]
     plot_df = denovo.set_index("de_novo_status").reindex(row_order).fillna(0)
     x = np.arange(len(plot_df))
@@ -765,38 +776,61 @@ def plot_denovo_override(denovo: pd.DataFrame) -> None:
     check = plot_df["VITAL_check_defer"].to_numpy(dtype=float)
     blocked = plot_df["VITAL_blocked_model_conflict"].to_numpy(dtype=float)
     totals = plot_df["case_count"].replace(0, np.nan).to_numpy(dtype=float)
-    fig, ax = plt.subplots(figsize=(8.2, 5.2))
     ax.bar(x, supported / totals * 100, label="Supported", color="#2f6f62")
     ax.bar(x, check / totals * 100, bottom=supported / totals * 100, label="Check/defer", color="#d18f2f")
     ax.bar(x, blocked / totals * 100, bottom=(supported + check) / totals * 100, label="Blocked", color="#b94a48")
     ax.set_xticks(x)
     ax.set_xticklabels(row_order)
     ax.set_ylabel("Percent of de novo stratum")
-    ax.set_title("de novo signal is routed through model constraints")
-    ax.legend(frameon=False)
+    ax.set_title("C. de novo override behavior", fontsize=12, fontweight="bold", loc="left")
+    ax.legend(frameon=False, fontsize=8, loc="upper right")
     ax.grid(axis="y", alpha=0.25)
+    ax.spines[["top", "right"]].set_visible(False)
+
+
+def plot_denovo_override(denovo: pd.DataFrame) -> None:
+    fig, ax = plt.subplots(figsize=(8.2, 5.2))
+    plot_denovo_override_panel(ax, denovo)
     fig.savefig(DENOVO_FIGURE_OUT, dpi=220, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {DENOVO_FIGURE_OUT.relative_to(BASE_DIR)}")
 
 
-def plot_mechanism(by_mechanism: pd.DataFrame) -> None:
+def plot_mechanism_panel(ax: plt.Axes, by_mechanism: pd.DataFrame) -> None:
     order = ["GoF_DN", "HI", "AR", "MIXED", "UNKNOWN"]
     plot_df = by_mechanism.set_index("mechanism_class").reindex(order).dropna(how="all")
     x = np.arange(len(plot_df))
     width = 0.34
-    fig, ax = plt.subplots(figsize=(8.5, 5.2))
     ax.bar(x - width / 2, plot_df["baseline_false_causal_percent"], width=width, label="Baseline false causal %", color="#b94a48")
     ax.bar(x + width / 2, plot_df["vital_false_causal_percent"], width=width, label="VITAL false causal %", color="#2f6f62")
     ax.set_xticks(x)
     ax.set_xticklabels(plot_df.index)
     ax.set_ylabel("Percent of cases")
-    ax.set_title("Mechanism stratification")
-    ax.legend(frameon=False)
+    ax.set_title("D. Mechanism stratification", fontsize=12, fontweight="bold", loc="left")
+    ax.legend(frameon=False, fontsize=8)
     ax.grid(axis="y", alpha=0.25)
+    ax.spines[["top", "right"]].set_visible(False)
+
+
+def plot_mechanism(by_mechanism: pd.DataFrame) -> None:
+    fig, ax = plt.subplots(figsize=(8.5, 5.2))
+    plot_mechanism_panel(ax, by_mechanism)
     fig.savefig(MECHANISM_FIGURE_OUT, dpi=220, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {MECHANISM_FIGURE_OUT.relative_to(BASE_DIR)}")
+
+
+def plot_autopsy_denovo_audit_panel(summary: pd.DataFrame, denovo: pd.DataFrame, by_mechanism: pd.DataFrame) -> None:
+    fig, axes = plt.subplots(2, 2, figsize=(15.5, 10.5))
+    fig.suptitle("Autopsy x de novo audit: routing and error control", fontsize=16, fontweight="bold", y=0.985)
+    draw_decision_flow_panel(axes[0, 0])
+    plot_false_attribution_panel(axes[0, 1], summary)
+    plot_denovo_override_panel(axes[1, 0], denovo)
+    plot_mechanism_panel(axes[1, 1], by_mechanism)
+    fig.tight_layout(rect=[0, 0, 1, 0.965], h_pad=2.2, w_pad=2.2)
+    fig.savefig(PANEL_FIGURE_OUT, dpi=220, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved {PANEL_FIGURE_OUT.relative_to(BASE_DIR)}")
 
 
 def main() -> None:
@@ -836,10 +870,9 @@ def main() -> None:
     save_table(build_gold_standard_preservation(design), GOLD_STANDARD_OUT)
     save_table(build_conflicting_layer(design, rng), CONFLICTING_OUT)
 
-    draw_decision_flow()
-    plot_false_attribution(summary)
-    plot_denovo_override(by_denovo)
-    plot_mechanism(by_mechanism)
+    # The autopsy/de novo audit is one logical experiment; emit one panel figure
+    # rather than four standalone figures.
+    plot_autopsy_denovo_audit_panel(summary, by_denovo, by_mechanism)
 
 
 if __name__ == "__main__":

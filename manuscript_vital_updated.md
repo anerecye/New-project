@@ -6,11 +6,11 @@ Public pathogenic/likely-pathogenic (P/LP) variant labels are widely reused as p
 
 We examined 1,731 ClinVar P/LP variants across 20 inherited arrhythmia genes, of which 17 contributed P/LP records. Only 357 variants (20.6%) achieved allele-resolved frequency recovery in gnomAD v4.1.1 exomes, and primary frequency conclusions were therefore restricted to the 334 variants with usable allele-resolved AF. Within that evaluable subset, ancestry-aware popmax screening identified frequency alerts missed by 102 of 115 global-only queries (88.7%), including 103 alerts in potentially consequential interpretation contexts such as cascade testing, medication guidance, surveillance intensity, or device-related management.
 
-Applying maximum-credible-allele-frequency (MCAF) stress-testing classified the evaluable exome subset into operationally distinct regimes. Here, decomposition denotes only disease-model incompatibility under population-frequency stress, not a claim that the variant is benign or incorrectly classified. At biologically interpretable thresholds, incompatibility with an unqualified dominant high-penetrance model was mechanism-dependent: gain-of-function/dominant-negative genes showed zero observed decomposition (0/34; 95% CI 0-10.2%), haploinsufficient genes showed intermediate decomposition, and recessive genes showed the highest decomposition. Supplementary HGDP and hereditary-cancer analyses were retained only as secondary stress checks rather than as co-equal burden estimates.
+Applying maximum-credible-allele-frequency (MCAF) stress-testing classified the evaluable exome subset into operationally distinct regimes. Here, decomposition denotes only disease-model incompatibility under population-frequency stress, not a claim that the variant is benign or incorrectly classified. Within the usable-AF Tier 1 subset, incompatibility with an unqualified dominant high-penetrance model was mechanism-dependent: gain-of-function/dominant-negative genes showed zero observed decomposition among evaluable variants (0/34; 95% CI 0-10.2%), haploinsufficient genes showed intermediate decomposition, and recessive genes showed the highest decomposition. This mechanism gradient is therefore a conditional allele-resolved result, not an estimate for non-evaluable variants. Supplementary HGDP and hereditary-cancer analyses were retained only as secondary stress checks rather than as co-equal burden estimates.
 
-We then translated these population and mechanism constraints into VITAL, a post-label actionability routing layer. Under a label-driven baseline, all 1,731 arrhythmia P/LP variants entered a direct-actionable route. After VITAL, 1,512/1,731 decisions (87.3%) were rerouted: 1,397 (80.7%) were evaluation-limiting, 77 (4.4%) were risk-escalating, and 38 (2.2%) were model-correcting. Across six disease domains, the mean nonpass rate was 87.7%. Routing instability persisted among high-review assertions (309/365; 84.7%), while expert-curated evaluable positives were largely preserved (69/73; 94.5% VITAL_OK or review-level; 4/73; 5.5% hard model conflict).
+We then translated these population and mechanism constraints into VITAL, a post-label actionability routing layer. Under a label-driven baseline, all 1,731 arrhythmia P/LP variants entered a direct-actionable route. After minimal portability constraints, only 219/1,731 labels (12.7%) could be directly routed as actionability-compatible. The remaining 1,512/1,731 decisions (87.3%) were rerouted, but this aggregate intentionally combines distinct reasons: 1,397 (80.7%) were evidence-unavailable EVAL_LIMITED deferrals, 77 (4.4%) required ancestry-aware frequency review, and 38 (2.2%) required disease-model repair. Most failures therefore reflected missing allele-resolved evaluability rather than evidence conflict.
 
-These findings operationalize a measurable downstream reuse failure mode: within the evaluable subset, the portability of a P/LP label as a disease-state claim depends on disease model, molecular mechanism, and population-frequency resolution, none of which are currently encoded in the exported label. Population-structured frequency review should therefore be treated as a minimum evidence layer in downstream interpretation workflows, while preserving explicit uncertainty for non-evaluable variants. VITAL does not reclassify variants; it reroutes actionability when flattened labels no longer carry the constraints required for direct reuse.
+These findings operationalize a measurable downstream reuse failure mode with two separable components: evidence unavailable for most labels, and evidence conflicting or model-incomplete for a smaller allele-resolved subset. Within the evaluable subset, the portability of a P/LP label as a disease-state claim depends on disease model, molecular mechanism, and population-frequency resolution, none of which are currently encoded in the exported label. Population-structured frequency review should therefore be treated as a minimum evidence layer in downstream interpretation workflows, while preserving explicit uncertainty for non-evaluable variants. VITAL does not reclassify variants; it reroutes actionability when flattened labels no longer carry the constraints required for direct reuse.
 
 ## Central Claim
 
@@ -22,7 +22,7 @@ Public clinical variant assertions now function as shared infrastructure. A path
 
 That assumption is structurally unsafe. A public P/LP assertion records a classification outcome but not necessarily the disease-model parameters required for reliable downstream reuse, including inheritance, penetrance, ancestry context, representation stability, molecular mechanism, and whether population evidence was evaluable at all. This study therefore does not adjudicate original ClinVar submissions. It models a downstream reuse failure mode in which exported P/LP alleles are consumed after condition- and submission-level context has been flattened.
 
-This flattening scenario is routine. Laboratory information systems, VCF annotation pipelines, decision-support tools, review spreadsheets, and screening filters often import ClinVar as a categorical flag. In each case, the consumer may receive a P/LP label without the disease model that justified it.
+This flattening scenario is routine. Laboratory information systems, VCF annotation pipelines, decision-support tools, review spreadsheets, and screening filters often import ClinVar as a categorical flag. Concrete examples include VEP or ANNOVAR consequence tables that append ClinVar significance to a VCF row, laboratory spreadsheets that sort candidate variants by P/LP status, clinical decision-support triggers that watch for actionable genes plus P/LP labels, and research screening filters that retain "pathogenic ClinVar" variants before phenotype-specific review. In each case, the consumer may receive a P/LP label without the disease model that justified it.
 
 The concern is practical rather than semantic. In potentially consequential interpretation contexts such as syndrome diagnosis, family cascade testing, medication guidance, surveillance intensity, or device-related management, the key question is whether an exported label remains interpretable once ancestry-aware frequency, allele-resolved representation, and mechanism are restored downstream.
 
@@ -30,7 +30,7 @@ Inherited arrhythmia genes provide a stringent test domain for this problem. The
 
 We examine three linked questions. First, how much of the public arrhythmia label space is population-evaluable at all under current representation systems? Second, within the exome Tier 1 usable-AF subset that serves as the primary analysis, how often does a label remain compatible with a dominant high-penetrance disease model when one moves from global AF to ancestry-aware popmax and then to frequency stress-testing? Third, when the same outputs are routed as actionability decisions, how often does a label-driven baseline require review, deferral, or model repair?
 
-We show that most public arrhythmia assertions cannot be connected to allele-resolved population frequency even after exhaustive reconciliation and reference-based normalization. Among the minority for which allele-resolved context is available, ancestry-aware frequency exposes distinct interpretation regimes concealed beneath the same public P/LP label. Critically, the rate of disease-model decomposition is not random: it is mechanistically determined by molecular mechanism and variant consequence, and the broader compression problem recurs across biologically distinct disease domains. Safe downstream reuse therefore requires more explicit metadata than current public labels provide.
+We show that most public arrhythmia assertions cannot be connected to allele-resolved population frequency even after exhaustive reconciliation and reference-based normalization. Among the minority for which allele-resolved context is available, ancestry-aware frequency exposes distinct interpretation regimes concealed beneath the same public P/LP label. Within that evaluable subset, the rate of disease-model decomposition is not random: it is structured by molecular mechanism and variant consequence. Outside that subset, the dominant finding is a transportability boundary rather than an estimable decomposition rate. Safe downstream reuse therefore requires more explicit metadata than current public labels provide.
 
 ## Methods
 
@@ -52,7 +52,7 @@ Variants were cross-referenced against gnomAD v4.1.1 exomes using a multi-step r
 | 2 | Locus or regional context only; no allele-resolved AF | 1,326 | 76.6 |
 | 3 | Genuinely unevaluable after all reconciliation steps | 48 | 2.8 |
 
-Tier 1 contains the only variants used for allele-level frequency conclusions in the exome analysis. Tier 2 was never interpreted as population-consistent by implication.
+Tier 1 contains the only variants used for allele-level frequency conclusions in the exome analysis. Tier 2 was never interpreted as population-consistent by implication. Because evaluability was not random with respect to variant class or gene architecture, all mechanism-stratified decomposition estimates are conditional on usable allele-resolved AF and are not transported to Tier 2.
 
 ### Exome Frequency Screening and Regime Assignment
 
@@ -68,13 +68,15 @@ MCAF thresholds were treated as disease-model stress ceilings, not as pathogenic
 
 `MCAF = prevalence x allelic contribution / (penetrance x 2)`
 
-The analysis therefore asks whether an observed population frequency is compatible with a specified disease model, not whether the variant is pathogenic. Three thresholds were used to bracket biologically interpretable dominant arrhythmia scenarios: 2.5 x 10^-5 as a strict high-penetrance dominant ceiling, 1 x 10^-4 as a reduced-penetrance or founder-compatible boundary, and 1 x 10^-3 as a deliberately permissive sensitivity extreme. The 1 x 10^-5 exome screen was used only to nominate variants for review before MCAF bracketing, not as the final model-incompatibility definition.
+The analysis therefore asks whether an observed population frequency is compatible with a specified disease model, not whether the variant is pathogenic. Three thresholds were used to bracket biologically interpretable dominant arrhythmia scenarios: 2.5 x 10^-5 as a strict high-penetrance dominant ceiling, 1 x 10^-4 as a reduced-penetrance or founder-compatible boundary, and 1 x 10^-3 as a deliberately permissive sensitivity extreme. These are not universal ClinVar thresholds and are not intended to be shared unchanged across all arrhythmia genes. They are stress-test ceilings for the unqualified dominant high-penetrance model; gene- or condition-specific deployment would require disease-specific prevalence, allelic contribution, and penetrance parameters. The 1 x 10^-5 exome screen was used only to nominate variants for review before MCAF bracketing, not as the final model-incompatibility definition.
 
-This threshold strategy is internally checked in three ways. First, absolute alert counts change under threshold sensitivity, but the ordinal mechanism gradient is preserved. Second, the GoF/dominant-negative class behaves as a positive control: at biologically interpretable MCAF thresholds, it shows 0/34 decomposition. Third, hard conflict is separated from boundary or recessive-compatible routing rather than collapsed into a single "too frequent" label. These safeguards prevent MCAF from becoming an uncalibrated reclassification rule.
+This threshold strategy is internally checked in three ways. First, absolute alert counts change under threshold sensitivity, but the ordinal mechanism gradient is preserved within the usable-AF subset. Second, the GoF/dominant-negative class behaves as an internal allele-resolved control: at biologically interpretable MCAF thresholds, it shows 0/34 decomposition among evaluable variants. Third, hard conflict is separated from boundary or recessive-compatible routing rather than collapsed into a single "too frequent" label. These safeguards prevent MCAF from becoming an uncalibrated reclassification rule, but they do not remove the Tier 2 transportability boundary.
 
 ### Baseline Decision Model and VITAL Routing
 
 To connect the frequency-stress analysis with downstream reuse, we formalized a simple label-driven baseline. This baseline is not a clinical recommendation; it is the null model used to audit flattened reuse.
+
+The baseline is intentionally concrete rather than adversarial. It reflects common downstream workflows in which a ClinVar P/LP field is appended to a variant row and then used for triage before full model reconstruction: VEP/ANNOVAR-style annotation, laboratory candidate-variant spreadsheets, clinical decision-support triggers for actionable genes, and research filters that retain P/LP variants for review.
 
 | Rule | Definition |
 | --- | --- |
@@ -100,43 +102,19 @@ To make the framework directly reusable in downstream annotation workflows, we i
 
 For pipeline compatibility, the tool also generates an ANNOVAR-style export using Chr, Start, End, Ref, and Alt coordinates. All lookup-based interpretation requires prior variant normalization against GRCh38 using bcftools norm. The MVP intentionally restricts actionable flags to three categories: OK, CHECK_POPMAX, and MODEL_CONFLICT. VITAL_OK does not imply benign status, CHECK_POPMAX does not imply reclassification, and MODEL_CONFLICT denotes incompatibility only with the tested unqualified dominant high-penetrance model.
 
-### HGDP Regional Stress-Test
-
-We queried gnomAD r3.1.2 genomes and the HGDP+1KG population layer using cached GraphQL outputs. Variant reconciliation used four levels: exact allele identity, normalization rescue, event-equivalent rescue, and position-overlap rescue, collapsed into four match classes: strict_allele, normalized_allele, position_overlap, and no_match.
-
-For HGDP-matched variants, effective AF was defined as the larger of max_hgdp_af and gnomad_r3_genome_af. This was compared against three pre-specified MCAF thresholds used as a resolution stress-test: 2.5 x 10^-5 as a strict dominant high-penetrance ceiling, 1 x 10^-4 as a reduced-penetrance or founder-compatible dominant boundary, and 1 x 10^-3 as a deliberately permissive sensitivity extreme used only for threshold-sweep robustness testing. These values were chosen to span biologically and clinically interpretable dominant arrhythmia scenarios rather than to create a single adjudication cutoff.
-
-Variants were classified as dominant_compatible, boundary, or hard_incompatible. HGDP results are reported in three evidence layers: strict allele evidence as the primary evidence layer, position-overlap matches as a hypothesis-generating stress map, and the full matched set as exploratory signal rather than an allele-level burden estimate.
-
 ### Molecular Mechanism Classification
 
 Genes were classified by molecular mechanism into three categories: gain-of-function/dominant-negative (GoF/DN), haploinsufficient (HI), and recessive (AR). These labels represent the dominant disease-model context being stress-tested for each gene, not a claim that every variant in a given gene acts exclusively through that mechanism. Gene-level assignments, their sources (ClinGen, OMIM, published literature), and caveats for genes with mixed or debated mechanisms, including SCN5A and KCNQ1, are detailed in supplementary tables.
 
-For each category, decomposition rate was defined as the proportion of population-evaluable variants falling outside the dominant-compatible regime. Association between mechanism class and decomposition was assessed by logistic regression with LOEUF score (gnomAD v4.1), variant consequence, and disease domain as covariates. Because the GoF/DN mechanism class exhibits complete separation at biologically interpretable thresholds, Firth-type penalized logistic regression was used to obtain finite, bias-corrected estimates. Leave-one-gene-out sensitivity analysis was used to assess robustness to gene-level clustering.
-
-### Cross-Domain Replication and Structural Sanity Checks
-
-To test whether evaluability compression and regime heterogeneity are domain-specific, we applied the same framework, with the same MCAF thresholds, evaluability tier definitions, and reconciliation logic, to hereditary cancer predisposition genes (BRCA1, BRCA2, MLH1, MSH2, MSH6, PMS2). No domain-specific parameter tuning was applied. This replication is treated as a structural stress-test, not as clinical adjudication or cross-domain calibration; quantitative burdens are interpreted as threshold-dependent and domain-specific.
-
-In parallel, we analyzed five additional sampled public P/LP panels (cardiomyopathy, epilepsy, metabolic autosomal-recessive disease, primary immunodeficiency, and hearing loss) to test whether actionability-routing instability recurs outside arrhythmia.
+For each category, decomposition rate was defined as the proportion of population-evaluable variants falling outside the dominant-compatible regime. Association between mechanism class and decomposition was assessed within the arrhythmia usable-AF subset by logistic regression with LOEUF score (gnomAD v4.1) and variant consequence as covariates. Because the GoF/DN mechanism class exhibits complete separation at biologically interpretable thresholds, Firth-type penalized logistic regression was used to obtain finite, bias-corrected estimates. Leave-one-gene-out sensitivity analysis was used to assess robustness to gene-level clustering.
 
 ### Validation and Calibration Layers
 
-The validation architecture was designed as calibration rather than as a single oversized truth set. Four layers were used.
+The validation architecture was designed as calibration rather than as a single oversized truth set. Three layers were used in the main text.
 
-First, high-review ClinVar assertions tested whether routing instability persisted after excluding the weakest public assertions. Second, ClinVar expert-panel and practice-guideline assertions, including ClinGen-curated sources where present in ClinVar, tested whether VITAL preserved expert-curated positives as compatible or review-level rather than indiscriminately generating hard conflicts. Third, expert-curated benign/likely benign controls tested whether VITAL behaved as a disease-model compatibility layer rather than as a pathogenicity detector. Fourth, the counterfactual decision audit and simulated CDS layer tested whether VITAL changed the route taken by a label-driven workflow.
+First, high-review ClinVar assertions tested whether routing instability persisted after excluding the weakest public assertions. Second, benign/likely benign controls tested whether VITAL behaved as a disease-model compatibility layer rather than as a pathogenicity detector. Third, published case-report reconstructions and repository-derived routing examples tested whether routing categories mapped onto recognizable clinical interpretation failure modes.
 
-This validation suite is intentionally modest. It is not a blinded clinician adjudication study, and the expert-curated arrhythmia subset is small. Its purpose is to check calibration, specificity of hard-conflict behavior, and workflow-level decision change.
-
-### Autopsy x de novo Counterfactual Decision Audit
-
-To model negative-autopsy interpretation contexts, we implemented an Autopsy x de novo Counterfactual Decision Audit. This phenotype-null framework simulates scenarios in which no structural post-mortem abnormality is available and genetic findings become the primary explanatory anchor.
-
-Each simulated case was assigned a candidate variant, genotype, disease mechanism, inheritance model, population frequency, evaluability tier, autopsy context, and de novo status. The simulation used a hybrid variant universe: empirical ClinVar/gnomAD arrhythmia variants for observed label/frequency structure, plus simulated variants to cover the allele-frequency range from 1 x 10^-6 to 1 x 10^-2. Genotypes were sampled conditional on a candidate alternate allele being present, using AF-derived heterozygous and homozygous probabilities. The primary phenotype-null setting used negative autopsy, absent structural heart disease, no phenotype, and unknown family history.
-
-A label-driven baseline treated any public P/LP variant in an arrhythmia-associated gene as sufficient for probable causal attribution, with confirmed trio de novo status increasing confidence to high. VITAL routing instead required allele-level evaluability, ancestry-aware population-frequency compatibility, and disease-model coherence before causal attribution could proceed. De novo status was treated as supportive evidence only when the underlying disease model remained coherent.
-
-The primary endpoint was false causal attribution, defined as assignment of a variant as the probable cause of death when the simulated ground-truth disease model did not support causality. Denominator-sensitive endpoints included per-case false attribution rate and per-evaluable-case false attribution rate. Secondary endpoints included de novo override error, prevented false attribution, CHECK/DEFER burden, MODEL_CONFLICT routing, and preservation of gold-standard dominant positives.
+This validation suite is intentionally modest. It is not a blinded clinician adjudication study. Its purpose is to check calibration, specificity of hard-conflict behavior, clinical interpretability, and workflow-level decision change.
 
 ### Clinical-Action Context and Actionability Discordance Audit
 
@@ -150,7 +128,7 @@ The main text uses one primary denominator chain:
 
 `1,731 public arrhythmia P/LP labels -> 357 allele-resolved exome matches -> 334 usable-AF variants -> 115 ancestry-aware frequency alerts`
 
-All primary disease-model conclusions come from the 334 usable-AF variants. All primary actionability-routing conclusions use the 1,731-label arrhythmia baseline. HGDP, hereditary cancer, and external disease panels are supplementary stress layers: they test structural recurrence and failure modes, not primary burden estimates.
+All primary disease-model conclusions come from the 334 usable-AF variants and should be read as conditional on allele-level evaluability. All primary actionability-routing conclusions use the 1,731-label arrhythmia baseline. Secondary stress tests are archived separately and do not contribute to the primary burden estimates.
 
 | Layer | Main denominator | Role |
 | --- | ---: | --- |
@@ -158,7 +136,6 @@ All primary disease-model conclusions come from the 334 usable-AF variants. All 
 | Allele-resolved exome recovery | 357 | Evaluability boundary |
 | Usable-AF exome subset | 334 | Primary population/MCAF denominator |
 | Popmax alert set | 115 | Primary regime and context analysis |
-| HGDP / cancer / external panels | variable | Supplementary stress architecture only |
 
 ## Results
 
@@ -172,9 +149,18 @@ Strict initial matching recovered 350 variants. Trim-aware and decomposition-awa
 
 ### 2. Tier 2 Reflects Structured Representation Limits, Not Random Absence
 
-Tier 2 is not a homogeneous gray zone. Within its 1,326 variants, 638 (48.1%) showed allele discordance at the queried locus, whereas 688 (51.9%) lacked even a same-locus gnomAD record. Tier 2 was also enriched for representation-sensitive classes: indels, duplications, and insertions accounted for 640 of 1,326 Tier 2 variants (48.3%), compared with 106 of 357 Tier 1 variants (29.7%), corresponding to an odds ratio of 2.21.
+Tier 2 is not a homogeneous gray zone. Within its 1,326 variants, 638 (48.1%) showed allele discordance at the queried locus, whereas 688 (51.9%) lacked even a same-locus gnomAD record. Tier 2 was also enriched for representation-sensitive classes: indels, duplications, and insertions accounted for 640 of 1,326 Tier 2 variants (48.3%), compared with 106 of 357 Tier 1 variants (29.7%), corresponding to an odds ratio of 2.21. Duplications showed the same pattern (170/1,326 Tier 2 variants, 12.8%, versus 22/357 Tier 1 variants, 6.2%; odds ratio 2.24).
 
-This means that non-observation at the allele level is not a uniform proxy for rarity. For precisely the classes most vulnerable to representation instability, absence of an allele-resolved match often reflects discordance between public assertion and aggregation systems rather than genuine population absence. This argument applies most strongly to indels, duplications, and splice-disrupting variants, where representation instability can cause genuine alleles to be absent from frequency databases for technical reasons. For SNVs in well-covered callable regions, allele absence in gnomAD may constitute meaningful rarity evidence with a computable upper bound. This study conservatively treats all non-recovered variants as not allele-level frequency-evaluable rather than absent from the population, and does not apply coverage-based negative-lookup inference.
+The mechanism denominator was affected by the same evaluability structure. Only 34/248 GoF/dominant-negative labels (13.7%) had usable AF, compared with 92/564 haploinsufficient labels (16.3%), 70/116 recessive labels (60.3%), and 130/779 mixed-mechanism labels (16.7%). The evaluable GoF/dominant-negative subset was entirely SNV-based and came from RYR2, KCNJ2, and CALM2; non-evaluable CALM1, CALM3, and most RYR2 labels therefore cannot be assigned the same 0% decomposition estimate.
+
+| Mechanism class | Total P/LP labels | Usable-AF Tier 1 labels | Not usable for MCAF | Transportability implication |
+| --- | ---: | ---: | ---: | --- |
+| Gain-of-function / dominant-negative | 248 | 34 (13.7%) | 214 (86.3%) | 0/34 decomposition is an allele-resolved SNV-space result only |
+| Haploinsufficient | 564 | 92 (16.3%) | 472 (83.7%) | Frequency-regime estimates do not cover most labels |
+| Recessive | 116 | 70 (60.3%) | 46 (39.7%) | Recessive labels are more evaluable and therefore not directly comparable to GoF/DN |
+| Mixed or context-dependent | 779 | 130 (16.7%) | 649 (83.3%) | Model-specific inference requires phenotype, inheritance, and allele-level context |
+
+This means that non-observation at the allele level is not a uniform proxy for rarity, and that mechanism-stratified decomposition is vulnerable to verifiability bias if generalized outside the usable-AF subset. For precisely the classes most vulnerable to representation instability, absence of an allele-resolved match often reflects discordance between public assertion and aggregation systems rather than genuine population absence. This argument applies most strongly to indels, duplications, and splice-disrupting variants, where representation instability can cause genuine alleles to be absent from frequency databases for technical reasons. For SNVs in well-covered callable regions, allele absence in gnomAD may constitute meaningful rarity evidence with a computable upper bound. This study conservatively treats all non-recovered variants as not allele-level frequency-evaluable rather than absent from the population, and does not apply coverage-based negative-lookup inference.
 
 ### 3. Global AF Alone Suppresses Ancestry-Localized Tension in the Evaluable Exome Subset
 
@@ -202,11 +188,11 @@ SCN5A VCV000440850 remains the clearest incompatibility case in the exome-resolv
 
 Under the formal label-driven baseline, all 1,731 arrhythmia P/LP variants entered ROUTE_PLP_ACTIONABLE. After VITAL routing, only 219/1,731 (12.7%) remained VITAL_OK. The remaining 1,512/1,731 (87.3%) were rerouted away from direct actionability.
 
-Most rerouted decisions were evaluation-limited: 1,397/1,731 (80.7%). A smaller subset required direct frequency or model review: 77/1,731 (4.4%) were risk-escalating and 38/1,731 (2.2%) were model-correcting. Across the six-domain meta-analysis, the mean nonpass rate was 87.7%.
+The 87.3% nonpass value should not be read as an 87.3% evidence-conflict rate. Most rerouted decisions were evidence-unavailable deferrals: 1,397/1,731 (80.7%) were EVAL_LIMITED because the asserted allele could not be evaluated at allele level in population data. A smaller subset carried evidence-based tension: 77/1,731 (4.4%) required ancestry-aware frequency review and 38/1,731 (2.2%) required model repair. Thus, VITAL separates absence of evaluability from positive evidence against a flattened model. Across the six-domain meta-analysis, the mean nonpass rate was 87.7%, again interpreted as a portability/routing burden rather than a conflict burden.
 
 ![Label-to-actionability routing audit](figures/vital_decision_disruption.png)
 
-The central result is therefore not that 87% of labels are false. It is that 87% of label-driven actionability decisions require rerouting once minimal constraints are restored.
+The central result is therefore not that 87% of labels are false, nor that 87% conflict with population evidence. It is that 87% of label-driven actionability decisions require rerouting once minimal constraints are restored, with most rerouting caused by evidence unavailability and a smaller component caused by frequency or model tension.
 
 ### 6. Routing Instability Persists Among High-Review Assertions
 
@@ -214,92 +200,63 @@ Routing instability persisted after restricting to high-review ClinVar assertion
 
 This pattern shows that the effect is not driven by low-confidence submissions alone. The problem is not simply that public databases contain noisy labels. The problem is that even strong label objects are not automatically portable actionability objects.
 
-### 7. HGDP Is a Supplementary Regional Stress Map, Not a Primary Burden Layer
+### 7. In the Evaluable Subset, Molecular Mechanism Predicts Disease-Model Stability
 
-HGDP adds regional resolution but weak allele-level coverage for this question. We therefore treat it as supplementary architecture, not as co-equal evidence with the exome-resolved primary analysis.
-
-The strict allele subset contained 64 variants. Within that allele-level subset, 4/64 (6.2%) were non-dominant-compatible under the tested MCAF framework. A much larger position-overlap-expanded universe produced a higher stress signal (67/339; 19.8%), but most of that denominator expansion came from same-position rather than same-allele evidence. It is therefore reported only as a locus-context stress map.
-
-The main-text implication is deliberately narrow: HGDP supports the direction of the exome finding but is not used to estimate primary burden.
-
-### 8. Molecular Mechanism Predicts Disease-Model Stability
-
-Decomposition rates varied systematically and predictably across gene classes defined by molecular mechanism. These mechanism labels define the disease-model context being stress-tested for each gene, not the intrinsic mechanism of every variant in that gene.
+Decomposition rates varied systematically and predictably across gene classes defined by molecular mechanism within the usable-AF Tier 1 subset. These mechanism labels define the disease-model context being stress-tested for each gene, not the intrinsic mechanism of every variant in that gene.
 
 | Mechanism class | Decomposition rate | Representative genes | Interpretation |
 | --- | --- | --- | --- |
-| Gain-of-function / dominant-negative | 0% | RYR2, CALM1-CALM3, KCNJ2 | Positive control: strong purifying selection on heterozygotes keeps variants universally rare |
+| Gain-of-function / dominant-negative | 0% | RYR2, CALM1-CALM3, KCNJ2 | Internal allele-resolved control: evaluable SNVs remain below the tested MCAF ceiling |
 | Haploinsufficient | approximately 29% | SCN5A HI context, ANK2 | Moderate selection permits some enrichment in specific ancestry groups |
 | Recessive | 37-54% | TRDN, CASQ2, KCNE1 | Weak heterozygous selection allows carrier frequencies inconsistent with dominant models |
 
-The GoF/dominant-negative class at 0% decomposition at MCAF >= 2.5 x 10^-5 constitutes a positive control supporting the interpretation that decomposition at biologically interpretable thresholds reflects genuine biology rather than methodological artifact (0/34 evaluable variants; 95% CI 0-10.2%; rule-of-three upper bound 8.8%). At sub-biological thresholds below 2.5 x 10^-5, GoF/DN variants are also flagged, confirming that threshold choice determines whether the pipeline detects genuine disease-model incompatibility or normal population variation.
+The GoF/dominant-negative class at 0% decomposition at MCAF >= 2.5 x 10^-5 constitutes an internal allele-resolved control supporting the interpretation that decomposition at biologically interpretable thresholds reflects genuine biology rather than a uniform pipeline artifact (0/34 evaluable variants; 95% CI 0-10.2%; rule-of-three upper bound 8.8%). It does not establish 0% decomposition for all GoF/dominant-negative labels in ClinVar, because 214/248 GoF/DN labels lacked usable allele-level AF. At sub-biological thresholds below 2.5 x 10^-5, GoF/DN variants are also flagged, confirming that threshold choice determines whether the pipeline detects genuine disease-model incompatibility or normal population variation.
 
 Variant consequence interacts with inheritance mode in the same direction. Missense variants in autosomal dominant genes decomposed at 6.7%, compared with 26.2% for loss-of-function variants in the same genes, a four-fold difference consistent with mechanism-dependent purifying selection. Loss-of-function in autosomal recessive genes reached 34.0%, and splice-disrupting variants reached 54.5%.
 
-Logistic regression confirmed that LOEUF score and recessive or haploinsufficient mechanism class increased decomposition odds, while missense consequence was associated with lower decomposition odds relative to loss-of-function (OR = 0.83). Disease domain remained a modest predictor (arrhythmia versus cancer OR = 1.69, p < 0.001), likely reflecting broader mechanism heterogeneity in arrhythmia genes compared with the predominantly haploinsufficient/MMR architecture of cancer genes. Because the GoF/DN mechanism class exhibits complete separation, Firth-type penalized logistic regression was used to obtain finite estimates.
+Logistic regression confirmed that LOEUF score and recessive or haploinsufficient mechanism class increased decomposition odds, while missense consequence was associated with lower decomposition odds relative to loss-of-function (OR = 0.83). Because the GoF/DN mechanism class exhibits complete separation, Firth-type penalized logistic regression was used to obtain finite estimates.
 
-Leave-one-gene-out sensitivity analysis preserved the mechanism gradient in every iteration. The overall decomposition rate ranged from 17.2% to 21.3% (overall 19.5%; maximum single-gene shift 2.3 percentage points, driven by TRDN exclusion). The ordering GoF/DN < HI < AR was preserved without exception. Excluding limited-evidence genes (AKAP9, CACNA2D1, CACNB2, SNTA1), mixed-mechanism genes (SCN5A, KCNQ1, CACNA1C, KCNE1), or all eight disputed/mixed genes still preserved the gradient.
+Within the usable-AF subset, leave-one-gene-out sensitivity analysis preserved the mechanism gradient in every iteration. The overall decomposition rate ranged from 17.2% to 21.3% (overall 19.5%; maximum single-gene shift 2.3 percentage points, driven by TRDN exclusion). The ordering GoF/DN < HI < AR was preserved without exception. Excluding limited-evidence genes (AKAP9, CACNA2D1, CACNB2, SNTA1), mixed-mechanism genes (SCN5A, KCNQ1, CACNA1C, KCNE1), or all eight disputed/mixed genes still preserved the gradient.
 
 ClinVar review status analysis also showed that decomposition is not driven by low-confidence submissions. Among Tier 1 variants at MCAF = 2.5 x 10^-5, no-assertion-criteria variants decomposed at 3/12 (25.0%), single-submitter variants at 28/213 (13.1%), and multiple-submitters-no-conflicts variants at 34/109 (31.2%). The higher rate in the multiple-submitter subset is consistent with enrichment of well-characterized, population-common alleles that attract multiple submissions precisely because they are frequent enough to be independently observed. Restricting to Pathogenic (not Likely pathogenic) classification yielded 21/148 (14.2%), lower than the overall rate but preserving the mechanism gradient. Restricting to multiple-submitter (>=2-star) variants yielded 34/109 (31.2%), higher than overall, with the mechanism gradient steepened.
 
-### 9. Cross-Domain Analyses Are Sanity Checks, Not Standalone Validation
-
-The cross-domain layers are intentionally demoted to structural sanity checks. The hereditary-cancer analysis asks whether evaluability compression and regime heterogeneity recur under a different mechanism mix; it does not estimate clinically calibrated cancer burden because the thresholds were inherited from arrhythmia.
-
-The five external disease panels similarly test recurrence of routing instability, not independent clinical validity. Their nonpass rates ranged from 82.7% to 95.0%, yielding a six-domain mean of 87.7%. This supports the generality of the infrastructure problem, while leaving disease-specific burden estimation to domain-calibrated analyses.
-
-![Evaluability and portability failure recur across external disease panels](figures/vital_external_panel_evaluability_portability.png)
-
-### 10. Validation Is Layered: Expert Positives, Controls, Review Status, and Pipeline Routing
+### 8. Calibration Uses Review Status, Controls, and Case Reconstruction
 
 No single validation layer is large enough to carry the manuscript alone, so validation is presented as a calibration suite.
 
 | Validation layer | Question | Result | Interpretation |
 | --- | --- | --- | --- |
 | High-review ClinVar assertions | Is routing instability driven by weak submissions? | 309/365 high-review assertions (84.7%) left the direct-actionable baseline. | No; high review status does not restore portability. |
-| Expert-curated P/LP positives | Does VITAL indiscriminately overturn expert positives? | 69/73 evaluable expert-curated positives (94.5%) remained VITAL_OK or review-level. | Expert truth is mostly preserved. |
-| Hard-conflict behavior | Is the severe alert burden low in expert positives? | 4/73 evaluable expert-curated positives (5.5%) entered MODEL_CONFLICT. | Hard model-conflict routing is uncommon. |
 | B/LB controls | Does VITAL behave as a pathogenicity classifier? | Common B/LB controls were incompatible with a forced dominant high-penetrance model. | VITAL detects model incompatibility, not pathogenicity status. |
-| Simulated pipeline comparison | Does routing change a flattened workflow? | 1,512/1,731 label-driven actionability decisions (87.3%) were interrupted. | VITAL changes workflow routing, not labels. |
+| Published case reconstructions | Do routes map onto real clinical interpretation modes? | Six portability modes were reconstructed from arrhythmia case reports. | VITAL routes are clinically interpretable, not only abstract states. |
 
-The expert-curated arrhythmia subset in the current GRCh38 snapshot was small (17 variants total; 9 P/LP and 8 B/LB, concentrated in KCNQ1), so it is not treated as a standalone burden estimate. Its purpose is calibration: CHECK_POPMAX functions primarily as a refinement layer, while rare MODEL_CONFLICT cases define candidates for targeted review rather than broad disagreement with expert classification.
+This validation architecture is sufficient for the manuscript's main claim because the claim is routing, not final clinical adjudication. A larger blinded external validation set would be the natural next benchmark, but the current data already show that VITAL separates direct actionability from review, model repair, and evaluability-limited deferral.
 
-This validation architecture is sufficient for the manuscript's claim because the claim is routing, not final clinical adjudication. A larger blinded ClinGen/ClinVar expert-panel validation set would be the natural next external benchmark, but the current data already show that VITAL preserves most expert-curated positives while interrupting label-driven direct-actionability workflows.
+### 9. Concrete Variant Examples Reconstruct Label Portability
 
-### 11. Autopsy x de novo Audit Shows How de novo Can Amplify False Causal Attribution
+To connect the routing framework to real clinical interpretation, we reconstructed published arrhythmia case reports and repository-derived routing calls as variant-model-action objects rather than as patient-level outcome claims. Each reconstruction mapped the observed genotype to its current public label, the disease model asserted or implied in the source context, the clinical action context, and the resulting VITAL route.
 
-In the phenotype-null negative-autopsy simulation, the label-driven baseline frequently converted P/LP status into causal attribution. It assigned 9,348 causal explanations, of which 7,975 were false under the simulated ground-truth disease model (85.3%). On denominator-based metrics, the baseline per-case false attribution rate was 79.8% (7,975/10,000), and the per-evaluable-case false attribution rate was 69.6% (2,540/3,648). Confirmed de novo status further increased baseline confidence, generating 371 de novo override errors.
+Each case was processed through the VITAL routing logic: (1) assignment of the label-driven baseline, (2) allele-level evaluability check, (3) ancestry-aware frequency constraint, (4) disease-model compatibility assessment, and (5) final route assignment.
 
-VITAL substantially reduced false causal attribution by reallocating unsupported genetic explanations into CHECK_MODEL, CHECK_POPMAX, EVAL_LIMITED, or MODEL_CONFLICT routes. VITAL supported only 48 causal attributions, of which 10 were false (20.8%), and prevented 7,965 baseline false attributions. The corresponding VITAL per-case false attribution rate was 0.1% (10/10,000), and the per-evaluable-case false attribution rate was 0.27% (10/3,648). Across all cases, VITAL routes were EVAL_LIMITED 61.9%, CHECK_MODEL 9.5%, CHECK_POPMAX 4.8%, and MODEL_CONFLICT 9.0%. Among evaluable cases, the same breakdown was EVAL_LIMITED 0.0%, CHECK_MODEL 26.1%, CHECK_POPMAX 13.1%, and MODEL_CONFLICT 24.6%. Among confirmed de novo cases, VITAL supported 48, routed 361 to CHECK/DEFER, and blocked 47 as MODEL_CONFLICT. De novo status therefore acted as supportive evidence only when the disease model remained coherent.
+These reconstructions do not evaluate outcomes; they evaluate whether causal interpretation remains coherent once constraints are restored.
 
-Gold-standard dominant positives were preserved: 42/42 empirical GoF/DN AF-compatible P/LP controls remained VITAL_OK and 0 entered MODEL_CONFLICT. A conflicting-ClinVar layer stayed outside the P/LP baseline rather than being forced into model-conflict routing, supporting the interpretation that VITAL is a routing layer rather than a pathogenicity detector.
+| Example | Source type | Label-driven baseline | VITAL route | Portability lesson |
+| --- | --- | --- | --- | --- |
+| SCN5A p.Asp1790Gly | Published case | Direct AD arrhythmia actionability | VITAL_OK + model specification | Preserved actionability requires explicit LQT3/Brugada overlap and medication-sensitive context |
+| KCNH2 p.Ala614Val | Published case | Direct AD LQT2 actionability | VITAL_OK | Dominant actionability is preserved when allele, model, and management context remain aligned |
+| KCNQ1 p.Thr322Met | Published case | Direct AD KCNQ1 actionability | CHECK_MODEL | Homozygous JLNS, heterozygous Romano-Ward-like disease, borderline QTc, and unaffected carrier states are not interchangeable |
+| SCN5A p.Arg1193Gln | Historical case-association control | No current P/LP baseline; historical disease claim | NO_CURRENT_PLP_BASELINE; historical claim -> MODEL_CONFLICT | Ancestry-aware population frequency breaks an unqualified dominant high-penetrance historical claim |
+| KCNH2 p.Arg356Cys | Published case | No P/LP baseline | NO_PLP_BASELINE / CHECK_MODEL | Drug-induced QT prolongation is clinically meaningful but does not make a VUS portable hereditary actionability |
+| KCNQ1 large duplication | Published case | Sequencing-negative does not exclude actionability | EVAL_LIMITED / SV_BLOCKED | CNV interpretation requires copy-number-aware representation rather than SNV/indel AF logic |
+| RYR2 c.1006-44_1007delinsATTTTG | Published case | Direct RYR2 CPVT actionability | EVAL_LIMITED + functional support | RNA and segregation evidence can repair interpretability when population evaluability is limited |
+| SCN5A VCV000440850 | Repository routing call | ROUTE_PLP_ACTIONABLE | MODEL_CONFLICT | Direct dominant actionability is not supported under current population-frequency constraints |
+| KCNH2 VCV004535537 | Repository routing call | ROUTE_PLP_ACTIONABLE | CHECK_POPMAX | Actionability requires ancestry-aware frequency review, not global AF alone |
+| TRDN VCV001325231 | Repository routing call | ROUTE_PLP_ACTIONABLE | CHECK_MODEL | Recessive or carrier-state logic replaces flattened dominant actionability |
+| KCNH2 VCV000405355 | Repository routing call | ROUTE_PLP_ACTIONABLE | EVAL_LIMITED | Direct actionability cannot be justified from allele-resolved population evidence |
 
-![Autopsy x de novo decision flow](figures/vital_autopsy_denovo_decision_flow.png)
+The examples separate six portability modes: preservation, model compression, population conflict, event-genotype dissociation, evaluability failure, and functional rescue. The point is not that VITAL assigns a binary truth value to each report. Rather, it reconstructs whether a public label can travel from "variant observed in a case" to "actionable causal object" without losing the disease model, inheritance state, allele-frequency constraint, or evidentiary basis that made the interpretation coherent in the first place.
 
-![False causal attribution reduction](figures/vital_autopsy_denovo_false_attribution.png)
-
-![de novo override routing](figures/vital_autopsy_denovo_override.png)
-
-![Mechanism stratification in the autopsy audit](figures/vital_autopsy_denovo_mechanism.png)
-
-These results show that in negative-autopsy contexts, the principal risk is not variant classification alone but causal overextension: a flattened P/LP label, especially when reinforced by de novo status, may be promoted from classification evidence to cause-of-death explanation without sufficient model support.
-
-### 12. Actionability Discordance and Simulated CDS Routing
-
-The Actionability Discordance Audit contained 24 repository-derived examples. Each example had a public P/LP label, an action-associated context, and a VITAL route away from direct actionability. The set included ancestry-aware frequency review, recessive or model-specific rerouting, hard dominant-model conflict, and evaluability-limited deferral.
-
-| Variant | Baseline route | VITAL route | Meaning |
-| --- | --- | --- | --- |
-| SCN5A VCV000440850 | ROUTE_PLP_ACTIONABLE | MODEL_CONFLICT | Direct dominant actionability is not supported under current constraints. |
-| KCNH2 VCV004535537 | ROUTE_PLP_ACTIONABLE | CHECK_POPMAX | Actionability requires ancestry-aware frequency review. |
-| TRDN VCV001325231 | ROUTE_PLP_ACTIONABLE | CHECK_MODEL | Recessive/carrier-state logic replaces flattened dominant actionability. |
-| KCNH2 VCV000405355 | ROUTE_PLP_ACTIONABLE | EVAL_LIMITED | Direct actionability cannot be justified from allele-resolved population evidence. |
-
-In the simulated CDS layer, VITAL would interrupt 1,512/1,731 (87.3%) arrhythmia baseline direct-actionability decisions. The alert burden was mostly orange evaluability-limited alerts: 1,397/1,731 (80.7%). Yellow review alerts accounted for 114/1,731 (6.6%) and red hard model-conflict alerts for 1/1,731 (0.06%). In the high-review subset, the alert rate remained 309/365 (84.7%). A simulated VITAL alert layer would therefore interrupt most label-driven direct-actionability decisions while producing a low hard-conflict rate among expert-curated evaluable positives.
-
-![Counterfactual routing validation](figures/vital_routing_validation.png)
-
-### 13. Repair Logic Separates Pathogenicity, Evaluability, and Actionability
+### 10. Repair Logic Separates Pathogenicity, Evaluability, and Actionability
 
 The repair layer converts a nonpass route into an explicit next step rather than a vague warning.
 
@@ -317,7 +274,7 @@ This repair logic is the operational point of VITAL: it separates pathogenicity,
 
 ### A Public P/LP Label Is a Compressed Object, Not a Self-Contained Disease Claim
 
-The main result of this study is a measurable downstream reuse failure mode. Even within the exome Tier 1 usable-AF subset, one exported P/LP label can map to incompatible operational readings once ancestry-aware frequency and mechanism are restored. HGDP contributes only a supplementary regional stress signal, with strict allele matches treated as the primary evidence within that layer and position-overlap results used only for hypothesis generation.
+The main result of this study is a measurable downstream reuse failure mode. Even within the exome Tier 1 usable-AF subset, one exported P/LP label can map to incompatible operational readings once ancestry-aware frequency and mechanism are restored.
 
 This instability arises for three structural reasons. Public labels omit the disease-model parameters needed for reuse; population constraint is ancestry-resolved rather than scalar; and the response to frequency stress is mechanism-dependent. In this framework, decomposition means only incompatibility with the tested dominant high-penetrance model under observed frequency stress, not that the variant is benign, false, or clinically reclassified.
 
@@ -331,82 +288,44 @@ This distinction matters for governance. If the evaluability gap were a normaliz
 
 Global-only screening missed 88.7% of ancestry-aware exome alerts. In a domain shaped by ancestry-localized enrichment, founder effects, and mixed inheritance architectures, global AF is not a sufficient stand-in for the population signal needed to constrain a disease model. Popmax does not add decorative granularity; it restores biologically relevant structure that global AF suppresses. Among the 102 missed alerts, the dominant signal came from non-European populations, precisely the populations most underrepresented in historical variant databases and most exposed to systematic under-detection of frequency incompatibility.
 
-### Decomposition Is Mechanistically Determined, Not Database Noise
+### In the Evaluable Subset, Decomposition Is Mechanism-Structured
 
-The molecular mechanism findings sharpen the interpretation of the regime structure. GoF and dominant-negative genes show 0% decomposition at MCAF thresholds >= 2.5 x 10^-5, not as a trivial result but as a positive control that supports the framework at biologically interpretable thresholds. If decomposition were a pipeline artifact or a consequence of curation error, it would affect all gene classes proportionally. Instead, it is absent where selection theory predicts it should be absent and present in proportion to how much constraint is relaxed in haploinsufficient and recessive genes.
-
-### The HGDP Layer Is Supplementary to the Exome-Resolved Primary Analysis
-
-The HGDP analysis is intentionally supplementary to the exome-resolved primary analysis. Its main value is to show that regional stress signals can be mapped more broadly than allele-level proof can be established. Strict allele matches remain the primary HGDP evidence, and the position-overlap-expanded universe is treated only as hypothesis-generating locus-context stress.
+The molecular mechanism findings sharpen the interpretation of the regime structure within the allele-resolved subset. GoF and dominant-negative genes show 0% decomposition at MCAF thresholds >= 2.5 x 10^-5 among 34 usable-AF variants, not as a trivial result but as an internal control that supports the framework at biologically interpretable thresholds. This does not exclude higher or lower decomposition in the non-evaluable GoF/DN majority. Instead, it means that where allele-level population evidence is available, decomposition is absent where selection theory predicts it should be absent and present in proportion to how much constraint is relaxed in haploinsufficient and recessive genes.
 
 ### Arrhythmia Genes Act Here as a Stress-Test Domain, Not as a Special Case
 
-This manuscript does not claim that arrhythmia genes are uniquely affected. Rather, they provide a stringent stress-test domain in which ancestry structure, variable penetrance, founder effects, and potentially consequential interpretation contexts coexist. The cancer comparison is used only as a structural sanity check. The core claim remains that public P/LP labels lose disease-model portability unless evaluability, inheritance, mechanism, and ancestry-aware AF are made explicit.
+This manuscript does not claim that arrhythmia genes are uniquely affected. Rather, they provide a stringent stress-test domain in which ancestry structure, variable penetrance, founder effects, and potentially consequential interpretation contexts coexist. The core claim remains that public P/LP labels lose disease-model portability unless evaluability, inheritance, mechanism, and ancestry-aware AF are made explicit.
 
 ### VITAL Is a Routing Layer, Not a Reclassification Engine
 
 VITAL does not claim that nonpass variants are benign, incorrect, or clinically irrelevant. It claims that direct actionability cannot be inferred from the flattened label alone. A public pathogenicity label can remain true in its expert context while still being insufficient as a direct-actionability object in a flattened downstream workflow.
 
-### De Novo Status Supports a Model; It Does Not Replace One
-
-The Autopsy x de novo audit highlights a particularly sensitive failure mode of downstream label reuse. In negative-autopsy settings, phenotypic and structural anchors are absent, increasing the interpretive weight placed on genetic findings. De novo status can further amplify this effect by raising confidence in causal attribution. However, de novo occurrence is orthogonal to disease-model compatibility: it supports causality only when the asserted model remains coherent under population, mechanism, inheritance, and evaluability constraints.
-
-VITAL therefore treats de novo status as evidence within a model, not as a substitute for the model itself. A confirmed de novo variant routed to CHECK_MODEL, CHECK_POPMAX, EVAL_LIMITED, or MODEL_CONFLICT remains important, but it should not be promoted directly to cause-of-death explanation in a phenotype-null negative-autopsy context.
-
 ## Limitations
 
-First, all exome disease-model conclusions are restricted to the 334 Tier 1 variants with usable allele-resolved AF. The unevaluable majority cannot be assumed to follow the same regime structure. Because Tier 1 was enriched for SNVs and depleted of indels and duplications relative to Tier 2, direct extrapolation across variant classes would be inappropriate.
+First, all exome disease-model conclusions are restricted to the 334 Tier 1 variants with usable allele-resolved AF. The unevaluable majority cannot be assumed to follow the same regime structure. Because Tier 1 was enriched for SNVs and depleted of indels and duplications relative to Tier 2, direct extrapolation across variant classes would be inappropriate. The 0/34 GoF/DN decomposition result is therefore a statement about evaluable GoF/DN SNVs, not about all GoF/DN assertions.
 
-Second, the HGDP regional analysis is limited by sparse evaluability. Its broader matched universe is useful as a supplementary stress map, but the strongest quantitative claims remain concentrated in the strict or representation-rescued allele-level subset.
+Second, this is a study of disease-model compatibility and actionability routing, not patient-level outcomes. The clinical-action categories used here identify potentially consequential interpretation contexts, not realized downstream clinical consequences.
 
-Third, this is a study of disease-model compatibility and actionability routing, not patient-level outcomes. The clinical-action categories used here identify potentially consequential interpretation contexts, not realized downstream clinical consequences.
+Third, frequency-based analysis can exclude a particular disease-model reading, but it cannot on its own establish the correct alternative interpretation. Low penetrance, haplotypic context, allelic phase, transcript-specific rescue, segregation evidence, and functional validation remain outside the scope of this analysis unless orthogonal data are introduced.
 
-Fourth, frequency-based analysis can exclude a particular disease-model reading, but it cannot on its own establish the correct alternative interpretation. Low penetrance, haplotypic context, allelic phase, transcript-specific rescue, segregation evidence, and functional validation remain outside the scope of this analysis unless orthogonal data are introduced.
+Fourth, the 1 x 10^-5 trigger used in the exome screening layer is operational rather than ontological. The qualitative result, especially the large popmax gain over global AF, was stable across a broad threshold range, but absolute alert counts depend on the screening threshold selected. The MCAF ceilings are disease-model stress parameters, not universal pathogenicity cutoffs; clinical deployment should recalibrate them by gene, disease prevalence, penetrance, allelic contribution, and ascertainment context.
 
-Fifth, the 1 x 10^-5 trigger used in the exome screening layer is operational rather than ontological. The qualitative result, especially the large popmax gain over global AF, was stable across a broad threshold range, but absolute alert counts depend on the screening threshold selected.
-
-Sixth, the HGDP panel covers approximately 4,000 individuals across 54 populations, so allele frequency estimates for rare variants in individual populations carry substantial sampling uncertainty. The HGDP findings are used here as a falsification test for the dominant high-penetrance model, not as precise frequency estimates.
-
-Seventh, the cancer predisposition sanity check uses MCAF thresholds calibrated for dominant high-penetrance arrhythmia models. Cancer genes have different penetrance profiles, age-dependent expressivity, and clinical ascertainment patterns. The deliberate use of identical thresholds tests structural recurrence only; it does not provide clinically calibrated cancer burden estimates.
-
-Eighth, most arrhythmia HGDP matches were achieved through position-overlap rather than strict allele-resolved matching. We therefore treat full matched-universe results as supplementary stress signals rather than primary burden estimates.
-
-Ninth, the current structural-variant layer is a blocking requirement rather than a fully deployed SV/CNV engine. Loci such as SMN1, STRC, and GJB6 require copy-state, paralog, haplotype, and phase-aware handling before direct portability can be granted.
-
-Tenth, the Autopsy x de novo audit is a simulation of candidate-variant interpretation, not an empirical sudden-death cohort. Its ground truth is generated from explicit mechanism, penetrance, inheritance, AF, and de novo assumptions. The purpose is to stress-test causal overextension under controlled assumptions, not to estimate real-world cause-of-death fractions.
-
-## Governance Implications
-
-Four governance-relevant conclusions follow from the evaluable-subset analysis and from the structural limits observed in the non-evaluable majority.
-
-First, population-structured frequency review, including popmax or an equivalent ancestry-aware maximum, should be treated as a minimum evidence layer in inherited arrhythmia variant review workflows whenever the asserted allele is population-evaluable. In this study, global-only screening missed 88.7% of ancestry-aware frequency alerts within the Tier 1 usable-AF subset, and 103 of those alerts occurred in potentially consequential interpretation contexts. Omitting popmax in such settings is not a small methodological omission; it is a systematic failure to apply available population constraint where such constraint is actually available.
-
-Second, public assertions intended for downstream reuse should carry at least four additional fields alongside pathogenicity category: the disease-state model being asserted, including inheritance class and penetrance logic; the population evaluability tier of the asserted allele; the allele count supporting any cited population signal, together with explicit acknowledgment of low-count uncertainty; and a coverage-aware negative-lookup status distinguishing true absence from representation failure or non-callable context. These additions do not require a new pathogenicity framework. They operationalize information that downstream users already need but that the flattened public label does not currently preserve.
-
-Third, downstream users should not equate locus-context stress with allele-level proof. For indels, duplications, splice-disrupting variants, and other representation-sensitive classes, non-observation and same-position overlap are properties of representation before they are properties of biology. Evaluability metadata, and eventually coverage-aware negative lookup, must therefore remain conceptually distinct from pathogenicity classification.
-
-Fourth, downstream users should adopt a four-step population-constrained interpretation workflow as a minimum standard for any application that imports public P/LP labels: determine evaluability tier for the asserted allele; apply ancestry-aware frequency constraint using popmax alongside global AF and preserve negative-lookup uncertainty where callability is unresolved; classify disease-model regime; and require explicit disease-model specification before downstream action. This workflow does not replace expert clinical judgment; it operationalizes a measurable failure mode in downstream reuse.
-
-The repository implementation adds two practical governance layers: a simulated CDS alert layer and a minimal repair table. The alert layer converts CHECK_POPMAX and CHECK_MODEL into review alerts, EVAL_LIMITED into deferral alerts, and MODEL_CONFLICT into model-conflict alerts. The repair table converts each nonpass route into an explicit next step rather than a vague warning.
+Fifth, the current structural-variant layer is a blocking requirement rather than a fully deployed SV/CNV engine. CNVs, repeat-mediated loci, paralogous genes, haplotypes, and phase-dependent mechanisms require specialized representation before direct portability can be granted.
 
 ## Conclusion
 
-Across 1,731 ClinVar P/LP variants in 20 inherited arrhythmia genes, the central biological result comes from a much smaller evaluable subset. Most public assertions could not be brought into allele-resolved exome frequency space, and primary frequency conclusions therefore rest on the 334 variants with usable AF rather than on the full label universe. HGDP provided only a supplementary regional stress layer and was not used as a co-equal burden estimate.
+Flattened public P/LP labels lose disease-model portability in downstream actionability workflows unless allele evaluability, ancestry-aware AF, and disease model are restored. Across 1,731 ClinVar P/LP variants in 20 inherited arrhythmia genes, only 219 labels (12.7%) could be directly routed as actionability-compatible after minimal portability constraints. Most non-direct routes reflected missing allele-resolved evaluability rather than evidence conflict.
 
-Within the evaluable subset, exported P/LP labels did not behave as portable disease-state claims. The same label could remain compatible with a dominant high-penetrance model, trigger ancestry-aware review, or become incompatible with that tested model depending on mechanism and population resolution.
+Within the 334 usable-AF variants, popmax recovered ancestry-localized frequency tension missed by global AF, and MCAF stress-testing separated compatible, review-level, and model-conflict regimes. The mechanism gradient was conditional on allele-level evaluability: evaluable GoF/DN SNVs showed 0/34 decomposition, whereas haploinsufficient and recessive architectures showed higher incompatibility under flattened dominant models.
 
-The pattern was biologically structured rather than random: no dominant-negative/GoF variants decomposed at MCAF >= 2.5 x 10^-5, whereas haploinsufficient and recessive architectures showed substantially higher incompatibility rates. Here, decomposition denotes only model incompatibility under frequency stress; it is not a statement that the variant is wrong, benign, or clinically reclassified. The hereditary-cancer analysis served only as a structural sanity check that the same compression problem can recur outside arrhythmia under a different mechanism mix.
-
-When translated into actionability routing, the same structural problem becomes operationally measurable. In the arrhythmia cohort, 1,512/1,731 label-driven direct-actionability decisions required rerouting; across six domains, the mean nonpass rate was 87.7%. Expert-curated evaluable positives were mostly preserved as VITAL_OK or review-level, with only 4/73 hard model conflicts.
-
-Public pathogenicity labels therefore lose disease-model portability when downstream systems strip away evaluability, inheritance, mechanism, and ancestry-aware frequency context. VITAL operationalizes that failure mode rather than reclassifying variants, and it suggests a minimal standard for public assertions: preserve the label together with the fields required to interpret it safely downstream.
+The main claim is therefore not that public P/LP labels are wrong. It is that a flattened label is not a self-contained actionability object. Direct downstream actionability requires restoration of allele-level evaluability, ancestry-aware frequency, and disease-model context.
 
 ## Tool Availability
 
 The VITAL pipeline (Variant Interpretation Through Ancestry-aware Labeling) is available as an open-source computational tool in the project repository. In addition to generating the analytical outputs reported here, VITAL includes a minimal annotation layer for downstream reuse. The MVP annotator accepts VCF, CSV, or TSV inputs, supports lookup-based annotation, emits VITAL evaluability and disease-model flags, and can export an ANNOVAR-style table with Chr, Start, End, Ref, Alt, VITAL_evaluability, VITAL_flag, VITAL_regime, VITAL_popmax_af, VITAL_global_af, VITAL_threshold, and VITAL_reason.
 
-The tool is designed as a guardrail layer rather than a variant reclassification system: VITAL_OK does not mean benign, CHECK_POPMAX does not mean reclassification, and MODEL_CONFLICT indicates incompatibility with the tested unqualified dominant high-penetrance model. The repository also exposes the routing audit layer (python src/run_vital_routing_validation.py), the Autopsy x de novo Counterfactual Decision Audit (python src/run_vital_autopsy_denovo_audit.py), the cached cohort-level CLI (python run_vital.py --mode full --genes "MYBPC3,MYH7" --pop gnomAD), and machine-readable repair/reason-code tables.
+The tool is designed as a guardrail layer rather than a variant reclassification system: VITAL_OK does not mean benign, CHECK_POPMAX does not mean reclassification, and MODEL_CONFLICT indicates incompatibility with the tested unqualified dominant high-penetrance model. The repository also exposes the routing audit layer (python src/run_vital_routing_validation.py), the cached cohort-level CLI (python run_vital.py --mode full --genes "MYBPC3,MYH7" --pop gnomAD), and machine-readable repair/reason-code tables.
 
 ## Data Availability
 
-Code, cached intermediate files, processed tables, and figure assets required to reproduce the analyses summarized here are available in the repository. The April 24, 2026 data freeze used ClinVar public assertion snapshots together with gnomAD v4.1.1 exome outputs and gnomAD r3.1.2 genome/HGDP regional outputs already cached in the project workspace. Machine-readable supplementary tables include evaluability tier classifications, frequency flags, regime assignments, molecular mechanism analysis outputs, routing validation outputs, and cross-domain stress-test tables. Repository: https://github.com/anerecye/New-project
+Code, cached intermediate files, processed tables, and figure assets required to reproduce the analyses summarized here are available in the repository. The April 24, 2026 data freeze used ClinVar public assertion snapshots together with gnomAD v4.1.1 exome outputs cached in the project workspace. Machine-readable supplementary tables include evaluability tier classifications, frequency flags, regime assignments, molecular mechanism analysis outputs, routing validation outputs, and secondary stress-test outputs. Repository: https://github.com/anerecye/New-project

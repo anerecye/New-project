@@ -1,9 +1,9 @@
 scope,strategy,total_cases,evaluable_cases,causal_attributions,false_causal_attributions,false_causal_attribution_rate,per_case_false_attribution_rate,false_causal_attributions_evaluable,per_evaluable_case_false_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors,sensitivity
-penetrance_high,label_driven_baseline,10000,3574,9360,5830,62.28632478632478,58.3,1709,47.81757134862899,0,0,0,291,high
-penetrance_high,VITAL_routing,10000,3574,37,3,8.108108108108109,0.03,3,0.08393956351426973,7757,862,5827,0,high
-penetrance_moderate,label_driven_baseline,10000,3647,9283,7141,76.92556285683507,71.41,2205,60.46065259117083,0,0,0,320,moderate
-penetrance_moderate,VITAL_routing,10000,3647,39,10,25.641025641025642,0.1,10,0.2741979709350151,7606,864,7131,0,moderate
-penetrance_low,label_driven_baseline,10000,3572,9322,8868,95.12980047200172,88.68,2826,79.11534154535275,0,0,0,453,low
-penetrance_low,VITAL_routing,10000,3572,37,23,62.16216216216216,0.23,23,0.6438969764837627,7696,859,8845,0,low
-penetrance_mixed,label_driven_baseline,10000,3654,9335,7994,85.63470808784146,79.94,2609,71.40120415982484,0,0,0,390,mixed
-penetrance_mixed,VITAL_routing,10000,3654,53,16,30.18867924528302,0.16,16,0.43787629994526545,7629,913,7978,0,mixed
+penetrance_high,label_driven_baseline,10000,3707,9306,5750,61.78809370298732,57.5,1754,47.315888858915564,0,0,0,299,high
+penetrance_high,VITAL_routing,10000,3707,34,3,8.823529411764707,0.03,3,0.08092797410304829,7587,927,5747,0,high
+penetrance_moderate,label_driven_baseline,10000,3674,9307,7173,77.07102181153971,71.73,2233,60.778443113772454,0,0,0,327,moderate
+penetrance_moderate,VITAL_routing,10000,3674,47,11,23.404255319148938,0.11,11,0.2994011976047904,7577,898,7162,0,moderate
+penetrance_low,label_driven_baseline,10000,3641,9339,8878,95.06371131812828,88.78,2916,80.08788794287284,0,0,0,414,low
+penetrance_low,VITAL_routing,10000,3641,35,25,71.42857142857143,0.25,25,0.6866245536940401,7658,905,8853,0,low
+penetrance_mixed,label_driven_baseline,10000,3574,9328,8003,85.79545454545455,80.03,2533,70.8729714605484,0,0,0,362,mixed
+penetrance_mixed,VITAL_routing,10000,3574,38,10,26.31578947368421,0.1,10,0.27979854504756574,7639,901,7993,0,mixed

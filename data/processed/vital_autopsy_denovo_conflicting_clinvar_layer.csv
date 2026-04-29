@@ -1,0 +1,2 @@
+conflicting_variant_count,NO_PLP_BASELINE,CHECK_or_DEFER,MODEL_CONFLICT,interpretation
+186,186,0,0,"Conflicting labels stay outside the P/LP baseline; enrichment belongs in review/defer, not automatic model-conflict."

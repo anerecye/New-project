@@ -128,6 +128,16 @@ First, high-review ClinVar assertions tested whether routing instability persist
 
 This validation suite is intentionally modest. It is not a blinded clinician adjudication study, and the expert-curated arrhythmia subset is small. Its purpose is to check calibration, specificity of hard-conflict behavior, and workflow-level decision change.
 
+### Autopsy x de novo Counterfactual Decision Audit
+
+To model negative-autopsy interpretation contexts, we implemented an Autopsy x de novo Counterfactual Decision Audit. This phenotype-null framework simulates scenarios in which no structural post-mortem abnormality is available and genetic findings become the primary explanatory anchor.
+
+Each simulated case was assigned a candidate variant, genotype, disease mechanism, inheritance model, population frequency, evaluability tier, autopsy context, and de novo status. The simulation used a hybrid variant universe: empirical ClinVar/gnomAD arrhythmia variants for observed label/frequency structure, plus simulated variants to cover the allele-frequency range from 1 x 10^-6 to 1 x 10^-2. Genotypes were sampled conditional on a candidate alternate allele being present, using AF-derived heterozygous and homozygous probabilities. The primary phenotype-null setting used negative autopsy, absent structural heart disease, no phenotype, and unknown family history.
+
+A label-driven baseline treated any public P/LP variant in an arrhythmia-associated gene as sufficient for probable causal attribution, with confirmed trio de novo status increasing confidence to high. VITAL routing instead required allele-level evaluability, ancestry-aware population-frequency compatibility, and disease-model coherence before causal attribution could proceed. De novo status was treated as supportive evidence only when the underlying disease model remained coherent.
+
+The primary endpoint was false causal attribution, defined as assignment of a variant as the probable cause of death when the simulated ground-truth disease model did not support causality. Secondary endpoints included de novo override error, prevented false attribution, CHECK/DEFER burden, MODEL_CONFLICT routing, and preservation of gold-standard dominant positives.
+
 ### Clinical-Action Context and Actionability Discordance Audit
 
 To connect population tension with real downstream use environments, alerted variants were classified into potentially consequential interpretation contexts: cascade testing, drug restriction, intensive surveillance, device-related management, syndrome diagnosis, or carrier/recessive routing. These context labels indicate exposure environments, not measured downstream outcomes.
@@ -256,7 +266,25 @@ The expert-curated arrhythmia subset in the current GRCh38 snapshot was small (1
 
 This validation architecture is sufficient for the manuscript's claim because the claim is routing, not final clinical adjudication. A larger blinded ClinGen/ClinVar expert-panel validation set would be the natural next external benchmark, but the current data already show that VITAL preserves most expert-curated positives while interrupting label-driven direct-actionability workflows.
 
-### 11. Actionability Discordance and Simulated CDS Routing
+### 11. Autopsy x de novo Audit Shows How de novo Can Amplify False Causal Attribution
+
+In the phenotype-null negative-autopsy simulation, the label-driven baseline frequently converted P/LP status into causal attribution. It assigned 9,348 causal explanations, of which 7,975 were false under the simulated ground-truth disease model (85.3%). Confirmed de novo status further increased baseline confidence, generating 371 de novo override errors.
+
+VITAL substantially reduced false causal attribution by reallocating unsupported genetic explanations into CHECK_MODEL, CHECK_POPMAX, EVAL_LIMITED, or MODEL_CONFLICT routes. VITAL supported only 48 causal attributions, of which 10 were false (20.8%), and prevented 7,965 baseline false attributions. Among confirmed de novo cases, VITAL supported 48, routed 361 to CHECK/DEFER, and blocked 47 as MODEL_CONFLICT. De novo status therefore acted as supportive evidence only when the disease model remained coherent.
+
+Gold-standard dominant positives were preserved: 42/42 empirical GoF/DN AF-compatible P/LP controls remained VITAL_OK and 0 entered MODEL_CONFLICT. A conflicting-ClinVar layer stayed outside the P/LP baseline rather than being forced into model-conflict routing, supporting the interpretation that VITAL is a routing layer rather than a pathogenicity detector.
+
+![Autopsy x de novo decision flow](figures/vital_autopsy_denovo_decision_flow.png)
+
+![False causal attribution reduction](figures/vital_autopsy_denovo_false_attribution.png)
+
+![de novo override routing](figures/vital_autopsy_denovo_override.png)
+
+![Mechanism stratification in the autopsy audit](figures/vital_autopsy_denovo_mechanism.png)
+
+These results show that in negative-autopsy contexts, the principal risk is not variant classification alone but causal overextension: a flattened P/LP label, especially when reinforced by de novo status, may be promoted from classification evidence to cause-of-death explanation without sufficient model support.
+
+### 12. Actionability Discordance and Simulated CDS Routing
 
 The Actionability Discordance Audit contained 24 repository-derived examples. Each example had a public P/LP label, an action-associated context, and a VITAL route away from direct actionability. The set included ancestry-aware frequency review, recessive or model-specific rerouting, hard dominant-model conflict, and evaluability-limited deferral.
 
@@ -271,7 +299,7 @@ In the simulated CDS layer, VITAL would interrupt 1,512/1,731 (87.3%) arrhythmia
 
 ![Counterfactual routing validation](figures/vital_routing_validation.png)
 
-### 12. Repair Logic Separates Pathogenicity, Evaluability, and Actionability
+### 13. Repair Logic Separates Pathogenicity, Evaluability, and Actionability
 
 The repair layer converts a nonpass route into an explicit next step rather than a vague warning.
 
@@ -319,6 +347,12 @@ This manuscript does not claim that arrhythmia genes are uniquely affected. Rath
 
 VITAL does not claim that nonpass variants are benign, incorrect, or clinically irrelevant. It claims that direct actionability cannot be inferred from the flattened label alone. A public pathogenicity label can remain true in its expert context while still being insufficient as a direct-actionability object in a flattened downstream workflow.
 
+### De Novo Status Supports a Model; It Does Not Replace One
+
+The Autopsy x de novo audit highlights a particularly sensitive failure mode of downstream label reuse. In negative-autopsy settings, phenotypic and structural anchors are absent, increasing the interpretive weight placed on genetic findings. De novo status can further amplify this effect by raising confidence in causal attribution. However, de novo occurrence is orthogonal to disease-model compatibility: it supports causality only when the asserted model remains coherent under population, mechanism, inheritance, and evaluability constraints.
+
+VITAL therefore treats de novo status as evidence within a model, not as a substitute for the model itself. A confirmed de novo variant routed to CHECK_MODEL, CHECK_POPMAX, EVAL_LIMITED, or MODEL_CONFLICT remains important, but it should not be promoted directly to cause-of-death explanation in a phenotype-null negative-autopsy context.
+
 ## Limitations
 
 First, all exome disease-model conclusions are restricted to the 334 Tier 1 variants with usable allele-resolved AF. The unevaluable majority cannot be assumed to follow the same regime structure. Because Tier 1 was enriched for SNVs and depleted of indels and duplications relative to Tier 2, direct extrapolation across variant classes would be inappropriate.
@@ -338,6 +372,8 @@ Seventh, the cancer predisposition sanity check uses MCAF thresholds calibrated 
 Eighth, most arrhythmia HGDP matches were achieved through position-overlap rather than strict allele-resolved matching. We therefore treat full matched-universe results as supplementary stress signals rather than primary burden estimates.
 
 Ninth, the current structural-variant layer is a blocking requirement rather than a fully deployed SV/CNV engine. Loci such as SMN1, STRC, and GJB6 require copy-state, paralog, haplotype, and phase-aware handling before direct portability can be granted.
+
+Tenth, the Autopsy x de novo audit is a simulation of candidate-variant interpretation, not an empirical sudden-death cohort. Its ground truth is generated from explicit mechanism, penetrance, inheritance, AF, and de novo assumptions. The purpose is to stress-test causal overextension under controlled assumptions, not to estimate real-world cause-of-death fractions.
 
 ## Governance Implications
 
@@ -369,7 +405,7 @@ Public pathogenicity labels therefore lose disease-model portability when downst
 
 The VITAL pipeline (Variant Interpretation Through Ancestry-aware Labeling) is available as an open-source computational tool in the project repository. In addition to generating the analytical outputs reported here, VITAL includes a minimal annotation layer for downstream reuse. The MVP annotator accepts VCF, CSV, or TSV inputs, supports lookup-based annotation, emits VITAL evaluability and disease-model flags, and can export an ANNOVAR-style table with Chr, Start, End, Ref, Alt, VITAL_evaluability, VITAL_flag, VITAL_regime, VITAL_popmax_af, VITAL_global_af, VITAL_threshold, and VITAL_reason.
 
-The tool is designed as a guardrail layer rather than a variant reclassification system: VITAL_OK does not mean benign, CHECK_POPMAX does not mean reclassification, and MODEL_CONFLICT indicates incompatibility with the tested unqualified dominant high-penetrance model. The repository also exposes the routing audit layer (python src/run_vital_routing_validation.py), the cached cohort-level CLI (python run_vital.py --mode full --genes "MYBPC3,MYH7" --pop gnomAD), and machine-readable repair/reason-code tables.
+The tool is designed as a guardrail layer rather than a variant reclassification system: VITAL_OK does not mean benign, CHECK_POPMAX does not mean reclassification, and MODEL_CONFLICT indicates incompatibility with the tested unqualified dominant high-penetrance model. The repository also exposes the routing audit layer (python src/run_vital_routing_validation.py), the Autopsy x de novo Counterfactual Decision Audit (python src/run_vital_autopsy_denovo_audit.py), the cached cohort-level CLI (python run_vital.py --mode full --genes "MYBPC3,MYH7" --pop gnomAD), and machine-readable repair/reason-code tables.
 
 ## Data Availability
 

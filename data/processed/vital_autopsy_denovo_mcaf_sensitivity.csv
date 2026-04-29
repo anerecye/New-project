@@ -1,0 +1,7 @@
+scope,strategy,causal_attributions,false_causal_attributions,false_causal_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors,mcaf_strict,mcaf_hard
+mcaf_strict_2p5e-5_hard_1e-4,label_driven_baseline,9331,8009,85.83217232879649,0,0,0,384,2.5e-05,0.0001
+mcaf_strict_2p5e-5_hard_1e-4,VITAL_routing,39,8,20.512820512820515,7701,835,8001,0,2.5e-05,0.0001
+mcaf_boundary_1e-4_hard_1e-3,label_driven_baseline,9274,7923,85.43239163252103,0,0,0,403,0.0001,0.001
+mcaf_boundary_1e-4_hard_1e-3,VITAL_routing,51,17,33.333333333333336,7932,415,7906,0,0.0001,0.001
+mcaf_permissive_1e-3_hard_1e-2,label_driven_baseline,9345,7960,85.17924023542001,0,0,0,400,0.001,0.01
+mcaf_permissive_1e-3_hard_1e-2,VITAL_routing,67,31,46.26865671641791,8190,0,7929,0,0.001,0.01

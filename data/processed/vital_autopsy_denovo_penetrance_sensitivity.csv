@@ -1,0 +1,9 @@
+scope,strategy,causal_attributions,false_causal_attributions,false_causal_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors,sensitivity
+penetrance_high,label_driven_baseline,9296,5805,62.44621342512909,0,0,0,282,high
+penetrance_high,VITAL_routing,30,2,6.666666666666667,7627,886,5803,0,high
+penetrance_moderate,label_driven_baseline,9334,7250,77.67302335547461,0,0,0,375,moderate
+penetrance_moderate,VITAL_routing,43,13,30.232558139534884,7698,884,7237,0,moderate
+penetrance_low,label_driven_baseline,9322,8822,94.63634413216047,0,0,0,424,low
+penetrance_low,VITAL_routing,36,29,80.55555555555556,7606,905,8793,0,low
+penetrance_mixed,label_driven_baseline,9314,7971,85.58084603822203,0,0,0,357,mixed
+penetrance_mixed,VITAL_routing,40,8,20.0,7633,840,7963,0,mixed

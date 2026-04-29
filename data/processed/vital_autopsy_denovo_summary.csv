@@ -1,0 +1,3 @@
+scope,strategy,causal_attributions,false_causal_attributions,false_causal_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors
+main_negative_autopsy,label_driven_baseline,9348,7975,85.31236628155756,0,0,0,371
+main_negative_autopsy,VITAL_routing,48,10,20.833333333333332,7623,899,7965,0

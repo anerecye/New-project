@@ -182,6 +182,45 @@ Headline cached metrics:
 - expert-curated evaluable hard-conflict rate: `4/73` (`5.5%`)
 - expert-curated evaluable review-level retention: `69/73` (`94.5%`)
 
+## Autopsy x de novo Counterfactual Audit
+
+The autopsy/de novo layer models phenotype-null negative-autopsy settings where
+genetic findings can become the main explanatory anchor.
+
+```bash
+python src/run_vital_autopsy_denovo_audit.py
+```
+
+The audit asks whether `P/LP + de novo` can be safely promoted to cause-of-death
+attribution without allele-level evaluability, ancestry-aware frequency, and
+disease-model checks. It treats de novo status as evidence within a coherent
+model, not as a substitute for the model.
+
+Headline cached outputs:
+
+- baseline false causal attributions: `7,975/9,348` causal attributions (`85.3%`)
+- VITAL false causal attributions: `10/48` supported causal attributions (`20.8%`)
+- prevented false attributions: `7,965`
+- confirmed de novo override errors under the label baseline: `371`
+- gold-standard GoF/DN dominant preservation: `42/42 VITAL_OK`, `0 MODEL_CONFLICT`
+
+Key outputs:
+
+- `data/processed/vital_autopsy_denovo_model_inputs.csv`
+- `data/processed/vital_autopsy_denovo_variant_design.csv`
+- `data/processed/vital_autopsy_denovo_case_calls.csv`
+- `data/processed/vital_autopsy_denovo_summary.csv`
+- `data/processed/vital_autopsy_denovo_by_denovo_status.csv`
+- `data/processed/vital_autopsy_denovo_by_mechanism.csv`
+- `data/processed/vital_autopsy_denovo_penetrance_sensitivity.csv`
+- `data/processed/vital_autopsy_denovo_denovo_rate_sensitivity.csv`
+- `data/processed/vital_autopsy_denovo_mcaf_sensitivity.csv`
+- `data/processed/vital_autopsy_denovo_gold_standard_preservation.csv`
+- `figures/vital_autopsy_denovo_decision_flow.png`
+- `figures/vital_autopsy_denovo_false_attribution.png`
+- `figures/vital_autopsy_denovo_override.png`
+- `figures/vital_autopsy_denovo_mechanism.png`
+
 ## Certification Fields
 
 Recommended reproducibility fields for downstream exports:
@@ -385,6 +424,27 @@ Key outputs:
 - `data/processed/vital_reason_code_definitions.csv`
 - `figures/vital_decision_disruption.png`
 - `figures/vital_routing_validation.png`
+
+### Autopsy x de novo Counterfactual Decision Audit
+
+This layer stress-tests negative-autopsy, phenotype-null interpretation. The
+label-driven baseline treats public `P/LP` in an arrhythmia gene as sufficient
+for probable genetic cause attribution and treats confirmed de novo status as
+high confidence. VITAL requires evaluability, popmax compatibility, mechanism
+coherence, and de novo compatibility before causal attribution is supported.
+
+```bash
+python src/run_vital_autopsy_denovo_audit.py
+```
+
+Primary endpoints:
+
+- false causal attribution
+- de novo override error
+- prevented false attribution
+- CHECK/DEFER burden
+- MODEL_CONFLICT routing
+- gold-standard dominant positive preservation
 
 ### Temporal Robustness
 

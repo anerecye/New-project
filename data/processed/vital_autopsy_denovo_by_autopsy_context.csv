@@ -1,0 +1,2 @@
+autopsy_context,case_count,baseline_causal_attributions,baseline_false_causal_attributions,baseline_false_causal_percent,vital_causal_attributions,vital_false_causal_attributions,vital_false_causal_percent,defer_percent,model_conflict_percent,prevented_false_attribution,de_novo_override_errors
+negative_autopsy_phenotype_null,10000,9348,7975,79.75,48,10,0.1,76.23,8.99,7965,371

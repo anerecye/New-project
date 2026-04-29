@@ -1,0 +1,9 @@
+scope,strategy,causal_attributions,false_causal_attributions,false_causal_attribution_rate,check_defer,model_conflict,prevented_false_attribution,de_novo_override_errors,confirmed_denovo_rate
+denovo_rate_0.001,label_driven_baseline,9331,8043,86.19654913728432,0,0,0,9,0.001
+denovo_rate_0.001,VITAL_routing,1,0,0.0,7647,906,8043,0,0.001
+denovo_rate_0.01,label_driven_baseline,9327,8008,85.85826096279618,0,0,0,89,0.01
+denovo_rate_0.01,VITAL_routing,7,4,57.142857142857146,7632,910,8004,0,0.01
+denovo_rate_0.05,label_driven_baseline,9316,7993,85.79862601975097,0,0,0,396,0.05
+denovo_rate_0.05,VITAL_routing,41,13,31.70731707317073,7631,883,7980,0,0.05
+denovo_rate_0.1,label_driven_baseline,9274,7916,85.35691179642009,0,0,0,788,0.1
+denovo_rate_0.1,VITAL_routing,74,16,21.62162162162162,7598,885,7900,0,0.1

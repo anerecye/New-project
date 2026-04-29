@@ -8,7 +8,15 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parent
+SRC_DIR = ROOT / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+from vital_standard import filter_standard_view, load_processed_prediction_tables, parse_gene_argument, summarize_standard_view
+
+
 DEFAULT_SCORES = ROOT / "data" / "processed" / "arrhythmia_vital_scores.csv"
+DEFAULT_CURATED = ROOT / "data" / "processed" / "vital_routing_validation_expert_concordance.csv"
 
 COMPONENTS = [
     ("AF pressure", "frequency_pressure_score", 45),
@@ -248,14 +256,117 @@ def batch_results(scores: pd.DataFrame, input_csv: Path) -> pd.DataFrame:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Fast offline cached-score demo for ClinVar VCV records.",
+        description="Offline VITAL demo plus full cached actionability-routing summaries.",
+    )
+    parser.add_argument(
+        "--mode",
+        choices=["demo", "full"],
+        default="demo",
+        help="Use demo for single-variant cached lookups or full for gene-set routing summaries.",
     )
     parser.add_argument("--vcv", help="ClinVar VCV ID, for example VCV000440850")
     parser.add_argument("--input", type=Path, help="CSV with a vcv/clinvar_id/variation_id column")
     parser.add_argument("--output", type=Path, help="Optional output CSV for batch mode")
+    parser.add_argument("--summary-output", type=Path, help="Optional summary CSV for --mode full")
     parser.add_argument("--scores", type=Path, default=DEFAULT_SCORES, help="Cached score CSV")
+    parser.add_argument("--genes", help="Comma-separated gene list for --mode full, for example MYBPC3,MYH7")
+    parser.add_argument("--pop", default="gnomAD", help="Population resource label to print in --mode full")
     parser.add_argument("--examples", action="store_true", help="Print demo VCV IDs")
     return parser.parse_args(argv)
+
+
+def fmt_pct(value: float) -> str:
+    return f"{100.0 * value:.1f}%"
+
+
+def load_curated_benchmark() -> str | None:
+    if not DEFAULT_CURATED.exists():
+        return None
+    curated = pd.read_csv(DEFAULT_CURATED)
+    evaluable = curated.loc[
+        curated["dataset"].eq("combined_expert_plp") & curated["route_group"].ne("NOT_EVALUABLE_NO_FREQUENCY_CLAIM")
+    ].copy()
+    if evaluable.empty:
+        return None
+    denominator = int(evaluable["count"].sum())
+    model_conflict = int(
+        evaluable.loc[evaluable["route_group"].eq("MODEL_CONFLICT_REVIEW"), "count"].sum()
+    )
+    ok_or_review = int(
+        evaluable.loc[evaluable["route_group"].isin(["VITAL_OK", "CONTROL_REVIEW_FLAG"]), "count"].sum()
+    )
+    return (
+        f"Combined expert-curated evaluable P/LP benchmark: {ok_or_review}/{denominator} "
+        f"({(100.0 * ok_or_review / denominator):.1f}%) remained VITAL_OK or review-level; "
+        f"MODEL_CONFLICT stayed at {model_conflict}/{denominator} "
+        f"({(100.0 * model_conflict / denominator):.1f}%)."
+    )
+
+
+def print_full_mode(summary: pd.DataFrame, variants: pd.DataFrame, genes: list[str], pop: str) -> None:
+    total_variants = len(variants)
+    pass_count = int(variants["VITAL_pass"].sum())
+    alert_count = int(variants["VITAL_alerted"].sum())
+    evaluation_limited = int(variants["VITAL_problem_evaluation"].sum())
+    popmax_review = int(variants["VITAL_problem_popmax"].sum())
+    model_conflict = int(variants["VITAL_problem_model"].sum())
+    recessive_route = int(variants["VITAL_problem_recessive"].sum())
+    sv_required = int(variants["VITAL_problem_sv"].sum())
+    domains = ", ".join(summary["domain"].dropna().astype(str).tolist())
+    selected = ", ".join(genes) if genes else "all cached meta-analysis genes"
+
+    print("=" * 72)
+    print("VITAL full actionability routing summary")
+    print("=" * 72)
+    print(f"Genes:                {selected}")
+    print(f"Population layer:     {pop} (cached processed outputs)")
+    print(f"Domains hit:          {domains}")
+    print(f"Baseline actionable:  {total_variants}")
+    print(f"VITAL_OK compatible:  {pass_count} ({fmt_pct(pass_count / total_variants) if total_variants else '0.0%'})")
+    print(f"Alerted / rerouted:   {alert_count} ({fmt_pct(alert_count / total_variants) if total_variants else '0.0%'})")
+    print()
+    print("Legacy export classes:")
+    for label in ["VITAL-1", "VITAL-ALERT", "VITAL-X", "VITAL-2", "VITAL-0"]:
+        count = int(variants["VITAL_certification"].eq(label).sum())
+        print(f"  {label:<12} {count:>6} ({fmt_pct(count / total_variants) if total_variants else '0.0%'})")
+    print()
+    print("Simulated CDS routing:")
+    print(f"  Evaluation-limiting alerts: {evaluation_limited}")
+    print(f"  Popmax-driven alerts:       {popmax_review}")
+    print(f"  Model-conflict alerts:      {model_conflict}")
+    print(f"  Recessive-route alerts:     {recessive_route}")
+    print(f"  SV/CNV-layer required:      {sv_required}")
+    benchmark = load_curated_benchmark()
+    if benchmark:
+        print()
+        print("Curated benchmark:")
+        print(f"  {benchmark}")
+    print()
+
+    top = variants.loc[variants["VITAL_alerted"]].copy()
+    if top.empty:
+        print("No alerts were generated in the selected cached cohort.")
+        return
+    sort_columns = [column for column in ["VITAL_problem_model", "VITAL_problem_recessive", "VITAL_problem_evaluation", "vital_score"] if column in top.columns]
+    ascending = [False, False, False, False][: len(sort_columns)]
+    top = top.sort_values(sort_columns, ascending=ascending).head(10)
+    display_columns = [
+        column
+        for column in [
+            "domain",
+            "gene",
+            "clinvar_id",
+            "VITAL_certification",
+            "VITAL_alert",
+            "global_af",
+            "popmax_af",
+            "vital_score",
+        ]
+        if column in top.columns
+    ]
+    print("Top alerted variants:")
+    print(top.loc[:, display_columns].to_string(index=False))
+    print("=" * 72)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -266,6 +377,27 @@ def main(argv: list[str] | None = None) -> int:
         print("  VCV000440850  SCN5A  RED anchor")
         print("  VCV001325231  TRDN   RED near-stable")
         print("  VCV004535537  KCNH2  RED borderline")
+        return 0
+
+    if args.mode == "full":
+        genes = parse_gene_argument(args.genes)
+        combined = load_processed_prediction_tables(include_auxiliary=False)
+        combined = combined.loc[combined["include_in_meta"]].copy()
+        variants = filter_standard_view(combined, genes)
+        if variants.empty:
+            query = ", ".join(genes) if genes else "selected cohort"
+            print(f"No cached variants found for: {query}")
+            return 2
+        summary = summarize_standard_view(variants)
+        print_full_mode(summary, variants, genes, args.pop)
+        if args.output:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            variants.to_csv(args.output, index=False)
+            print(f"\nSaved variant-level output: {args.output}")
+        if args.summary_output:
+            args.summary_output.parent.mkdir(parents=True, exist_ok=True)
+            summary.to_csv(args.summary_output, index=False)
+            print(f"Saved summary output: {args.summary_output}")
         return 0
 
     if not args.vcv and not args.input:

@@ -1,0 +1,19 @@
+metric,value,numerator,denominator,percent,note
+clinvar_plp_variants_in_vital_table,17.0,17,17,100.0,"All P/LP variants carried through the cached score table, including explicit no-frequency-evidence rows."
+exact_af_covered_clinvar_plp_variants,17.0,17,17,100.0,Variants with observed exact gnomAD AF used for continuous score-based prioritization.
+no_gnomad_frequency_evidence_variants,0.0,0,17,0.0,No AF imputation is applied; these variants retain NaN frequency fields and a gray no-frequency band.
+allele_discordance_no_exact_af_variants,0.0,0,17,0.0,ClinVar/gnomAD allele mismatch rows kept outside frequency scoring.
+gnomad_query_error_no_frequency_evidence_variants,0.0,0,17,0.0,Transient gnomAD query failures are flagged separately and kept outside frequency scoring.
+standard_popmax_or_global_af_gt_1e_5_flags,13.0,13,17,76.47058823529412,Naive frequency-only ACMG-style contradiction screen.
+standard_popmax_or_global_af_gt_1e_4_flags,9.0,9,17,52.94117647058823,High-frequency subset of the naive screen.
+global_af_gt_1e_5_flags,11.0,11,17,64.70588235294117,Flags found by global AF alone.
+popmax_af_gt_1e_5_flags,13.0,13,17,76.47058823529412,Flags found when population maximum AF is considered.
+global_af_gt_1e_4_flags,6.0,6,17,35.294117647058826,High-frequency flags found by global AF alone.
+popmax_af_gt_1e_4_flags,9.0,9,17,52.94117647058823,High-frequency flags found when population maximum AF is considered.
+ac_supported_frequency_flags,9.0,9,17,52.94117647058823,Frequency signal has AC >= 20 in global or popmax source.
+vital_red_reclassification_predictions,0.0,0,17,0.0,"Score >= 70, weak review, and AC-supported frequency signal."
+alert_reduction_vs_standard_frequency_screen_percent,100.0,0,13,100.0,Reduction in action-priority calls versus a naive AF > 1e-5 frequency screen.
+vital_band_blue_low_support_signal,4.0,4,17,23.529411764705884,Score band count.
+vital_band_green_frequency_consistent,4.0,4,17,23.529411764705884,Score band count.
+vital_band_orange_high_tension,8.0,8,17,47.05882352941177,Score band count.
+vital_band_yellow_watchlist,1.0,1,17,5.882352941176471,Score band count.

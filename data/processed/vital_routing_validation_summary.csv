@@ -1,0 +1,7 @@
+cohort,metric,numerator,denominator,percent,note
+arrhythmia_plp_all,routing_changed,1512,1731,87.34835355285962,Baseline ROUTE_PLP_ACTIONABLE rerouted by the VITAL layer.
+arrhythmia_plp_all,actionability_at_risk,1512,1731,87.34835355285962,Public P/LP variants that would be directly reused as actionable but are flagged or limited by VITAL.
+arrhythmia_plp_all,vital_ok,219,1731,12.651646447140381,No routing change under the routing-validation layer.
+arrhythmia_plp_all,evaluation_limiting,1397,1731,80.7047949162334,Evaluation-limiting
+arrhythmia_plp_all,risk_escalating,77,1731,4.448295782784518,Risk-escalating
+arrhythmia_plp_all,model_correcting,38,1731,2.19526285384171,Model-correcting

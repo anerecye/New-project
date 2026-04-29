@@ -1,0 +1,14 @@
+dataset,route_group,count,denominator,percent_of_dataset,tier1_evaluable_n,dataset_note
+arrhythmia_expert_plp,VITAL_OK,4,9,44.44444444444444,9,Expert-curated arrhythmia positive-control set.
+arrhythmia_expert_plp,CONTROL_REVIEW_FLAG,4,9,44.44444444444444,9,Expert-curated arrhythmia positive-control set.
+arrhythmia_expert_plp,MODEL_CONFLICT_REVIEW,1,9,11.11111111111111,9,Expert-curated arrhythmia positive-control set.
+external_expert_plp,VITAL_OK,25,204,12.254901960784315,64,Independent non-arrhythmia expert-panel stress set.
+external_expert_plp,CONTROL_REVIEW_FLAG,36,204,17.647058823529413,64,Independent non-arrhythmia expert-panel stress set.
+external_expert_plp,MODEL_CONFLICT_REVIEW,3,204,1.4705882352941178,64,Independent non-arrhythmia expert-panel stress set.
+external_expert_plp,NOT_EVALUABLE_NO_FREQUENCY_CLAIM,140,204,68.62745098039215,64,Independent non-arrhythmia expert-panel stress set.
+arrhythmia_blb_controls,CONTROL_REVIEW_FLAG,3,8,37.5,8,Benign/likely benign control layer for dominant-model compatibility.
+arrhythmia_blb_controls,MODEL_CONFLICT_CONTROL_FLAG,5,8,62.5,8,Benign/likely benign control layer for dominant-model compatibility.
+combined_expert_plp,VITAL_OK,29,213,13.615023474178404,73,Combined evaluability and concordance view across expert-curated P/LP positives.
+combined_expert_plp,CONTROL_REVIEW_FLAG,40,213,18.779342723004696,73,Combined evaluability and concordance view across expert-curated P/LP positives.
+combined_expert_plp,MODEL_CONFLICT_REVIEW,4,213,1.8779342723004695,73,Combined evaluability and concordance view across expert-curated P/LP positives.
+combined_expert_plp,NOT_EVALUABLE_NO_FREQUENCY_CLAIM,140,213,65.72769953051643,73,Combined evaluability and concordance view across expert-curated P/LP positives.

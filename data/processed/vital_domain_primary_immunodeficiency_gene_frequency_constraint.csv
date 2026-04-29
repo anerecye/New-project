@@ -1,0 +1,13 @@
+gene,clinvar_plp_variant_count,exact_af_covered_count,popmax_gt_1e_5_count,popmax_gt_1e_4_count,global_gt_1e_5_count,global_gt_1e_4_count,popmax_gt_1e_5_fraction,popmax_gt_1e_4_fraction,gene_frequency_constraint_proxy,gene_frequency_constraint_label
+CYBB,34,3,0,0,0,0,0.0,0.0,0.875,frequency_constrained
+FAS,16,2,0,0,0,0,0.0,0.0,0.8333333333333334,frequency_constrained
+IL2RG,26,2,0,0,0,0,0.0,0.0,0.8333333333333334,frequency_constrained
+NFKB1,18,2,0,0,0,0,0.0,0.0,0.8333333333333334,frequency_constrained
+WAS,25,2,0,0,0,0,0.0,0.0,0.8333333333333334,frequency_constrained
+STAT3,16,1,0,0,0,0,0.0,0.0,0.75,frequency_constrained
+BTK,48,3,1,0,0,0,0.3333333333333333,0.0,0.625,intermediate
+ADA,28,17,9,1,2,0,0.5294117647058824,0.058823529411764705,0.4722222222222222,intermediate
+RAG1,27,15,10,1,1,0,0.6666666666666666,0.06666666666666667,0.34375,permissive_or_founder_prone
+UNC13D,30,14,10,3,4,0,0.7142857142857143,0.21428571428571427,0.3,permissive_or_founder_prone
+RAG2,15,8,6,0,1,0,0.75,0.0,0.2777777777777778,permissive_or_founder_prone
+DOCK8,17,5,5,1,1,0,1.0,0.2,0.08333333333333333,permissive_or_founder_prone

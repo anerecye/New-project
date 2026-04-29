@@ -1,0 +1,3 @@
+variant_type,clinvar_plp_variant_count,exact_match_count,allele_discordance_count,no_gnomad_record_count,non_overlap_count,exact_match_fraction,non_overlap_fraction,technical_detectability_prior,technical_detectability_index
+SNV,16,16,0,0,0,1.0,0.0,0.95,0.96
+duplication,1,1,0,0,0,1.0,0.0,0.45,0.56

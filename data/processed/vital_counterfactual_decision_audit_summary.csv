@@ -1,0 +1,21 @@
+scope,metric,numerator,denominator,percent,note
+all_baseline_actionable,incorrectly_escalated_without_vital,1512,1731,87.34835355285962,Formal counterfactual decision audit across the full ClinVar-driven actionable baseline.
+all_baseline_actionable,sustained_action_after_vital,219,1731,12.651646447140381,Baseline-actionable decisions preserved after VITAL.
+all_baseline_actionable,unjustified_action_evaluation_limiting,1397,1731,80.7047949162334,Counterfactual audit subtype.
+all_baseline_actionable,unjustified_action_risk_escalating,77,1731,4.448295782784518,Counterfactual audit subtype.
+all_baseline_actionable,unjustified_action_model_correcting,38,1731,2.19526285384171,Counterfactual audit subtype.
+tier1_evaluable_baseline_actionable,incorrectly_escalated_without_vital,115,334,34.4311377245509,Restricted to variants with allele-resolved AF available.
+tier1_evaluable_baseline_actionable,sustained_action_after_vital,219,334,65.5688622754491,Baseline-actionable decisions preserved after VITAL.
+tier1_evaluable_baseline_actionable,unjustified_action_evaluation_limiting,0,334,0.0,Counterfactual audit subtype.
+tier1_evaluable_baseline_actionable,unjustified_action_risk_escalating,77,334,23.05389221556886,Counterfactual audit subtype.
+tier1_evaluable_baseline_actionable,unjustified_action_model_correcting,38,334,11.377245508982035,Counterfactual audit subtype.
+high_review_baseline_actionable,incorrectly_escalated_without_vital,309,365,84.65753424657534,Restricted to ClinVar review score >= 2.
+high_review_baseline_actionable,sustained_action_after_vital,56,365,15.342465753424657,Baseline-actionable decisions preserved after VITAL.
+high_review_baseline_actionable,unjustified_action_evaluation_limiting,256,365,70.13698630136986,Counterfactual audit subtype.
+high_review_baseline_actionable,unjustified_action_risk_escalating,33,365,9.04109589041096,Counterfactual audit subtype.
+high_review_baseline_actionable,unjustified_action_model_correcting,20,365,5.47945205479452,Counterfactual audit subtype.
+high_review_tier1_evaluable,incorrectly_escalated_without_vital,53,109,48.62385321100918,High-review subset with allele-resolved AF available.
+high_review_tier1_evaluable,sustained_action_after_vital,56,109,51.37614678899082,Baseline-actionable decisions preserved after VITAL.
+high_review_tier1_evaluable,unjustified_action_evaluation_limiting,0,109,0.0,Counterfactual audit subtype.
+high_review_tier1_evaluable,unjustified_action_risk_escalating,33,109,30.275229357798164,Counterfactual audit subtype.
+high_review_tier1_evaluable,unjustified_action_model_correcting,20,109,18.34862385321101,Counterfactual audit subtype.

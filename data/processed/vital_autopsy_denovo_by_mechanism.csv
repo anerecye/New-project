@@ -1,0 +1,5 @@
+mechanism_class,case_count,baseline_causal_attributions,baseline_false_causal_attributions,baseline_false_causal_percent,vital_causal_attributions,vital_false_causal_attributions,vital_false_causal_percent,defer_percent,model_conflict_percent,prevented_false_attribution,de_novo_override_errors
+AR,848,770,749,88.3254716981132,0,0,0.0,74.52830188679245,16.27358490566038,749,29
+GoF_DN,2001,1782,1167,58.32083958020989,27,0,0.0,54.772613693153424,14.492753623188406,1167,53
+HI,2709,2601,1970,72.72056109265412,21,10,0.36913990402362495,74.71391657438168,5.426356589147287,1960,92
+MIXED,4442,4195,4089,92.05312922107159,0,0,0.0,87.14542998649257,7.294011706438541,4089,197

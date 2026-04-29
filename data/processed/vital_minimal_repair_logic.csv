@@ -1,0 +1,7 @@
+VITAL_route,meaning,recommended_next_step
+VITAL_OK,Label remains compatible with the tested actionability model.,Proceed with standard expert interpretation.
+CHECK_POPMAX,"Label may remain valid, but direct actionability requires ancestry-aware frequency review.",Perform ancestry-aware review and penetrance/model reassessment.
+CHECK_MODEL,"Label may remain valid, but inheritance, phase, or mechanism is not portable from the flattened label.",Specify inheritance/mechanism before action; use model-specific routing.
+MODEL_CONFLICT,Flattened P/LP label is incompatible with the tested dominant high-penetrance disease model.,Do not use the flattened P/LP label as a dominant-actionability claim.
+EVAL_LIMITED,No allele-resolved evaluability; direct actionability cannot be justified from population evidence.,"Defer direct actionability; require representation, callability, or orthogonal evidence."
+RECESSIVE_COMPATIBLE,Dominant model unsupported but carrier or recessive model may remain coherent.,Specify inheritance and phase before routing clinical actionability.

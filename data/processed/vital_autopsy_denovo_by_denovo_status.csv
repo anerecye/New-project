@@ -1,0 +1,5 @@
+de_novo_status,case_count,baseline_high_confidence_causal,VITAL_supported,VITAL_check_defer,VITAL_blocked_model_conflict,de_novo_override_error,de_novo_override_model_error
+absent,8175,0,0,6259,731,0,0
+assumed,334,0,0,255,26,0,0
+confirmed,486,456,48,361,47,371,250
+unknown,1005,0,0,748,95,0,0

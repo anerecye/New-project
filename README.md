@@ -1,48 +1,84 @@
-# ClinVar Arrhythmia Evaluability Audit
+# VITAL Actionability Routing Audit
 
-This repository studies how public ClinVar pathogenic and likely pathogenic
-(P/LP) assertions behave when they are re-used outside their original submission
-context. The current framing centers two questions:
+VITAL is a post-classification actionability routing layer for public
+pathogenic and likely pathogenic (`P/LP`) variant labels.
 
-1. For how many public arrhythmia assertions can allele-resolved population
-   constraint actually be recovered?
-2. When that constraint is available, what disease-model heterogeneity becomes
-   visible beneath a shared public P/LP label?
+Public P/LP labels are often reused as actionability proxies, but they are not
+portable actionability units. VITAL tests whether a flattened public label can
+survive minimal population, mechanism, inheritance, and evaluability
+constraints before downstream systems treat it as direct-actionable.
 
-The main manuscript now argues that a public pathogenic label is not, by itself,
-a portable disease state. In this project, ancestry-aware population frequency,
-allele-resolved evaluability, and mechanism reveal hidden interpretation
-regimes beneath the same exported label.
+Core chain:
 
-Technical filenames, script names, and data columns still retain the historical
-`vital_` prefix for compatibility with cached outputs and prior runs. The
-user-facing documentation below follows the newer evaluability and
-frequency-tension framing.
+`label -> baseline actionability -> VITAL constraint -> rerouting -> explicit review route`
+
+## What VITAL Does
+
+- Treats public `P/LP` as a trigger for routing, not as a direct-actionability certificate.
+- Applies allele-resolved evaluability, ancestry-aware frequency, and disease-model constraints.
+- Converts a label-driven baseline into reviewable routing categories.
+- Separates pathogenicity classification from downstream actionability.
+
+## What VITAL Does Not Do
+
+VITAL is not a variant classifier.
+
+VITAL does not claim that nonpass variants are benign, incorrect, or clinically
+irrelevant. A nonpass route means that direct actionability cannot be inferred
+from the flattened label alone.
+
+VITAL is not a patient-outcome or malpractice detector. The repository audits
+variant-level routing logic, not realized clinical harm.
+
+## Routing Categories
+
+| Route | Meaning | Operational output |
+| --- | --- | --- |
+| `VITAL_OK` | Label remains compatible with the tested actionability model. | Proceed with standard expert interpretation. |
+| `CHECK_POPMAX` | Label may remain valid, but direct actionability requires ancestry-aware frequency review. | Review. |
+| `CHECK_MODEL` | Label may remain valid, but inheritance, phase, or mechanism is not portable from the flattened label. | Model-specific routing or model repair. |
+| `MODEL_CONFLICT` | Flattened P/LP label is incompatible with the tested dominant high-penetrance model. | Do not direct-route as dominant actionability. |
+| `EVAL_LIMITED` | No allele-resolved evaluability; direct actionability cannot be justified from population evidence. | Defer direct actionability until representation/callability/evidence is repaired. |
+
+Legacy export states remain available for compatibility:
+
+- `VITAL-1`: allele-resolved, popmax-compatible, model-defined
+- `VITAL-2`: locus-level or representation-limited
+- `VITAL-X`: recessive or phase-defined route
+- `VITAL-ALERT`: allele-resolved but blocked by population/model tension
+- `VITAL-0`: representation or normalization unresolved
 
 ## Key Result
 
-Across 1,731 ClinVar P/LP variants in 20 inherited arrhythmia genes, only
-357 variants (20.6%) achieved allele-resolved population context after strict
-matching, trim-aware reconciliation, decomposition-aware reconciliation, and
-reference-based normalization with `bcftools norm`. The remaining
-1,326 variants (76.6%) retained only locus- or region-level context without
-allele-resolved AF, and 48 (2.8%) remained unevaluable.
+Across six disease domains, the mean VITAL nonpass rate is `87.7%`: most
+label-driven actionability decisions require rerouting once minimal constraints
+are restored.
 
-Within the Tier 1 subset with usable AF data (`n = 334`), global AF alone
-flagged 13 variants above the `1e-5` review threshold, whereas a
-global-or-popmax screen flagged 115. Global-only review therefore missed
-102 of 115 ancestry-aware frequency alerts (88.7%).
+This is a portability/routing burden, not an evidence-conflict rate. In the
+arrhythmia cohort, most nonpass routes are `EVAL_LIMITED` deferrals caused by
+missing allele-level evaluability; the smaller CHECK/MODEL_CONFLICT components
+represent frequency tension or disease-model repair.
 
-Those 115 frequency-tension variants resolved into three distinct regimes:
+In the inherited-arrhythmia cohort:
 
-- `1` hard incompatibility with an unqualified dominant high-penetrance reading
-- `76` boundary or monitored-interpretation cases
-- `38` recessive or carrier-compatible cases
+- `1,512/1,731` public P/LP labels (`87.3%`) leave the direct-actionable baseline.
+- `1,397/1,731` (`80.7%`) are evaluation-limited.
+- `77/1,731` (`4.4%`) require population/frequency review.
+- `38/1,731` (`2.2%`) require model-specific rerouting.
+- In the high-review subset, `309/365` (`84.7%`) still leave the direct-actionable baseline.
+- Mechanism-stratified decomposition results are conditional on the `334`
+  usable-AF variants; the non-evaluable majority is treated as an evaluability
+  and transportability boundary, not as missing-at-random.
+
+This effect is not driven by low-confidence submissions alone: in the
+high-review subset, `309/365` (`84.7%`) still leave the direct-actionable
+baseline.
 
 ## Repository Structure
 
 - `src/`: analysis and data-preparation scripts
 - `notebooks/`: quick Colab demo notebook
+- `examples/`: tiny end-to-end VCF and annotation examples
 - `data/processed/`: cached CSV/TSV outputs used by the analyses
 - `data/examples/`: tiny demo CSVs for the cached quick runner
 - `figures/`: PNG figures generated from processed outputs
@@ -67,6 +103,252 @@ The notebook has three paths:
 
 The quick demo uses cached score tables and makes no ClinVar or gnomAD API
 calls.
+
+## Full Gene-Set CLI
+
+For cohort-level routing summaries, use the cached full mode:
+
+```bash
+python run_vital.py --mode full --genes "MYBPC3,MYH7" --pop gnomAD
+```
+
+This returns:
+
+- baseline actionable cohort size
+- `VITAL-1` / `VITAL_OK` compatible count and rate
+- total alert/reroute burden
+- alert subtypes (`evaluation-limiting`, `VITAL-ALERT`, `VITAL-X`, `SV/CNV-required`)
+- top alerted variants
+
+Optional outputs:
+
+```bash
+python run_vital.py --mode full --genes "MYBPC3,MYH7" --pop gnomAD \
+  --output examples/mybpc3_myh7_variants.csv \
+  --summary-output examples/mybpc3_myh7_summary.csv
+```
+
+For the cross-domain meta-summary and gene-level intersection plot:
+
+```bash
+python src/run_vital_standard_meta_analysis.py
+```
+
+Key outputs:
+
+- `data/processed/vital_standard_meta_summary.csv`
+- `data/processed/vital_standard_meta_overall.csv`
+- `data/processed/vital_standard_gene_problem_matrix.csv`
+- `data/processed/vital_standard_gene_problem_intersections.csv`
+- `figures/vital_standard_gene_problem_upset.png`
+
+## Baseline And Routing Audit
+
+The formal routing audit is the manuscript-facing layer:
+
+```bash
+python src/run_vital_routing_validation.py
+```
+
+Key outputs:
+
+- `data/processed/vital_formal_baseline_decision_model.csv`
+- `data/processed/vital_routing_validation_calls.csv`
+- `data/processed/vital_counterfactual_decision_audit_summary.csv`
+- `data/processed/vital_simulated_cds_alert_summary.csv`
+- `data/processed/vital_actionability_discordance_audit.csv`
+- `data/processed/vital_minimal_repair_logic.csv`
+- `data/processed/vital_reason_code_definitions.csv`
+- `figures/vital_decision_disruption.png`
+- `figures/vital_routing_validation.png`
+
+Baseline rules:
+
+| Rule | Meaning |
+| --- | --- |
+| `B1_LABEL_DRIVEN_BASELINE` | Public P/LP may be reused as direct-actionable unless additional context is encoded. |
+| `B2_ACTIONABILITY_CONTEXT_BASELINE` | If P/LP appears in an action-linked gene/context, the baseline route is direct-actionable. |
+| `B3_NO_IMPLIED_BENIGNITY` | Absence of `VITAL_OK` does not imply benignity. It means direct actionability is unsupported by the flattened label alone. |
+
+## Simulated CDS Alert Layer
+
+The simulated clinical decision-support layer converts VITAL routes into alert
+classes:
+
+| Alert | VITAL routes | Message |
+| --- | --- | --- |
+| `YELLOW` | `CHECK_POPMAX`, `CHECK_MODEL` | Actionability requires population/mechanism review. |
+| `ORANGE` | `EVAL_LIMITED` | Allele-resolved population evidence unavailable; do not infer population compatibility. |
+| `RED` | `MODEL_CONFLICT` | Dominant high-penetrance model incompatible under current constraints. |
+
+Headline cached metrics:
+
+- all arrhythmia P/LP alert rate: `1512/1731` (`87.3%`)
+- high-review arrhythmia P/LP alert rate: `309/365` (`84.7%`)
+
+## Autopsy x de novo Counterfactual Audit
+
+The autopsy/de novo layer models phenotype-null negative-autopsy settings where
+genetic findings can become the main explanatory anchor.
+
+```bash
+python src/run_vital_autopsy_denovo_audit.py
+```
+
+The audit asks whether `P/LP + de novo` can be safely promoted to cause-of-death
+attribution without allele-level evaluability, ancestry-aware frequency, and
+disease-model checks. It treats de novo status as evidence within a coherent
+model, not as a substitute for the model.
+
+Headline cached outputs:
+
+- baseline false causal attributions: `7,975/9,348` causal attributions (`85.3%`)
+- baseline per-case false attribution rate: `7,975/10,000` cases (`79.8%`)
+- baseline per-evaluable-case false attribution rate: `2,540/3,648` evaluable cases (`69.6%`)
+- VITAL false causal attributions: `10/48` supported causal attributions (`20.8%`)
+- VITAL per-case false attribution rate: `10/10,000` cases (`0.1%`)
+- VITAL per-evaluable-case false attribution rate: `10/3,648` evaluable cases (`0.27%`)
+- prevented false attributions: `7,965`
+- VITAL route burden across all cases: `EVAL_LIMITED 61.9%`, `CHECK_MODEL 9.5%`, `CHECK_POPMAX 4.8%`, `MODEL_CONFLICT 9.0%`
+- VITAL route burden among evaluable cases: `EVAL_LIMITED 0.0%`, `CHECK_MODEL 26.1%`, `CHECK_POPMAX 13.1%`, `MODEL_CONFLICT 24.6%`
+- confirmed de novo override errors under the label baseline: `371`
+
+Key outputs:
+
+- `data/processed/vital_autopsy_denovo_model_inputs.csv`
+- `data/processed/vital_autopsy_denovo_variant_design.csv`
+- `data/processed/vital_autopsy_denovo_case_calls.csv`
+- `data/processed/vital_autopsy_denovo_summary.csv`
+- `data/processed/vital_autopsy_denovo_false_attribution_rates.csv`
+- `data/processed/vital_autopsy_denovo_by_denovo_status.csv`
+- `data/processed/vital_autopsy_denovo_by_mechanism.csv`
+- `data/processed/vital_autopsy_denovo_penetrance_sensitivity.csv`
+- `data/processed/vital_autopsy_denovo_denovo_rate_sensitivity.csv`
+- `data/processed/vital_autopsy_denovo_mcaf_sensitivity.csv`
+- `data/processed/vital_autopsy_denovo_gold_standard_preservation.csv`
+- `figures/vital_autopsy_denovo_audit_panel.png`
+
+Figure 5. Autopsy x de novo audit: routing and error control. We simulate phenotype-null autopsy scenarios to test how label-driven attribution behaves under de novo reinforcement and how VITAL reroutes unsupported causal claims.
+
+## Certification Fields
+
+Recommended reproducibility fields for downstream exports:
+
+- source database
+- source version/date
+- variant normalization status
+- genome build
+- evaluability tier
+- population frequency source
+- popmax source
+- actionability domain
+- disease model tested
+- inheritance model tested
+- mechanism class
+- review status
+- routing output
+- reason code
+
+Machine-readable reason codes:
+
+- `EVAL_NO_ALLELE_MATCH`
+- `EVAL_LOCI_ONLY`
+- `POPMAX_EXCEEDS_MCAF`
+- `RECESSIVE_COMPATIBLE_NOT_DOMINANT`
+- `EXPERT_REVIEW_RETAINED`
+- `MODEL_CONFLICT_DOMINANT_HP`
+- `CHECK_LOW_COUNT`
+- `CHECK_MECHANISM_AMBIGUOUS`
+
+## VITAL Annotation MVP
+
+This repository now includes a compact annotation export layer for downstream
+VCF or variant-table pipelines. It converts the cached VITAL outputs into
+machine-readable variant-level columns:
+
+- `VITAL_certification`
+- `VITAL_alert`
+- `VITAL_public_use`
+- `VITAL_sv_required`
+- `VITAL_flag`
+- `VITAL_evaluability`
+- `VITAL_regime`
+- `VITAL_action`
+- `VITAL_reason`
+- `VITAL_threshold`
+
+The MVP is intentionally narrow:
+
+- only popmax/global frequency tension is used
+- routing/certification is emitted explicitly instead of collapsing everything into one pass/fail flag
+- Tier 2 and still-unevaluable variants are separated via `VITAL_evaluability`
+  and `VITAL_certification` instead of being over-called
+
+This is actionability routing, not clinical reclassification.
+
+**`VITAL_OK` does not mean clinically benign.** It means: no
+population-frequency conflict detected under the current MVP threshold/model in
+usable allele-resolved space.
+
+**`CHECK_POPMAX` does not mean reclassification.** It means:
+ancestry-aware AF exceeds the review trigger and requires model-specific
+interpretation.
+
+**`MODEL_CONFLICT` means:** observed AF is incompatible with the tested
+unqualified dominant high-penetrance model.
+
+**Required precondition:** input variants must be normalized to `GRCh38` with
+`bcftools norm` before VITAL lookup. Non-normalized input may produce false
+non-matches.
+
+Build the lookup tables once:
+
+```bash
+python src/run_vital_annotation_mvp.py
+```
+
+This writes:
+
+- `data/processed/arrhythmia_vital_mvp_lookup.tsv`
+- `data/processed/arrhythmia_vital_mvp_annovar.tsv`
+
+The normalized lookup table uses `chr / pos / ref / alt`. The ANNOVAR-style
+table uses:
+
+`Chr Start End Ref Alt VITAL_evaluability VITAL_flag VITAL_regime VITAL_certification VITAL_alert VITAL_public_use VITAL_sv_required VITAL_popmax_af VITAL_global_af VITAL_threshold VITAL_reason`
+
+Normalize the input VCF before lookup:
+
+```bash
+bcftools norm -f GRCh38.fa -m -both input.vcf.gz -Oz -o input.norm.vcf.gz
+```
+
+Then annotate the normalized VCF:
+
+```bash
+python src/run_vital_annotation_mvp.py \
+  --input examples/input.example.vcf \
+  --lookup data/processed/arrhythmia_vital_mvp_lookup.tsv \
+  --output examples/output.vital.tsv \
+  --annovar-export-output examples/annovar_export.hg38_vital.txt
+```
+
+Repository examples:
+
+- `examples/input.example.vcf`
+- `examples/output.vital.tsv`
+- `examples/annovar_export.hg38_vital.txt`
+
+Expected output:
+
+| VITAL_evaluability | VITAL_flag | VITAL_regime | VITAL_reason | Meaning |
+| --- | --- | --- | --- | --- |
+| `TIER_1` | `OK` | `OK` | `EXPERT_REVIEW_RETAINED` | usable allele-resolved AF was found and did not cross the MVP review trigger |
+| `TIER_1` | `CHECK_POPMAX` | `BOUNDARY` | `POPMAX_EXCEEDS_MCAF` | ancestry-aware AF crossed the review trigger and needs model-specific review |
+| `TIER_1` | `CHECK_POPMAX` | `BOUNDARY` | `RECESSIVE_COMPATIBLE_NOT_DOMINANT` | dominant actionability is unsupported, but recessive/carrier logic may remain coherent |
+| `TIER_1` | `MODEL_CONFLICT` | `DOMINANT_INCOMPATIBLE` | `MODEL_CONFLICT_DOMINANT_HP` | observed AF is incompatible with the tested unqualified dominant high-penetrance model |
+| `TIER_2` | `.` | `.` | `EVAL_LOCI_ONLY` | locus or representation context exists, but usable allele-resolved AF does not |
+| `UNEVALUABLE` | `.` | `.` | `EVAL_NO_ALLELE_MATCH` | no reliable normalized allele-resolved lookup result was available |
 
 ## Main Analyses
 
@@ -124,6 +406,56 @@ of future reclassification.
 python src/run_vital_real_reclassification_audit.py
 ```
 
+### Routing And Clinical Decision Layer
+
+This layer reframes VITAL as a downstream actionability router rather than a
+standalone reclassification engine. It compares a ClinVar-only
+`ROUTE_PLP_ACTIONABLE` baseline against VITAL constraint routes, quantifies
+`actionability at risk`, formalizes the baseline decision model, runs a
+counterfactual decision audit, summarizes burden by workflow context, and checks
+representative case vignettes.
+
+```bash
+python src/run_vital_routing_validation.py
+```
+
+Key outputs:
+
+- `data/processed/vital_formal_baseline_decision_model.csv`
+- `data/processed/vital_counterfactual_decision_audit_summary.csv`
+- `data/processed/vital_routing_validation_summary.csv`
+- `data/processed/vital_routing_validation_context_summary.csv`
+- `data/processed/vital_routing_validation_expert_concordance.csv`
+- `data/processed/vital_routing_validation_case_vignettes.csv`
+- `data/processed/vital_actionability_discordance_audit.csv`
+- `data/processed/vital_simulated_cds_alert_summary.csv`
+- `data/processed/vital_minimal_repair_logic.csv`
+- `data/processed/vital_reason_code_definitions.csv`
+- `figures/vital_decision_disruption.png`
+- `figures/vital_routing_validation.png`
+
+### Autopsy x de novo Counterfactual Decision Audit
+
+This layer stress-tests negative-autopsy, phenotype-null interpretation. The
+label-driven baseline treats public `P/LP` in an arrhythmia gene as sufficient
+for probable genetic cause attribution and treats confirmed de novo status as
+high confidence. VITAL requires evaluability, popmax compatibility, mechanism
+coherence, and de novo compatibility before causal attribution is supported.
+
+```bash
+python src/run_vital_autopsy_denovo_audit.py
+```
+
+Primary endpoints:
+
+- false causal attribution
+- de novo override error
+- prevented false attribution
+- CHECK/DEFER burden
+- MODEL_CONFLICT routing
+
+The four visual endpoints are reported as one panel figure: `figures/vital_autopsy_denovo_audit_panel.png`.
+
 ### Temporal Robustness
 
 The temporal analysis rescored archived ClinVar snapshots for January 2023,
@@ -171,7 +503,7 @@ Current cached outputs:
 - locus/regional context without exact/equivalent AF: `1,326 / 1,731` (`76.6%`)
 - still unevaluable after both passes: `48 / 1,731` (`2.8%`)
 
-Tier 2 is not random residue:
+Tier 2 is not missing-at-random:
 
 - same-locus allele discordance: `638 / 1,326` (`48.1%`)
 - no same-locus record, regional-only context: `688 / 1,326` (`51.9%`)
@@ -225,7 +557,7 @@ Headline outputs:
 
 ### Frequency Constraint and Maximum Credible AF
 
-This layer formalizes the “too common for high-penetrance Mendelian disease”
+This layer formalizes the "too common for high-penetrance Mendelian disease"
 argument using maximum credible allele frequency, disease-prevalence logic,
 Bayesian ACMG-style odds, recessive carrier logic, and allele-count reliability.
 

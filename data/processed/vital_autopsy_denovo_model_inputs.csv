@@ -1,0 +1,15 @@
+gene,mechanism_class,inheritance_model,ClinGen_validity_gene_level,expected_VITAL_behavior
+RYR2,GoF_DN,autosomal_dominant,strong_or_definitive,VITAL_OK when allele-resolved and AF-compatible; de novo supports only coherent dominant model.
+CASQ2,AR,autosomal_recessive,strong_or_definitive,CHECK_MODEL for heterozygous carrier state under a flattened dominant baseline.
+TRDN,AR,autosomal_recessive,strong_or_definitive,CHECK_MODEL for heterozygous carrier state under a flattened dominant baseline.
+KCNQ1,MIXED,mixed_context_dependent,strong_or_definitive,CHECK_MODEL unless phenotype/mechanism specifies the asserted disease model.
+KCNH2,HI,autosomal_dominant,strong_or_definitive,CHECK_POPMAX or VITAL_OK depending on penetrance and AF; de novo does not override high AF.
+SCN5A,MIXED,mixed_context_dependent,strong_or_definitive,CHECK_MODEL unless phenotype/mechanism specifies the asserted disease model.
+CALM1,GoF_DN,autosomal_dominant,strong_or_definitive,VITAL_OK when allele-resolved and AF-compatible; de novo supports only coherent dominant model.
+CALM2,GoF_DN,autosomal_dominant,strong_or_definitive,VITAL_OK when allele-resolved and AF-compatible; de novo supports only coherent dominant model.
+CALM3,GoF_DN,autosomal_dominant,strong_or_definitive,VITAL_OK when allele-resolved and AF-compatible; de novo supports only coherent dominant model.
+ANK2,HI,autosomal_dominant,moderate_or_disputed_context,CHECK_POPMAX or VITAL_OK depending on penetrance and AF; de novo does not override high AF.
+KCNE1,MIXED,mixed_context_dependent,moderate_or_disputed_context,CHECK_MODEL unless phenotype/mechanism specifies the asserted disease model.
+KCNE2,MIXED,mixed_context_dependent,limited_or_unknown,CHECK_MODEL unless phenotype/mechanism specifies the asserted disease model.
+KCNJ2,GoF_DN,autosomal_dominant,moderate_or_disputed_context,VITAL_OK when allele-resolved and AF-compatible; de novo supports only coherent dominant model.
+CACNA1C,MIXED,mixed_context_dependent,moderate_or_disputed_context,CHECK_MODEL unless phenotype/mechanism specifies the asserted disease model.

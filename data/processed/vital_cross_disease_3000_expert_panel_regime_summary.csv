@@ -1,0 +1,2 @@
+group,n_total,n_tier1,n_tier2,n_unevaluable,ok_count,check_popmax_count,model_conflict_count,ok_percent_of_tier1,check_popmax_percent_of_tier1,model_conflict_percent_of_tier1
+cross_disease_expert_panel_P_LP,204,64,0,140,25,36,3,39.0625,56.25,4.6875

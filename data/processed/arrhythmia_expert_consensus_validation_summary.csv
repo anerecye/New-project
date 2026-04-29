@@ -1,0 +1,4 @@
+group,n_total,n_tier1,n_tier2,n_unevaluable,ok_count,check_popmax_count,model_conflict_count,ok_percent_of_tier1,check_popmax_percent_of_tier1,model_conflict_percent_of_tier1,interpretation
+expert_curated_P_LP,9,9,0,0,4,4,1,44.44444444444444,44.44444444444444,11.11111111111111,"Positive-control comparator. MODEL_CONFLICT here means incompatibility with the tested unqualified dominant high-penetrance model, not automatic disagreement with expert curation."
+expert_curated_B_LB,8,8,0,0,0,3,5,0.0,37.5,62.5,Negative-control comparator. False positive concern is whether benign expert-curated records are spuriously routed into MODEL_CONFLICT in exact usable AF space.
+all_expert_curated_arrhythmia,17,17,0,0,4,7,6,23.529411764705884,41.1764705882353,35.294117647058826,Combined expert-curated arrhythmia subset.

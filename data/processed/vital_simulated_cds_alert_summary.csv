@@ -1,0 +1,51 @@
+scope,metric,numerator,denominator,percent,note
+all_arrhythmia_p_lp,alert_rate,1512,1731,87.34835355285962,Simulated clinical decision-support layer across all baseline direct-actionable arrhythmia P/LP labels.
+all_arrhythmia_p_lp,yellow_alert_rate,114,1731,6.58578856152513,Yellow alert: actionability requires population/mechanism review
+all_arrhythmia_p_lp,orange_alert_rate,1397,1731,80.7047949162334,Orange alert: allele-resolved population evidence unavailable
+all_arrhythmia_p_lp,red_alert_rate,1,1731,0.057770075101097634,Red alert: dominant high-penetrance model incompatible
+all_arrhythmia_p_lp,check_popmax_rate,76,1731,4.39052570768342,CHECK_POPMAX
+all_arrhythmia_p_lp,check_model_rate,38,1731,2.19526285384171,CHECK_MODEL
+all_arrhythmia_p_lp,model_conflict_rate,1,1731,0.057770075101097634,MODEL_CONFLICT
+all_arrhythmia_p_lp,eval_limited_rate,1397,1731,80.7047949162334,EVAL_LIMITED
+high_review_arrhythmia_p_lp,alert_rate,309,365,84.65753424657534,Restricted to ClinVar review score >= 2.
+high_review_arrhythmia_p_lp,yellow_alert_rate,53,365,14.520547945205479,Yellow alert: actionability requires population/mechanism review
+high_review_arrhythmia_p_lp,orange_alert_rate,256,365,70.13698630136986,Orange alert: allele-resolved population evidence unavailable
+high_review_arrhythmia_p_lp,red_alert_rate,0,365,0.0,Red alert: dominant high-penetrance model incompatible
+high_review_arrhythmia_p_lp,check_popmax_rate,33,365,9.04109589041096,CHECK_POPMAX
+high_review_arrhythmia_p_lp,check_model_rate,20,365,5.47945205479452,CHECK_MODEL
+high_review_arrhythmia_p_lp,model_conflict_rate,0,365,0.0,MODEL_CONFLICT
+high_review_arrhythmia_p_lp,eval_limited_rate,256,365,70.13698630136986,EVAL_LIMITED
+context_cascade_testing,alert_rate,1384,1585,87.3186119873817,Domain-specific alert burden for cascade_testing.
+context_cascade_testing,yellow_alert_rate,102,1585,6.435331230283912,Yellow alert: actionability requires population/mechanism review
+context_cascade_testing,orange_alert_rate,1281,1585,80.82018927444796,Orange alert: allele-resolved population evidence unavailable
+context_cascade_testing,red_alert_rate,1,1585,0.06309148264984227,Red alert: dominant high-penetrance model incompatible
+context_cascade_testing,check_popmax_rate,64,1585,4.037854889589905,CHECK_POPMAX
+context_cascade_testing,check_model_rate,38,1585,2.3974763406940065,CHECK_MODEL
+context_cascade_testing,model_conflict_rate,1,1585,0.06309148264984227,MODEL_CONFLICT
+context_cascade_testing,eval_limited_rate,1281,1585,80.82018927444796,EVAL_LIMITED
+context_drug_guidance,alert_rate,1139,1286,88.56920684292379,Domain-specific alert burden for drug_guidance.
+context_drug_guidance,yellow_alert_rate,59,1286,4.587869362363919,Yellow alert: actionability requires population/mechanism review
+context_drug_guidance,orange_alert_rate,1079,1286,83.90357698289269,Orange alert: allele-resolved population evidence unavailable
+context_drug_guidance,red_alert_rate,1,1286,0.07776049766718507,Red alert: dominant high-penetrance model incompatible
+context_drug_guidance,check_popmax_rate,59,1286,4.587869362363919,CHECK_POPMAX
+context_drug_guidance,check_model_rate,0,1286,0.0,CHECK_MODEL
+context_drug_guidance,model_conflict_rate,1,1286,0.07776049766718507,MODEL_CONFLICT
+context_drug_guidance,eval_limited_rate,1079,1286,83.90357698289269,EVAL_LIMITED
+context_surveillance_device,alert_rate,1262,1426,88.49929873772791,Domain-specific alert burden for surveillance_device.
+context_surveillance_device,yellow_alert_rate,58,1426,4.0673211781206176,Yellow alert: actionability requires population/mechanism review
+context_surveillance_device,orange_alert_rate,1203,1426,84.36185133239832,Orange alert: allele-resolved population evidence unavailable
+context_surveillance_device,red_alert_rate,1,1426,0.07012622720897616,Red alert: dominant high-penetrance model incompatible
+context_surveillance_device,check_popmax_rate,58,1426,4.0673211781206176,CHECK_POPMAX
+context_surveillance_device,check_model_rate,0,1426,0.0,CHECK_MODEL
+context_surveillance_device,model_conflict_rate,1,1426,0.07012622720897616,MODEL_CONFLICT
+context_surveillance_device,eval_limited_rate,1203,1426,84.36185133239832,EVAL_LIMITED
+context_carrier_recessive,alert_rate,84,116,72.41379310344827,Domain-specific alert burden for carrier_recessive.
+context_carrier_recessive,yellow_alert_rate,38,116,32.758620689655174,Yellow alert: actionability requires population/mechanism review
+context_carrier_recessive,orange_alert_rate,46,116,39.6551724137931,Orange alert: allele-resolved population evidence unavailable
+context_carrier_recessive,red_alert_rate,0,116,0.0,Red alert: dominant high-penetrance model incompatible
+context_carrier_recessive,check_popmax_rate,0,116,0.0,CHECK_POPMAX
+context_carrier_recessive,check_model_rate,38,116,32.758620689655174,CHECK_MODEL
+context_carrier_recessive,model_conflict_rate,0,116,0.0,MODEL_CONFLICT
+context_carrier_recessive,eval_limited_rate,46,116,39.6551724137931,EVAL_LIMITED
+combined_expert_curated_evaluable_plp,hard_conflict_rate,4,73,5.47945205479452,Hard model-conflict rate among evaluable expert-curated P/LP positives.
+combined_expert_curated_evaluable_plp,review_level_retention_rate,69,73,94.52054794520548,Expert-curated positives retained as VITAL_OK or review-level rather than model-conflict.

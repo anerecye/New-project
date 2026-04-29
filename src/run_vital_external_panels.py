@@ -56,6 +56,33 @@ PANEL_DEFINITIONS = {
         "GABRG2",
         "DEPDC5",
     ],
+    "metabolic_ar": [
+        "PAH",
+        "GAA",
+        "GALT",
+        "SLC22A5",
+        "ACADVL",
+        "BTD",
+        "ASS1",
+        "MMACHC",
+        "ASL",
+        "HMGCL",
+        "LPL",
+    ],
+    "primary_immunodeficiency": [
+        "BTK",
+        "CYBB",
+        "WAS",
+        "UNC13D",
+        "RAG1",
+        "IL2RG",
+        "NFKB1",
+        "DOCK8",
+        "ADA",
+        "FAS",
+        "RAG2",
+        "STAT3",
+    ],
     "hearing_loss": [
         "GJB2",
         "GJB6",
@@ -113,14 +140,30 @@ def summarize_prefix(prefix: str, domain: str, domain_type: str) -> tuple[dict[s
     band_counts.insert(0, "output_prefix", prefix)
     band_counts["variant_fraction"] = band_counts["variant_count"] / len(scores) if len(scores) else np.nan
 
+    naive_flags = read_metric(summary, "standard_popmax_or_global_af_gt_1e_5_flags")
+    global_flags = read_metric(summary, "global_af_gt_1e_5_flags")
+    popmax_flags = read_metric(summary, "popmax_af_gt_1e_5_flags")
+    popmax_high = read_metric(summary, "popmax_af_gt_1e_4_flags")
+    global_high = read_metric(summary, "global_af_gt_1e_4_flags")
+    popmax_only = naive_flags - global_flags if not np.isnan(naive_flags) and not np.isnan(global_flags) else np.nan
+
     row = {
         "output_prefix": prefix,
         "domain": domain,
         "domain_type": domain_type,
         "variant_count": len(scores),
         "frequency_observed_count": int(observed.sum()),
+        "frequency_observed_fraction": float(observed.mean()) if len(scores) else np.nan,
         "no_frequency_evidence_count": int((~observed).sum()),
-        "naive_af_gt_1e_5_flags": read_metric(summary, "standard_popmax_or_global_af_gt_1e_5_flags"),
+        "naive_af_gt_1e_5_flags": naive_flags,
+        "global_af_gt_1e_5_flags": global_flags,
+        "popmax_af_gt_1e_5_flags": popmax_flags,
+        "popmax_only_alerts": popmax_only,
+        "global_review_miss_fraction_among_popmax_alerts": (
+            popmax_only / naive_flags if naive_flags and not np.isnan(popmax_only) else np.nan
+        ),
+        "global_af_gt_1e_4_flags": global_high,
+        "popmax_af_gt_1e_4_flags": popmax_high,
         "ac_supported_frequency_flags": read_metric(summary, "ac_supported_frequency_flags"),
         "vital_red_count": int(red.sum()),
         "score_ge_50_count": int((vital_score >= 50).sum()),
@@ -182,6 +225,8 @@ def plot_external_score_distribution(score_distribution: pd.DataFrame, output_pa
     domain_order = [
         "cardiomyopathy",
         "epilepsy",
+        "metabolic_ar",
+        "primary_immunodeficiency",
         "hearing_loss",
         "random_clinvar_plp",
         "BRCA_MMR_APC_control",
@@ -201,7 +246,7 @@ def plot_external_score_distribution(score_distribution: pd.DataFrame, output_pa
         whiskerprops={"linewidth": 1.0},
         capprops={"linewidth": 1.0},
     )
-    palette = ["#3b7ddd", "#7b6fd6", "#d18f2f", "#60866a", "#7b8794"]
+    palette = ["#3b7ddd", "#7b6fd6", "#d18f2f", "#bd5f45", "#60866a", "#7b8794", "#4e5d6c"]
     for patch, color in zip(box["boxes"], palette):
         patch.set_facecolor(color)
         patch.set_alpha(0.38)
@@ -234,6 +279,50 @@ def plot_external_score_distribution(score_distribution: pd.DataFrame, output_pa
     ax.tick_params(axis="x", rotation=22)
     for label in ax.get_xticklabels():
         label.set_horizontalalignment("right")
+    fig.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, dpi=220)
+    plt.close(fig)
+    print(f"Saved {output_path}")
+
+
+def plot_external_evaluability_portability(summary: pd.DataFrame, output_path: Path) -> None:
+    plot_df = summary.loc[
+        summary["domain_type"].eq("external_disease_panel")
+        & summary["frequency_observed_fraction"].notna()
+    ].copy()
+    if plot_df.empty:
+        return
+
+    plot_df = plot_df.sort_values("frequency_observed_fraction", ascending=False).reset_index(drop=True)
+    plot_df["coverage_percent"] = 100 * plot_df["frequency_observed_fraction"]
+    plot_df["miss_percent"] = 100 * plot_df["global_review_miss_fraction_among_popmax_alerts"]
+    miss_plot = plot_df["miss_percent"].fillna(0.0)
+
+    fig, axes = plt.subplots(1, 2, figsize=(11.8, 4.8))
+    coverage_colors = ["#2f6f62", "#4c8c7d", "#78a699", "#9dc2b5", "#bfd9cf"]
+    miss_colors = ["#8c2f39", "#a5424d", "#bf626b", "#d2878e", "#e7b9bd"]
+
+    axes[0].bar(plot_df["domain"], plot_df["coverage_percent"], color=coverage_colors[: len(plot_df)])
+    axes[0].set_ylabel("Exact AF-evaluable variants (%)")
+    axes[0].set_xlabel("")
+    axes[0].set_ylim(0, max(45, plot_df["coverage_percent"].max() * 1.15))
+    axes[0].set_title("Evaluability gap persists across disease domains")
+    axes[0].grid(axis="y", color="#d8dde6", linewidth=0.8, alpha=0.7)
+    axes[0].tick_params(axis="x", rotation=22)
+    for label in axes[0].get_xticklabels():
+        label.set_horizontalalignment("right")
+
+    axes[1].bar(plot_df["domain"], miss_plot, color=miss_colors[: len(plot_df)])
+    axes[1].set_ylabel("Popmax alerts missed by global AF (%)")
+    axes[1].set_xlabel("")
+    axes[1].set_ylim(0, 105)
+    axes[1].set_title("Global AF suppresses local tension when evaluable")
+    axes[1].grid(axis="y", color="#d8dde6", linewidth=0.8, alpha=0.7)
+    axes[1].tick_params(axis="x", rotation=22)
+    for label in axes[1].get_xticklabels():
+        label.set_horizontalalignment("right")
+
     fig.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_path, dpi=220)
@@ -276,6 +365,20 @@ def main() -> None:
             "epilepsy",
             "external_disease_panel",
             PANEL_DEFINITIONS["epilepsy"],
+            args.panel_sample_size,
+        ),
+        (
+            "vital_domain_metabolic_ar",
+            "metabolic_ar",
+            "external_disease_panel",
+            PANEL_DEFINITIONS["metabolic_ar"],
+            args.panel_sample_size,
+        ),
+        (
+            "vital_domain_primary_immunodeficiency",
+            "primary_immunodeficiency",
+            "external_disease_panel",
+            PANEL_DEFINITIONS["primary_immunodeficiency"],
             args.panel_sample_size,
         ),
         (
@@ -329,6 +432,10 @@ def main() -> None:
     score_distribution = pd.concat(score_frames, ignore_index=True)
     save_table(score_distribution, DATA_DIR / "vital_external_panel_score_distribution.csv")
     plot_external_score_distribution(score_distribution, FIGURE_DIR / "vital_external_panel_score_distribution.png")
+    plot_external_evaluability_portability(
+        pd.DataFrame(summary_rows),
+        FIGURE_DIR / "vital_external_panel_evaluability_portability.png",
+    )
 
 
 if __name__ == "__main__":

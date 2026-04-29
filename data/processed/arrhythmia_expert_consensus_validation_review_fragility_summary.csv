@@ -1,0 +1,2 @@
+review_strength,variant_count,frequency_flag_count,ac_supported_frequency_count,vital_red_count,median_vital_score,max_vital_score,variant_fraction,ac_supported_fraction_within_review_strength,vital_red_fraction_within_review_strength,share_of_ac_supported_frequency_variants,share_of_vital_red_variants
+expert_panel,17,13,9,0,64.09434179857064,85.93624179299327,1.0,0.5294117647058824,0.0,1.0,

@@ -1,0 +1,9 @@
+cohort,metric,numerator,denominator,percent,note
+arrhythmia_high_review_ge2,total_variants,365,365,100.0,ClinVar review score >= 2 subset.
+arrhythmia_high_review_ge2,tier1_evaluable,109,365,29.863013698630137,Allele-resolved AF evaluable within the high-review subset.
+arrhythmia_high_review_ge2,actionability_at_risk,309,365,84.65753424657534,Baseline actionable variants rerouted or limited by VITAL.
+arrhythmia_high_review_ge2,VITAL_OK,56,365,15.342465753424657,VITAL_OK
+arrhythmia_high_review_ge2,LOW_COUNT_UNCERTAIN,33,365,9.04109589041096,LOW_COUNT_UNCERTAIN
+arrhythmia_high_review_ge2,RECESSIVE_MODEL_REQUIRED,6,365,1.643835616438356,RECESSIVE_MODEL_REQUIRED
+arrhythmia_high_review_ge2,RECESSIVE_COMPATIBLE,14,365,3.835616438356164,RECESSIVE_COMPATIBLE
+arrhythmia_high_review_ge2,NOT_EVALUABLE_NO_FREQUENCY_CLAIM,256,365,70.13698630136986,NOT_EVALUABLE

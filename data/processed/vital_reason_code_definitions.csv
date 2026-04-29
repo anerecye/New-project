@@ -1,0 +1,9 @@
+reason_code,definition
+EVAL_NO_ALLELE_MATCH,No allele-resolved population match after normalization/reconciliation.
+EVAL_LOCI_ONLY,Only locus or regional context is available; allele-level AF is not usable.
+POPMAX_EXCEEDS_MCAF,Ancestry-aware population maximum exceeds the operational model/review ceiling.
+RECESSIVE_COMPATIBLE_NOT_DOMINANT,"Carrier/recessive logic may remain coherent, but direct dominant actionability is unsupported."
+EXPERT_REVIEW_RETAINED,No VITAL constraint displaced the label under the tested model.
+MODEL_CONFLICT_DOMINANT_HP,Observed frequency is incompatible with an unqualified dominant high-penetrance model.
+CHECK_LOW_COUNT,A frequency signal exists but allele-count support is limited; review is required.
+CHECK_MECHANISM_AMBIGUOUS,Mechanism or inheritance cannot be inferred from the flattened label.

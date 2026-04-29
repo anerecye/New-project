@@ -1,0 +1,5 @@
+clinical_context,n_total,n_actionability_at_risk,actionability_at_risk_percent,n_vital_ok,n_evaluation_limiting,n_risk_escalating,n_model_correcting,interpretation
+cascade_testing,1585,1384,87.3186119873817,201,1281,65,38,Cascade testing / family follow-up exposure.
+drug_guidance,1286,1139,88.56920684292379,147,1079,60,0,Medication restriction or drug-avoidance exposure.
+surveillance_device,1426,1262,88.49929873772791,164,1203,59,0,Surveillance-intensity or device-related exposure.
+carrier_recessive,116,84,72.41379310344827,32,46,0,38,Carrier-state or recessive/affected-state exposure.
